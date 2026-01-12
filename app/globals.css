@@ -61,3 +61,6 @@ body {
 .text-shadow-main {
   text-shadow: 4px 5px 0px #000;
 }
+.text-shadow-small {
+  text-shadow: 2px 2px 0px #000;
+}
