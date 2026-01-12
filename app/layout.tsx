@@ -4,19 +4,12 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "KOMEX - Autoservis",
   description: "KOMEX - Váš spoľahlivý partner pre autoservis a opravy",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -26,12 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sk">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
-      >
-        <Navbar />
-        {children}
-        <Footer />
+      <body className={`antialiased flex flex-col min-h-screen`}>
+        <div className="flex flex-col container mx-auto">
+          <Navbar />
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );
