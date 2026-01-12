@@ -12,11 +12,11 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Kontakt</h4>
             <p className="text-gray-400">Email: info@komex.sk</p>
-            <p className="text-gray-400">Telefón: +421 XXX XXX XXX</p>
+            <p className="text-gray-400">Telefón: 0905 489 092</p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Otváracie hodiny</h4>
-            <p className="text-gray-400">Po - Pia: 8:00 - 17:00</p>
+            <p className="text-gray-400">Po - Pia: 8:00 - 16:00</p>
             <p className="text-gray-400">So - Ne: Zatvorené</p>
           </div>
         </div>
