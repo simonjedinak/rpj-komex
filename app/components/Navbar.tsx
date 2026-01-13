@@ -1,6 +1,18 @@
 import Link from "next/link";
 import StrokeText from "./StrokeText";
 import ChromeDivider from "./ChromeDivider";
+import { ButtonLink } from "./ButtonLink";
+
+const navTopTexts: string[] = [
+  "",
+  "info@komex-auto.sk",
+  "",
+  "0905 489 092",
+  "",
+  "6A, Strojnícka 13179, 080 06 Prešov",
+];
+
+const navLinks: string[] = ["Domov", "O nás", "Servis", "Kontakt"];
 
 export default function Navbar() {
   return (
@@ -8,30 +20,19 @@ export default function Navbar() {
       <div className="w-full h-10 flex gap-1.5 bg-chrome1 inset-chrome">
         <div className="container w-80"></div>
         <div className="w-full h-full flex justify-between items-center py-2 -ml-0.5 pr-20">
-          <ChromeDivider />
-          <StrokeText
-            strokeWidth={2}
-            strokeColor="black"
-            className="text-lg font-bold text-shadow-small"
-          >
-            info@komex-auto.sk
-          </StrokeText>
-          <ChromeDivider />
-          <StrokeText
-            strokeWidth={2}
-            strokeColor="black"
-            className="text-lg font-bold text-shadow-small"
-          >
-            0905 489 092
-          </StrokeText>
-          <ChromeDivider />
-          <StrokeText
-            strokeWidth={2}
-            strokeColor="black"
-            className="text-lg font-bold text-shadow-small"
-          >
-            6A, Strojnícka 13179, 080 06 Prešov
-          </StrokeText>
+          {navTopTexts.map((text: string, index: number) =>
+            text === "" ? (
+              <ChromeDivider key={`divider-${index}`} />
+            ) : (
+              <StrokeText
+                key={`text-${index}`}
+                strokeWidth={2}
+                className="text font-bold text-shadow-small"
+              >
+                {text}
+              </StrokeText>
+            )
+          )}
         </div>
       </div>
       <div className="flex flex-row gap-1.5">
@@ -40,31 +41,29 @@ export default function Navbar() {
             <img src="/logo.svg" alt="KOMEX Logo" />
           </Link>
         </div>
+
         <div className="flex justify-between items-center bg-chrome2 inset-chrome w-full px-10 py-6 rounded-xs">
           <StrokeText
             strokeWidth={6}
-            strokeColor="black"
             className="text-5xl font-bold text-shadow-main"
           >
             Profesionálna starostlivosť
           </StrokeText>
         </div>
       </div>
-      <div className="w-full h-10 bg-chrome1 inset-chrome">
-        <ul className="flex gap-6">
-          <li>
-            <Link href="/" className="hover:text-red-500 transition-colors">
-              Domov
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/o-nas"
-              className="hover:text-red-500 transition-colors"
-            >
-              O nás
-            </Link>
-          </li>
+      <div className="w-full flex flex-row h-10 gap-1.5 bg-chrome1 inset-chrome">
+        <div className="container w-80"></div>
+        <ul className="w-full h-full flex items-center gap-10 py-2 -ml-0.5">
+          {navLinks.map((link: string, index: number) => (
+            <li key={`nav-link-${index}`}>
+              <ButtonLink
+                href={link === "Domov" ? "/" : `/${link.toLowerCase()}`}
+                variant="small"
+                text={link}
+                arrow={true}
+              />  
+            </li>
+          ))}
         </ul>
       </div>
     </nav>
