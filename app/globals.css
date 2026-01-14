@@ -68,3 +68,7 @@ body {
   background-image: linear-gradient(180deg, #666666 0%, #2a2a2a 100%);
   box-shadow: inset 0px 3.77761px 5.03681px rgba(0, 0, 0, 0.65);
 }
+
+.shadow-navbar {
+  box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.35);
+}

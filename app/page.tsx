@@ -9,6 +9,7 @@ export default function Home() {
         <FisheyeCarousel />
         <SvgBar className="bottom-0" />
       </section>
+      <div className="h-6 w-full bg-chrome1"></div>
 
       <section id="sluzby" className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
