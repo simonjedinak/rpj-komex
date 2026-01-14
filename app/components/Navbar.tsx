@@ -16,7 +16,7 @@ const navLinks: string[] = ["Domov", "O nás", "Servis", "Kontakt"];
 
 export default function Navbar() {
   return (
-    <nav className="shadow-md bg-black flex flex-col gap-1.5">
+    <nav className="shadow-2xl bg-black flex flex-col gap-1.5 py-1.5">
       <div className="w-full h-10 flex gap-1.5 bg-chrome1 inset-chrome">
         <div className="container w-80"></div>
         <div className="w-full h-full flex justify-between items-center py-2 -ml-0.5 pr-20">
@@ -61,7 +61,7 @@ export default function Navbar() {
                 variant="small"
                 text={link}
                 arrow={true}
-              />  
+              />
             </li>
           ))}
         </ul>
