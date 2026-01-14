@@ -15,8 +15,8 @@ const easeInOutSine = (t: number): number => -(Math.cos(Math.PI * t) - 1) / 2;
 
 export default function FisheyeCarousel({
   imageUrls,
-  autoplayInterval = 3000,
-  animationDuration = 500,
+  autoplayInterval = 4000,
+  animationDuration = 700,
   className = "",
   aspectRatio = 16 / 9,
 }: FisheyeCarouselProps) {
@@ -120,11 +120,11 @@ export default function FisheyeCarousel({
   const getLayoutDimensions = useCallback((canvas: HTMLCanvasElement) => {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const centerImageWidth = canvas.width * 0.42;
-    const centerImageHeight = canvas.height * 0.8;
-    const sideImageWidth = canvas.width * 0.32;
-    const sideImageHeight = canvas.height * 0.65;
-    const gap = canvas.width * 0.03;
+    const centerImageWidth = canvas.width * 0.7;
+    const centerImageHeight = canvas.height * 1.2;
+    const sideImageWidth = canvas.width * 0.5;
+    const sideImageHeight = canvas.height * 0.6;
+    const gap = canvas.width * 0.01;
 
     return {
       centerX,
@@ -175,7 +175,7 @@ export default function FisheyeCarousel({
       } = getLayoutDimensions(canvas);
 
       // Clear canvas
-      ctx.fillStyle = "#000000";
+      ctx.fillStyle = "#fff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const len = imgArray.length;
@@ -250,11 +250,31 @@ export default function FisheyeCarousel({
         const imgIndex = (baseIndex + slot.indexOffset + len) % len;
         const img = imgArray[imgIndex];
         if (img) {
-          const x = lerp(slot.startX, slot.endX, progress);
-          const width = lerp(slot.startWidth, slot.endWidth, progress);
-          const height = lerp(slot.startHeight, slot.endHeight, progress);
-          const y = centerY - height / 2;
-          ctx.drawImage(img, x, y, width, height);
+          const slotX = lerp(slot.startX, slot.endX, progress);
+          const slotWidth = lerp(slot.startWidth, slot.endWidth, progress);
+          const slotHeight = lerp(slot.startHeight, slot.endHeight, progress);
+          const slotY = centerY - slotHeight / 2;
+
+          // Calculate dimensions that preserve original aspect ratio ("contain" fit)
+          const imgAspect = img.naturalWidth / img.naturalHeight;
+          const slotAspect = slotWidth / slotHeight;
+
+          let drawWidth: number, drawHeight: number;
+          if (imgAspect > slotAspect) {
+            // Image is wider than slot - fit to width
+            drawWidth = slotWidth;
+            drawHeight = slotWidth / imgAspect;
+          } else {
+            // Image is taller than slot - fit to height
+            drawHeight = slotHeight;
+            drawWidth = slotHeight * imgAspect;
+          }
+
+          // Center the image within the slot
+          const drawX = slotX + (slotWidth - drawWidth) / 2;
+          const drawY = slotY + (slotHeight - drawHeight) / 2;
+
+          ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
         }
       }
     },
