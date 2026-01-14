@@ -36,6 +36,7 @@ export default function FisheyeCarousel({
   const isAnimatingRef = useRef(false);
   const lastFisheyeUpdateRef = useRef(0);
   const pendingImageRef = useRef<string | null>(null);
+  const currentDprRef = useRef(1); // Track current DPR for dynamic scaling
 
   // Observe container size with debounce
   useEffect(() => {
@@ -141,13 +142,27 @@ export default function FisheyeCarousel({
     (
       progress: number, // 0 to 1 representing transition progress
       baseIndex: number,
-      imgArray: HTMLImageElement[]
+      imgArray: HTMLImageElement[],
+      dpr: number = currentDprRef.current // Allow custom DPR for dynamic scaling
     ) => {
       const canvas = sourceCanvasRef.current;
-      if (!canvas || imgArray.length === 0) return;
+      if (!canvas || imgArray.length === 0 || containerSize.width === 0) return;
+
+      // Resize canvas if DPR changed
+      const targetWidth = Math.floor(containerSize.width * dpr);
+      const targetHeight = Math.floor(containerSize.height * dpr);
+      if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        currentDprRef.current = dpr;
+      }
 
       const ctx = canvas.getContext("2d", { alpha: false });
       if (!ctx) return;
+
+      // Optimize rendering quality based on animation state
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = dpr < 2 ? "medium" : "high";
 
       const {
         centerX,
@@ -243,7 +258,7 @@ export default function FisheyeCarousel({
         }
       }
     },
-    [getLayoutDimensions]
+    [getLayoutDimensions, containerSize]
   );
 
   // Update fisheye - throttle during animation to prevent black flashes
@@ -264,7 +279,8 @@ export default function FisheyeCarousel({
     }
 
     try {
-      const quality = isAnimating ? 0.7 : 0.9;
+      // Use lower quality during animation for speed, full quality when static
+      const quality = isAnimating ? 0.75 : 0.95;
       const dataURL = canvas.toDataURL("image/jpeg", quality);
       fisheye.setImage(dataURL);
       lastFisheyeUpdateRef.current = now;
@@ -281,12 +297,17 @@ export default function FisheyeCarousel({
     const startIndex = currentIndexRef.current;
     const startTime = performance.now();
 
+    // Use 1x DPR during animation for smooth performance
+    const animationDpr = 1;
+    // Use higher DPR for final static frame (capped at 2x)
+    const finalDpr = Math.min(window.devicePixelRatio || 1, 2);
+
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const rawProgress = Math.min(elapsed / animationDuration, 1);
       const easedProgress = easeInOutSine(rawProgress);
 
-      drawCarousel(easedProgress, startIndex, images);
+      drawCarousel(easedProgress, startIndex, images, animationDpr);
       updateFisheye(true); // Pass true for animating state
 
       if (rawProgress < 1) {
@@ -297,12 +318,11 @@ export default function FisheyeCarousel({
         isAnimatingRef.current = false;
         animationFrameRef.current = null;
 
-        // Final high-quality render after animation completes
-        // Use setTimeout to ensure fisheye has finished processing
+        // Final high-quality render at full DPR after animation completes
         setTimeout(() => {
-          drawCarousel(0, currentIndexRef.current, images);
+          drawCarousel(0, currentIndexRef.current, images, finalDpr);
           updateFisheye(false);
-        }, 50);
+        }, 30);
       }
     };
 
@@ -324,19 +344,22 @@ export default function FisheyeCarousel({
     const fisheyeCanvas = fisheyeCanvasRef.current;
     const { width, height } = containerSize;
 
-    // Set canvas dimensions
-    sourceCanvas.width = width;
-    sourceCanvas.height = height;
-    fisheyeCanvas.width = width;
-    fisheyeCanvas.height = height;
+    // Use devicePixelRatio for high-DPI displays (Retina, etc.)
+    const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x for performance
+    const scaledWidth = Math.floor(width * dpr);
+    const scaledHeight = Math.floor(height * dpr);
+
+    // Set fisheye canvas dimensions (source canvas is managed by drawCarousel)
+    fisheyeCanvas.width = scaledWidth;
+    fisheyeCanvas.height = scaledHeight;
 
     // Reset index on reinit
     currentIndexRef.current = 0;
 
-    // Draw initial state
-    drawCarousel(0, 0, images);
+    // Draw initial state at full DPR
+    drawCarousel(0, 0, images, dpr);
 
-    const initialDataURL = sourceCanvas.toDataURL("image/jpeg", 0.9);
+    const initialDataURL = sourceCanvas.toDataURL("image/jpeg", 0.95);
     const FisheyeGLFunc = (window as any).FisheyeGl;
 
     if (typeof FisheyeGLFunc === "function") {
@@ -347,8 +370,8 @@ export default function FisheyeCarousel({
 
       fisheyeInstanceRef.current = FisheyeGLFunc({
         selector: "#fisheye-canvas",
-        width: fisheyeCanvas.width,
-        height: fisheyeCanvas.height,
+        width: scaledWidth,
+        height: scaledHeight,
         image: initialDataURL,
         animate: false,
         lens: {
