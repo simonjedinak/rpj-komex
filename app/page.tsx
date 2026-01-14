@@ -1,10 +1,13 @@
 import FisheyeCarousel from "./components/FisheyeCarousel";
+import SvgBar from "./components/SvgBar";
 
 export default function Home() {
   return (
     <main className="flex-1">
-      <section className="bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+      <section className="relative from-gray-900 to-gray-800 text-white overflow-hidden">
+        <SvgBar className="rotate-180 top-0" />
         <FisheyeCarousel />
+        <SvgBar className="bottom-0" />
       </section>
 
       <section id="sluzby" className="py-16 bg-gray-50">
