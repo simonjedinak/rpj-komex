@@ -10,13 +10,13 @@ interface FisheyeCarouselProps {
   aspectRatio?: number;
 }
 
-// Smooth easing function - ease out cubic for natural deceleration
-const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+// Smooth easing function - ease in-out sine for ultra-smooth animation
+const easeInOutSine = (t: number): number => -(Math.cos(Math.PI * t) - 1) / 2;
 
 export default function FisheyeCarousel({
   imageUrls,
   autoplayInterval = 3000,
-  animationDuration = 600,
+  animationDuration = 500,
   className = "",
   aspectRatio = 16 / 9,
 }: FisheyeCarouselProps) {
@@ -34,7 +34,8 @@ export default function FisheyeCarousel({
   const currentIndexRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
   const isAnimatingRef = useRef(false);
-  const lastUpdateTimeRef = useRef(0);
+  const lastFisheyeUpdateRef = useRef(0);
+  const pendingImageRef = useRef<string | null>(null);
 
   // Observe container size with debounce
   useEffect(() => {
@@ -245,26 +246,34 @@ export default function FisheyeCarousel({
     [getLayoutDimensions]
   );
 
-  // Update fisheye with throttling for smooth performance
-  const updateFisheye = useCallback(() => {
+  // Update fisheye - throttle during animation to prevent black flashes
+  // The FisheyeGL library can't handle rapid setImage calls without flickering
+  const updateFisheye = useCallback((isAnimating: boolean = false) => {
     const canvas = sourceCanvasRef.current;
     const fisheye = fisheyeInstanceRef.current;
     if (!canvas || !fisheye) return;
 
-    // Throttle updates to ~30fps for fisheye (it's expensive)
     const now = performance.now();
-    if (now - lastUpdateTimeRef.current < 33) return;
-    lastUpdateTimeRef.current = now;
+    const timeSinceLastUpdate = now - lastFisheyeUpdateRef.current;
+
+    // The fisheye library needs time to process each image
+    const minInterval = isAnimating ? 21 : 0;
+
+    if (isAnimating && timeSinceLastUpdate < minInterval) {
+      return;
+    }
 
     try {
-      const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+      const quality = isAnimating ? 0.7 : 0.9;
+      const dataURL = canvas.toDataURL("image/jpeg", quality);
       fisheye.setImage(dataURL);
+      lastFisheyeUpdateRef.current = now;
     } catch (e) {
       // Silently fail - not critical
     }
   }, []);
 
-  // Smooth animation using requestAnimationFrame
+  // Smooth animation using requestAnimationFrame (syncs with monitor refresh rate)
   const animateToNext = useCallback(() => {
     if (isAnimatingRef.current || images.length === 0) return;
 
@@ -275,10 +284,10 @@ export default function FisheyeCarousel({
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const rawProgress = Math.min(elapsed / animationDuration, 1);
-      const easedProgress = easeOutCubic(rawProgress);
+      const easedProgress = easeInOutSine(rawProgress);
 
       drawCarousel(easedProgress, startIndex, images);
-      updateFisheye();
+      updateFisheye(true); // Pass true for animating state
 
       if (rawProgress < 1) {
         animationFrameRef.current = requestAnimationFrame(animate);
@@ -287,6 +296,13 @@ export default function FisheyeCarousel({
         currentIndexRef.current = (startIndex + 1) % images.length;
         isAnimatingRef.current = false;
         animationFrameRef.current = null;
+
+        // Final high-quality render after animation completes
+        // Use setTimeout to ensure fisheye has finished processing
+        setTimeout(() => {
+          drawCarousel(0, currentIndexRef.current, images);
+          updateFisheye(false);
+        }, 50);
       }
     };
 
