@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Script from "next/script";
 
 interface FisheyeCarouselProps {
@@ -10,10 +10,13 @@ interface FisheyeCarouselProps {
   aspectRatio?: number;
 }
 
+// Smooth easing function - ease out cubic for natural deceleration
+const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+
 export default function FisheyeCarousel({
   imageUrls,
-  autoplayInterval = 2000,
-  animationDuration = 1000,
+  autoplayInterval = 3000,
+  animationDuration = 600,
   className = "",
   aspectRatio = 16 / 9,
 }: FisheyeCarouselProps) {
@@ -21,39 +24,52 @@ export default function FisheyeCarousel({
   const sourceCanvasRef = useRef<HTMLCanvasElement>(null);
   const fisheyeCanvasRef = useRef<HTMLCanvasElement>(null);
   const fisheyeInstanceRef = useRef<any>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [images, setImages] = useState<HTMLImageElement[]>([]);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-  const animationRef = useRef<number | null>(null);
-  const autoplayRef = useRef<NodeJS.Timeout | null>(null);
-  const isAnimatingRef = useRef(false);
 
-  // Observe container size
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const [isReady, setIsReady] = useState(false);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+  // Animation state stored in refs to avoid re-renders during animation
+  const currentIndexRef = useRef(0);
+  const animationFrameRef = useRef<number | null>(null);
+  const isAnimatingRef = useRef(false);
+  const lastUpdateTimeRef = useRef(0);
+
+  // Observe container size with debounce
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
+    let timeoutId: NodeJS.Timeout;
     const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width } = entry.contentRect;
-        if (width > 0) {
-          const height = width / aspectRatio;
-          setContainerSize({ width, height });
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        for (const entry of entries) {
+          const { width } = entry.contentRect;
+          if (width > 0) {
+            const height = width / aspectRatio;
+            setContainerSize((prev) =>
+              prev.width === width && prev.height === height
+                ? prev
+                : { width, height }
+            );
+          }
         }
-      }
+      }, 50);
     });
 
     resizeObserver.observe(container);
-
     return () => {
+      clearTimeout(timeoutId);
       resizeObserver.disconnect();
     };
   }, [aspectRatio]);
 
   // Load all images
   useEffect(() => {
+    let cancelled = false;
+
     const loadImages = async () => {
       let urls: string[] = imageUrls ?? [];
 
@@ -64,192 +80,223 @@ export default function FisheyeCarousel({
           urls = data.images || [];
         } catch (error) {
           console.error("Failed to load images:", error);
-          urls = [];
+          return;
         }
       }
 
-      if (urls.length === 0) return;
+      if (urls.length === 0 || cancelled) return;
 
-      const loadedImages = await Promise.all(
-        urls.map((url) => {
-          return new Promise<HTMLImageElement>((resolve) => {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => resolve(img);
-            img.src = url;
-          });
-        })
-      );
-      setImages(loadedImages);
-      setImagesLoaded(true);
+      try {
+        const loadedImages = await Promise.all(
+          urls.map(
+            (url) =>
+              new Promise<HTMLImageElement>((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = () => reject(new Error(`Failed to load: ${url}`));
+                img.src = url;
+              })
+          )
+        );
+
+        if (!cancelled) {
+          setImages(loadedImages);
+        }
+      } catch (error) {
+        console.error("Error loading images:", error);
+      }
     };
 
     loadImages();
+    return () => {
+      cancelled = true;
+    };
   }, [imageUrls]);
 
-  // Draw carousel
-  const drawCarousel = (offset: number = 0) => {
-    const canvas = sourceCanvasRef.current;
-    if (!canvas || images.length === 0) return;
-
-    const ctx = canvas.getContext("2d", { alpha: false });
-    if (!ctx) return;
-
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+  // Calculate layout dimensions
+  const getLayoutDimensions = useCallback((canvas: HTMLCanvasElement) => {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const imageWidth = canvas.width * 0.8;
-    const imageHeight = canvas.height * 0.8;
-    const spacing = canvas.width * 0.85;
+    const centerImageWidth = canvas.width * 0.42;
+    const centerImageHeight = canvas.height * 0.8;
+    const sideImageWidth = canvas.width * 0.32;
+    const sideImageHeight = canvas.height * 0.65;
+    const gap = canvas.width * 0.03;
 
-    // Draw current image
-    const currentImg = images[currentIndex];
-    if (currentImg) {
-      const x = centerX - imageWidth / 2 + offset;
-      const y = centerY - imageHeight / 2;
-      ctx.drawImage(currentImg, x, y, imageWidth, imageHeight);
-    }
+    return {
+      centerX,
+      centerY,
+      centerImageWidth,
+      centerImageHeight,
+      sideImageWidth,
+      sideImageHeight,
+      gap,
+    };
+  }, []);
 
-    // Draw next image
-    const nextIndex = (currentIndex + 1) % images.length;
-    const nextImg = images[nextIndex];
-    if (nextImg) {
-      const x = centerX - imageWidth / 2 + spacing + offset;
-      const y = centerY - imageHeight / 2;
-      ctx.drawImage(nextImg, x, y, imageWidth, imageHeight);
-    }
+  // Draw carousel with interpolated position
+  const drawCarousel = useCallback(
+    (
+      progress: number, // 0 to 1 representing transition progress
+      baseIndex: number,
+      imgArray: HTMLImageElement[]
+    ) => {
+      const canvas = sourceCanvasRef.current;
+      if (!canvas || imgArray.length === 0) return;
 
-    // Draw previous image
-    const prevIndex = (currentIndex - 1 + images.length) % images.length;
-    const prevImg = images[prevIndex];
-    if (prevImg) {
-      const x = centerX - imageWidth / 2 - spacing + offset;
-      const y = centerY - imageHeight / 2;
-      ctx.drawImage(prevImg, x, y, imageWidth, imageHeight);
-    }
-  };
+      const ctx = canvas.getContext("2d", { alpha: false });
+      if (!ctx) return;
 
-  // Update fisheye
-  const updateFisheyeFromCanvas = () => {
-    if (!sourceCanvasRef.current || !fisheyeInstanceRef.current) return;
+      const {
+        centerX,
+        centerY,
+        centerImageWidth,
+        centerImageHeight,
+        sideImageWidth,
+        sideImageHeight,
+        gap,
+      } = getLayoutDimensions(canvas);
 
-    setTimeout(() => {
-      try {
-        if (sourceCanvasRef.current && fisheyeInstanceRef.current) {
-          const dataURL = sourceCanvasRef.current.toDataURL("image/jpeg", 0.8);
-          fisheyeInstanceRef.current.setImage(dataURL);
+      // Clear canvas
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const len = imgArray.length;
+
+      // Calculate total width of the visible 3-image layout
+      // Layout: [left side image] [gap] [center image] [gap] [right side image]
+      const totalLayoutWidth =
+        sideImageWidth + gap + centerImageWidth + gap + sideImageWidth;
+
+      // Start position so that the entire layout is centered on the canvas
+      const layoutStartX = (canvas.width - totalLayoutWidth) / 2;
+
+      // Calculate positions for each image
+      const leftImageLeft = layoutStartX;
+      const centerImageLeft = layoutStartX + sideImageWidth + gap;
+      const rightImageLeft = centerImageLeft + centerImageWidth + gap;
+      const farRightImageLeft = rightImageLeft + sideImageWidth + gap;
+
+      // Animation: slide distance is from right position to center position
+      const slideDistance = centerImageWidth + gap;
+
+      // Interpolate function for smooth size transitions
+      const lerp = (start: number, end: number, t: number) =>
+        start + (end - start) * t;
+
+      // Define start and end states for each image slot
+      // Each image transitions: far-left <- left <- center <- right <- far-right
+      const slots = [
+        {
+          indexOffset: -1,
+          // Left image moves further left (off-screen)
+          startX: leftImageLeft,
+          endX: leftImageLeft - slideDistance,
+          startWidth: sideImageWidth,
+          endWidth: sideImageWidth,
+          startHeight: sideImageHeight,
+          endHeight: sideImageHeight,
+        },
+        {
+          indexOffset: 0,
+          // Center image moves to left position
+          startX: centerImageLeft,
+          endX: leftImageLeft,
+          startWidth: centerImageWidth,
+          endWidth: sideImageWidth,
+          startHeight: centerImageHeight,
+          endHeight: sideImageHeight,
+        },
+        {
+          indexOffset: 1,
+          // Right image moves to center position
+          startX: rightImageLeft,
+          endX: centerImageLeft,
+          startWidth: sideImageWidth,
+          endWidth: centerImageWidth,
+          startHeight: sideImageHeight,
+          endHeight: centerImageHeight,
+        },
+        {
+          indexOffset: 2,
+          // Far-right image moves to right position
+          startX: farRightImageLeft,
+          endX: rightImageLeft,
+          startWidth: sideImageWidth,
+          endWidth: sideImageWidth,
+          startHeight: sideImageHeight,
+          endHeight: sideImageHeight,
+        },
+      ];
+
+      for (const slot of slots) {
+        const imgIndex = (baseIndex + slot.indexOffset + len) % len;
+        const img = imgArray[imgIndex];
+        if (img) {
+          const x = lerp(slot.startX, slot.endX, progress);
+          const width = lerp(slot.startWidth, slot.endWidth, progress);
+          const height = lerp(slot.startHeight, slot.endHeight, progress);
+          const y = centerY - height / 2;
+          ctx.drawImage(img, x, y, width, height);
         }
-      } catch (e) {
-        console.error("Error updating fisheye:", e);
       }
-    }, 0);
-  };
+    },
+    [getLayoutDimensions]
+  );
 
-  // Easing function
-  const easeInOutCubic = (t: number): number => {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  };
-
-  // Animation
-  const animateTransition = () => {
-    if (isAnimatingRef.current || images.length === 0) return;
-    isAnimatingRef.current = true;
-
+  // Update fisheye with throttling for smooth performance
+  const updateFisheye = useCallback(() => {
     const canvas = sourceCanvasRef.current;
-    if (!canvas) return;
+    const fisheye = fisheyeInstanceRef.current;
+    if (!canvas || !fisheye) return;
 
-    const spacing = canvas.width * 0.85;
-    let startTime: number | null = null;
-    let frameCount = 0;
-    const updateEveryNFrames = 2;
+    // Throttle updates to ~30fps for fisheye (it's expensive)
+    const now = performance.now();
+    if (now - lastUpdateTimeRef.current < 33) return;
+    lastUpdateTimeRef.current = now;
 
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / animationDuration, 1);
-
-      const easedProgress = easeInOutCubic(progress);
-      const offset = -spacing * easedProgress;
-
-      drawCarousel(offset);
-
-      frameCount++;
-      if (frameCount % updateEveryNFrames === 0) {
-        updateFisheyeFromCanvas();
-      }
-
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
-        const nextIndex = (currentIndex + 1) % images.length;
-        setCurrentIndex(nextIndex);
-
-        requestAnimationFrame(() => {
-          if (sourceCanvasRef.current && images.length > 0) {
-            const canvas = sourceCanvasRef.current;
-            const ctx = canvas.getContext("2d", { alpha: false });
-            if (ctx) {
-              ctx.fillStyle = "#000000";
-              ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-              const centerX = canvas.width / 2;
-              const centerY = canvas.height / 2;
-              const imageWidth = canvas.width * 0.8;
-              const imageHeight = canvas.height * 0.8;
-
-              const img = images[nextIndex];
-              if (img) {
-                const x = centerX - imageWidth / 2;
-                const y = centerY - imageHeight / 2;
-                ctx.drawImage(img, x, y, imageWidth, imageHeight);
-              }
-
-              setTimeout(() => {
-                updateFisheyeFromCanvas();
-                isAnimatingRef.current = false;
-              }, 0);
-            }
-          } else {
-            isAnimatingRef.current = false;
-          }
-        });
-      }
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-  };
-
-  // Autoplay
-  useEffect(() => {
-    if (!imagesLoaded || images.length === 0) return;
-
-    if (autoplayRef.current) {
-      clearInterval(autoplayRef.current);
+    try {
+      const dataURL = canvas.toDataURL("image/jpeg", 0.8);
+      fisheye.setImage(dataURL);
+    } catch (e) {
+      // Silently fail - not critical
     }
+  }, []);
 
-    autoplayRef.current = setInterval(() => {
-      if (!isAnimatingRef.current) {
-        animateTransition();
-      }
-    }, autoplayInterval);
+  // Smooth animation using requestAnimationFrame
+  const animateToNext = useCallback(() => {
+    if (isAnimatingRef.current || images.length === 0) return;
 
-    return () => {
-      if (autoplayRef.current) {
-        clearInterval(autoplayRef.current);
-      }
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+    isAnimatingRef.current = true;
+    const startIndex = currentIndexRef.current;
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const rawProgress = Math.min(elapsed / animationDuration, 1);
+      const easedProgress = easeOutCubic(rawProgress);
+
+      drawCarousel(easedProgress, startIndex, images);
+      updateFisheye();
+
+      if (rawProgress < 1) {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      } else {
+        // Animation complete - update index
+        currentIndexRef.current = (startIndex + 1) % images.length;
+        isAnimatingRef.current = false;
+        animationFrameRef.current = null;
       }
     };
-  }, [imagesLoaded, currentIndex, images.length, autoplayInterval]);
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+  }, [images, animationDuration, drawCarousel, updateFisheye]);
 
   // Initialize FisheyeGL
   useEffect(() => {
     if (
-      !imagesLoaded ||
+      images.length === 0 ||
       !scriptLoaded ||
       !sourceCanvasRef.current ||
       !fisheyeCanvasRef.current ||
@@ -259,20 +306,29 @@ export default function FisheyeCarousel({
 
     const sourceCanvas = sourceCanvasRef.current;
     const fisheyeCanvas = fisheyeCanvasRef.current;
-
     const { width, height } = containerSize;
 
+    // Set canvas dimensions
     sourceCanvas.width = width;
     sourceCanvas.height = height;
     fisheyeCanvas.width = width;
     fisheyeCanvas.height = height;
 
-    drawCarousel(0);
+    // Reset index on reinit
+    currentIndexRef.current = 0;
 
-    const initialDataURL = sourceCanvas.toDataURL("image/jpeg", 0.95);
+    // Draw initial state
+    drawCarousel(0, 0, images);
+
+    const initialDataURL = sourceCanvas.toDataURL("image/jpeg", 0.9);
     const FisheyeGLFunc = (window as any).FisheyeGl;
 
     if (typeof FisheyeGLFunc === "function") {
+      // Clean up previous instance
+      if (fisheyeInstanceRef.current) {
+        fisheyeInstanceRef.current = null;
+      }
+
       fisheyeInstanceRef.current = FisheyeGLFunc({
         selector: "#fisheye-canvas",
         width: fisheyeCanvas.width,
@@ -280,31 +336,42 @@ export default function FisheyeCarousel({
         image: initialDataURL,
         animate: false,
         lens: {
-          a: 1.0,
-          b: 1.0,
-          Fx: 0.5,
-          Fy: 0.5,
-          scale: 1.5,
+          a: 1,
+          b: 1,
+          Fx: 0.17,
+          Fy: 0.6,
+          scale: 1.1,
         },
         fov: {
           x: 1.0,
           y: 1.0,
         },
       });
+
+      setIsReady(true);
     }
 
     return () => {
-      fisheyeInstanceRef.current = null;
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      isAnimatingRef.current = false;
     };
-  }, [imagesLoaded, scriptLoaded, containerSize]);
+  }, [images, scriptLoaded, containerSize, drawCarousel]);
 
-  // Update when index changes
+  // Autoplay with stable interval
   useEffect(() => {
-    if (!imagesLoaded || !fisheyeInstanceRef.current || isAnimatingRef.current)
-      return;
-    drawCarousel(0);
-    updateFisheyeFromCanvas();
-  }, [currentIndex, imagesLoaded]);
+    if (!isReady || images.length === 0) return;
+
+    const intervalId = setInterval(() => {
+      if (!isAnimatingRef.current) {
+        animateToNext();
+      }
+    }, autoplayInterval);
+
+    return () => clearInterval(intervalId);
+  }, [isReady, images.length, autoplayInterval, animateToNext]);
 
   return (
     <>
