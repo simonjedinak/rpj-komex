@@ -29,9 +29,25 @@ export default function KontaktPage() {
                         </p>
                     </div>
 
+
                     <ContactForm />
+
+                    {/* Google Maps Embed */}
+                    <div className="mt-12 w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden shadow-lg border border-white/10">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            scrolling="no"
+                            marginHeight={0}
+                            marginWidth={0}
+                            src="https://maps.google.com/maps?q=KOMEX+oprava+autochladičov&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                            aria-label="Google Maps showing location of KOMEX"
+                        ></iframe>
+                    </div>
                 </div>
             </section>
         </main>
     );
 }
+
