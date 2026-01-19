@@ -1,236 +1,199 @@
-import FisheyeCarousel from "../components/FisheyeCarousel";
-
 export default function AboutPage() {
   return (
-    <main className="flex-1">
-      {/* Section 1 - O nás */}
-      <section className="w-full"></section>
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Left Column - Text Content */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-4xl font-bold mb-6 text-red-500 italic">
-                  O nás
-                </h2>
-                <p className="text-gray-300 leading-relaxed mb-6">
-                  Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na
-                  Strojníckej ulici, kde dodnes sídli a dlhodobo poskytuje
-                  servis osobným aj úžitkovým vozidlám.
-                </p>
-                <p className="text-gray-300 leading-relaxed">
-                  Postupne sa z menšieho pracoviska stal plnohodnotný servis so
-                  zameraním na mechanické opravy, diagnostiku, pneuservis a
-                  údržbu klimatizácií.
-                </p>
-              </div>
-            </div>
-
-            {/* Right Column - Image Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <img
-                  src="/images/budova-komex.jpg"
-                  alt="Autoservis KOMEX - exteriér budovy"
-                  className="w-full h-64 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/budova-bočný-pohľad.jpg"
-                  alt="Bočný pohľad na budovu"
-                  className="w-full h-48 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 2 - Servis a repasovanie autochladičov */}
-      <section className="py-16 bg-gray-800 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Left Column - Images */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <img
-                  src="/images/mobilny-servis-dodavka.jpg"
-                  alt="Mobilný servis - dodávka"
-                  className="w-full h-48 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/servisna-hala-vnutro.jpg"
-                  alt="Vnútro servisnej haly"
-                  className="w-full h-48 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-              <div className="col-span-2">
-                <img
-                  src="/images/servisne-vozidla.jpg"
-                  alt="Servisné vozidlá"
-                  className="w-full h-64 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-              <div className="col-span-2">
-                <img
-                  src="/images/diagnostika-vozidla.jpg"
-                  alt="Diagnostika vozidla"
-                  className="w-full h-48 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-            </div>
-
-            {/* Right Column - Text Content */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-4xl font-bold mb-6 text-red-500 italic">
-                  Servis a repasovanie autochladičov na jednom mieste
-                </h2>
-                <p className="text-gray-300 leading-relaxed mb-6">
-                  Dôležitou súčasťou služieb KOMEX-u je aj špecializácia na
-                  opravy a repasovanie autochladičov, ktorá sústreďuje klasické
-                  servisné úkony aj širšiu údržbu chladiaceho systému na jedno
-                  miesto.
-                </p>
-                <p className="text-gray-300 leading-relaxed">
-                  Vďaka tomu vie dielňa vyriešiť bežné opravy aj špecifické
-                  problémy s chladením motora na jednom mieste.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 3 - Rodinný servis dvoch generácií */}
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Left Column - Text */}
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-4xl font-bold mb-6 text-red-500 italic">
-                  Rodinný servis dvoch generácií
-                </h2>
-                <p className="text-gray-300 leading-relaxed mb-6">
-                  Rodinný charakter realizuje aj úzky prístup k zákazníkom - či
-                  už ide o zakladateľa (otca) generála a ďalšiu mladú generáciu,
-                  všetci si uchovávame klasický servisný na Strojníckej ulici.
-                </p>
-                <p className="text-gray-300 leading-relaxed mb-6">
-                  Autoservis KOMEX dnes funguje ako spolupráca dvoch generácií -
-                  samotný servis vozidiel vedie Marcel Komka, zatiaľ čo na
-                  opravy a repasovanie autochladičov sa špecializuje jeho otec
-                  Dušan Komka.
-                </p>
-                <div className="mt-8">
-                  <a
-                    href="/kontakt"
-                    className="inline-block bg-red-500 hover:bg-red-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-                  >
-                    Objednajte sa u nás
-                  </a>
+      <main className="flex-1 bg-neutral-200 py-10">
+        <section className="mx-auto w-[min(980px,92vw)]">
+          {/* BIG DARK CHROME FRAME (brushed metal) */}
+          <div
+              className="rounded-[34px] p-[28px] shadow-2xl"
+              style={{
+                // darker brushed-metal look
+                background:
+                    "linear-gradient(90deg, #7b7f86 0%, #b8bcc2 10%, #7a7e85 22%, #c7cbd1 36%, #7a7e85 52%, #b7bbc1 66%, #6b7077 82%, #c7cbd1 92%, #6a6f76 100%)",
+                boxShadow:
+                    "inset 0 16px 34px rgba(0,0,0,.65), inset 0 -14px 26px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35)",
+              }}
+          >
+            {/* inner dark edge */}
+            <div
+                className="rounded-[26px] p-[12px]"
+                style={{
+                  background:
+                      "linear-gradient(180deg, #0a0f15 0%, #141a22 55%, #070a0f 100%)",
+                  boxShadow:
+                      "inset 0 2px 0 rgba(255,255,255,.08), inset 0 -10px 30px rgba(0,0,0,.8)",
+                }}
+            >
+              {/* CARD */}
+              <div className="rounded-[20px] bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white overflow-hidden relative">
+                {/* subtle inner glow like in design */}
+                <div className="pointer-events-none absolute inset-0">
+                  <div className="absolute inset-x-0 top-0 h-12 bg-white/12 blur-md" />
+                  <div className="absolute inset-0 ring-1 ring-white/5" />
+                  <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
                 </div>
-              </div>
-            </div>
 
-            {/* Right Column - Images */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <img
-                  src="/images/budova-detail-vchod.jpg"
-                  alt="Detail vchodu do autoservisu"
-                  className="w-full h-64 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-              <div>
-                <img
-                  src="/images/budova-exterier-detail.jpg"
-                  alt="Detail exteriéru budovy"
-                  className="w-full h-48 object-cover rounded-lg shadow-lg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-12 text-center">
-              Prečo si vybrať Komex
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="flex gap-4">
-                <div className="text-3xl text-red-500">🤝</div>
-                <div>
-                  <h3 className="font-semibold text-xl mb-2">Osobný prístup</h3>
-                  <p className="text-gray-600">
-                    Otvorená komunikácia – vždy vysvetlíme, čo je potrebné
-                    urobiť a prečo.
-                  </p>
+                {/* Header strip */}
+                <div className="px-8 pt-8 relative">
+                  <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
                 </div>
-              </div>
 
-              <div className="flex gap-4">
-                <div className="text-3xl text-red-500">⚡</div>
-                <div>
-                  <h3 className="font-semibold text-xl mb-2">Rýchle termíny</h3>
-                  <p className="text-gray-600">
-                    Snaha skrátiť čas odstávky vozidla na minimum a flexibilné
-                    objednávanie.
-                  </p>
+                <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-8 px-8 py-8 relative">
+                  {/* LEFT */}
+                  <div className="space-y-6">
+                    <div>
+                      <h2 className="text-5xl font-extrabold italic text-red-500 tracking-tight">
+                        O nás
+                      </h2>
+                      <div className="mt-4 space-y-4 text-zinc-200 leading-relaxed">
+                        <p>
+                          Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na
+                          Strojníckej ulici, kde dodnes sídli a dlhodobo poskytuje
+                          servis osobným aj úžitkovým vozidlám.
+                        </p>
+                        <p className="text-zinc-300">
+                          Postupne sa z menšieho pracoviska stal plnohodnotný
+                          servis so zameraním na mechanické opravy, diagnostiku,
+                          pneuservis a údržbu klimatizácií.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="h-px w-full bg-zinc-700/70" />
+
+                    <div>
+                      <h3 className="text-3xl font-extrabold italic text-red-500">
+                        Servis a repasovanie
+                        <span className="block text-2xl text-red-500/90">
+                        autochladičov na jednom mieste
+                      </span>
+                      </h3>
+                      <div className="mt-4 space-y-4 text-zinc-200 leading-relaxed">
+                        <p>
+                          Dôležitou súčasťou služieb KOMEX-u je aj špecializácia
+                          na opravy a repasovanie autochladičov, ktorá sústreďuje
+                          klasické servisné úkony aj širšiu údržbu chladiaceho
+                          systému na jedno miesto.
+                        </p>
+                        <p className="text-zinc-300">
+                          Vďaka tomu vie dielňa vyriešiť bežné opravy aj špecifické
+                          problémy s chladením motora na jednom mieste.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="h-px w-full bg-zinc-700/70" />
+
+                    <div>
+                      <h3 className="text-4xl font-extrabold italic text-red-500">
+                        Rodinný servis
+                        <span className="block text-3xl text-red-500/90">
+                        dvoch generácií
+                      </span>
+                      </h3>
+
+                      <div className="mt-4 space-y-4 text-zinc-200 leading-relaxed">
+                        <p>
+                          Rodinný charakter podniku sa odráža aj v prístupe k
+                          zákazníkom a dlhodobej dôvere.
+                        </p>
+                        <p className="text-zinc-300">
+                          Autoservis KOMEX dnes funguje ako spolupráca dvoch
+                          generácií — servis vozidiel vedie Marcel Komka, opravy a
+                          repasovanie autochladičov zabezpečuje Dušan Komka.
+                        </p>
+                      </div>
+
+                      <div className="mt-6">
+                        <a
+                            href="/kontakt"
+                            className="inline-flex items-center justify-center rounded-md bg-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-900 shadow hover:bg-white transition"
+                        >
+                          Objednajte sa u nás
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* RIGHT: photo grid (tiles) */}
+                  <aside className="lg:pl-2">
+                    <div className="grid grid-cols-2 gap-3 auto-rows-[92px]">
+                      <div className="col-span-2 row-span-2 rounded-md overflow-hidden ring-1 ring-zinc-700/70">
+                        <img
+                            src="/images/o-nas/IMG_20251221_232359_182 1.png"
+                            alt="KOMEX - detail"
+                            className="h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="rounded-md overflow-hidden ring-1 ring-zinc-700/70">
+                        <img
+                            src="/images/o-nas/IMG_20251221_232357_750 1.png"
+                            alt="KOMEX - budova"
+                            className="h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="rounded-md overflow-hidden ring-1 ring-zinc-700/70">
+                        <img
+                            src="/images/o-nas/IMG_20251221_232351_217 1.png"
+                            alt="KOMEX - hala"
+                            className="h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="col-span-2 row-span-2 rounded-md overflow-hidden ring-1 ring-zinc-700/70">
+                        <img
+                            src="/images/o-nas/IMG_20251221_232356_106 1.png"
+                            alt="KOMEX - servis"
+                            className="h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="col-span-2 row-span-2 rounded-md overflow-hidden ring-1 ring-zinc-700/70">
+                        <img
+                            src="/images/o-nas/IMG_20251221_232352_681 1.png"
+                            alt="KOMEX - diagnostika"
+                            className="h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="col-span-2 row-span-2 rounded-md overflow-hidden ring-1 ring-zinc-700/70">
+                        <img
+                            src="/images/o-nas/IMG_20251221_232351_217 1.png"
+                            alt="KOMEX - detail vnútra"
+                            className="h-full w-full object-cover"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-6 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
+                  </aside>
                 </div>
-              </div>
 
-              <div className="flex gap-4">
-                <div className="text-3xl text-red-500">💰</div>
-                <div>
-                  <h3 className="font-semibold text-xl mb-2">Korektné ceny</h3>
-                  <p className="text-gray-600">
-                    Férové ceny a možnosť vopred sa dohodnúť na rozpočte opravy.
-                  </p>
+                {/* Footer */}
+                <div className="px-8 pb-10 relative">
+                  <div className="rounded-xl bg-zinc-950/40 ring-1 ring-zinc-700/60 p-6">
+                    <div className="text-center">
+                      <div className="text-5xl font-extrabold italic text-red-500 leading-tight">
+                        Rodinný servis
+                        <br />
+                        dvoch generácií
+                      </div>
+                      <div className="mt-4 text-zinc-300">
+                        Strojnícka ulica, Prešov • Servis osobných aj úžitkových
+                        vozidiel
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-4">
-                <div className="text-3xl text-red-500">⭐</div>
-                <div>
-                  <h3 className="font-semibold text-xl mb-2">Kvalitná práca</h3>
-                  <p className="text-gray-600">
-                    Dlhoročné skúsenosti a spokojní zákazníci sú zárukou našej
-                    kvality.
-                  </p>
+                <div className="px-8 pb-6 relative">
+                  <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">Kontakt a objednávky</h2>
-            <p className="text-lg text-gray-700 mb-6 leading-relaxed">
-              Objednať sa môžete telefonicky alebo e-mailom; radi vám nájdeme
-              termín, ktorý vám bude vyhovovať.
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Autoservis Komex nájdete na{" "}
-              <strong>Strojníckej ulici v Prešove</strong>, s jednoduchým
-              prístupom a možnosťou parkovania priamo pri dielni.
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
   );
 }
