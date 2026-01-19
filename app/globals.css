@@ -48,6 +48,17 @@
   );
 }
 
+.border-chrome {
+  border-image: linear-gradient(
+      180deg,
+      #404040 0%,
+      #888888 13%,
+      #2d2c2c 22%,
+      #171717 100%
+    )
+    1;
+}
+
 .inset-chrome {
   box-shadow: inset 0px 4px 6px rgba(255, 255, 255, 0.6);
 }

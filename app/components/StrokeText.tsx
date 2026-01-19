@@ -3,6 +3,8 @@ interface StrokeTextProps {
   strokeWidth?: number;
   strokeColor?: string;
   className?: string;
+  tag?: "span" | "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  shadowSize?: number;
 }
 
 export default function StrokeText({
@@ -10,14 +12,20 @@ export default function StrokeText({
   strokeWidth = 4,
   strokeColor = "black",
   className = "",
+  tag = "span",
+  shadowSize = 2,
 }: StrokeTextProps) {
+  const Tag = tag;
   return (
-    <span className={`relative inline-block ${className}`}>
+    <span className={`relative inline-block text-white ${className}`}>
       {/* Stroke layer (behind) */}
       <span
         className="absolute left-0 top-0"
         style={{
           WebkitTextStroke: `${strokeWidth}px ${strokeColor}`,
+          textShadow: `${shadowSize}px ${
+            shadowSize - shadowSize / 5
+          }px 0 ${strokeColor}`,
           color: "transparent",
         }}
         aria-hidden="true"
@@ -25,7 +33,7 @@ export default function StrokeText({
         {children}
       </span>
       {/* Text layer (on top) */}
-      <span className="relative">{children}</span>
+      <Tag className="relative">{children}</Tag>
     </span>
   );
 }
