@@ -1,9 +1,11 @@
+import Display from "./components/Display";
 import FisheyeCarousel from "./components/FisheyeCarousel";
+import StrokeText from "./components/StrokeText";
 import SvgBar from "./components/SvgBar";
 
 export default function Home() {
   return (
-    <main className="flex-1">
+    <main className="flex-1 text-black bg-white">
       <section className="relative from-gray-900 to-gray-800 text-white overflow-hidden">
         <SvgBar className="rotate-180 top-0" />
         <FisheyeCarousel />
@@ -11,38 +13,17 @@ export default function Home() {
       </section>
       <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome "></div>
 
-      <section id="sluzby" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">Naše služby</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold mb-4 text-red-500">
-                Servis a údržba
-              </h3>
-              <p className="text-gray-600">
-                Pravidelný servis a údržba vozidiel všetkých značiek. Výmena
-                olejov, filtrov a technické kontroly.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold mb-4 text-red-500">
-                Diagnostika
-              </h3>
-              <p className="text-gray-600">
-                Profesionálna diagnostika pomocou najmodernejších zariadení.
-                Identifikácia a riešenie problémov.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-2xl font-semibold mb-4 text-red-500">
-                Opravy
-              </h3>
-              <p className="text-gray-600">
-                Kompletné opravy motorov, prevodoviek, brzd a ďalších
-                komponentov vozidla.
-              </p>
-            </div>
-          </div>
+      <section className="flex flex-col items-center">
+        <StrokeText
+          strokeWidth={7.8}
+          tag="h2"
+          shadowSize={7}
+          className="text-[4rem] font-bold translate-y-13"
+        >
+          Naše služby
+        </StrokeText>
+        <div className="pt-20 bg-chrome2 bg-size-[100%_30%] bg-no-repeat w-full">
+          <Display className="w-full" />
         </div>
       </section>
 

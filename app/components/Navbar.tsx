@@ -45,6 +45,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center bg-chrome2 inset-chrome w-full px-10 py-6 rounded-xs">
           <StrokeText
             strokeWidth={6}
+            tag="h1"
             className="text-5xl font-bold text-shadow-main"
           >
             Profesionálna starostlivosť
