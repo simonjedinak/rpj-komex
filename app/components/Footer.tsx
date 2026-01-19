@@ -1,5 +1,4 @@
 // components/Footer.tsx
-
 import { ButtonLink } from "./ButtonLink";
 import StrokeText from "./StrokeText";
 
@@ -16,13 +15,15 @@ export default function Footer() {
             <nav className="flex flex-col gap-4 h-full justify-center items-start">
               <ButtonLink href="/" text="Domov" arrow />
               <ButtonLink href="/o-nas" text="O nás" arrow />
-              <ButtonLink href="/nieco" text="Niečo" arrow />
+
+              {/* ZMENENÉ: pôvodné "/nieco" -> "/details" */}
+              <ButtonLink href="/details" text="Details" arrow />
             </nav>
 
             <nav className="flex flex-col gap-4 justify-center items-start ">
               <ButtonLink href="/faq" text="Často kladené otázky" arrow />
               <ButtonLink href="/o-nas" text="O nás" arrow />
-              <ButtonLink href="/nieco" text="Niečo" arrow />
+              <ButtonLink href="/details" text="Niečo" arrow />
             </nav>
           </div>
 
