@@ -53,10 +53,10 @@ export default function Display({ className = "" }: { className?: string }) {
       className={`rounded-t-[7rem] p-2 bg-[linear-gradient(150deg,#404040_0%,#888888_13%,#2d2c2c_22%,#171717_100%)]
         shadow-[0px_-4px_14px_2px_#000002]${className}`}
     >
-      <div className="bg-black rounded-t-[calc(7rem-8px)] py-14 px-14 w-full min-h-100">
+      <div className="bg-black rounded-t-[calc(7rem-8px)] py-10 px-50 w-full min-h-100">
         {selectedItem ? (
           // Detail View
-          <div className="relative flex items-center justify-between h-full gap-8">
+          <div className="relative flex items-center justify-between h-full">
             <button
               onClick={handleBack}
               className="absolute top-0 left-0 text-white hover:text-gray-300 transition-colors p-2"
@@ -78,12 +78,12 @@ export default function Display({ className = "" }: { className?: string }) {
           </div>
         ) : (
           // Grid View
-          <div className="grid grid-cols-4 grid-rows-2 gap-4">
+          <div className="grid grid-cols-4 grid-rows-2">
             {Object.entries(items).map(([key, value], index) => (
               <button
                 key={index}
                 onClick={() => handleItemClick(key)}
-                className="flex flex-col gap-4 items-center justify-center p-5 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
+                className="flex flex-col gap-4 items-center justify-center px-7 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
               >
                 <div className="bg-red-500 w-full aspect-square rounded-full" />
                 <p className="text-white text-center font-bold text-xl">
