@@ -32,7 +32,7 @@ const services: Service[] = [
       "Robíme aj výmenu brzdovej kvapaliny a odvzdušnenie.",
     ],
     note:
-      "Ako všeobecné odporúčanie sa často uvádza približne každé 2 roky (vždy však podľa výrobcu a stavu kvapaliny).",
+        "Ako všeobecné odporúčanie sa často uvádza približne každé 2 roky (vždy však podľa výrobcu a stavu kvapaliny).",
   },
   {
     title: "Sklá vozidla",
@@ -92,77 +92,162 @@ const services: Service[] = [
   },
 ];
 
+function ChromePanel({
+                       children,
+                       className = "",
+                     }: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+      <div
+          className={`rounded-[34px] p-[22px] shadow-2xl ${className}`}
+          style={{
+            background:
+                "linear-gradient(90deg,#6b7077 0%,#c7cbd1 10%,#70757c 22%,#cfd3d8 36%,#6e737a 52%,#b8bcc2 66%,#5b6067 82%,#c7cbd1 92%,#5a5f66 100%)",
+            boxShadow:
+                "inset 0 16px 34px rgba(0,0,0,.70), inset 0 -14px 26px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35)",
+          }}
+      >
+        <div
+            className="rounded-[26px] p-[12px]"
+            style={{
+              background:
+                  "linear-gradient(180deg,#0a0f15 0%,#141a22 55%,#070a0f 100%)",
+              boxShadow:
+                  "inset 0 2px 0 rgba(255,255,255,.08), inset 0 -10px 30px rgba(0,0,0,.85)",
+            }}
+        >
+          <div className="rounded-[20px] bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white overflow-hidden relative">
+            <div className="pointer-events-none absolute inset-0">
+              <div className="absolute inset-x-0 top-0 h-12 bg-white/10 blur-md" />
+              <div className="absolute inset-0 ring-1 ring-white/5" />
+              <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
+            </div>
+            <div className="relative z-10 p-6 md:p-8">{children}</div>
+          </div>
+        </div>
+      </div>
+  );
+}
+
 export default function DetailsPage() {
   return (
-    <main className="flex-1 text-black bg-white">
-      <section className="relative overflow-hidden">
-        {/* Background from Kontakt page */}
-        <div className="absolute inset-0 bg-slate-950" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-950 to-black" />
-
-        <div className="relative container mx-auto px-4 py-10">
-          {/* Silver Header Box */}
+      <main className="min-h-[70vh] bg-neutral-200 py-10">
+        <section className="mx-auto w-[min(1100px,92vw)]">
           <div
-            className="
-              mb-8
-              rounded-[2px]
-              px-5 py-4
-              [background:linear-gradient(180deg,#3A3A3A_-29.23%,#A4A4A4_-5.96%,#606060_11.48%,#CECECE_34.34%,#8F8F8F_50.25%,#464646_72.22%,#696969_94.18%)]
-              shadow-[inset_0px_3.30363px_4.95545px_rgba(255,255,255,0.6)]
-            "
+              className="
+            mb-8
+            rounded-[10px]
+            px-6 py-4
+            [background:linear-gradient(180deg,#3A3A3A_-29.23%,#A4A4A4_-5.96%,#606060_11.48%,#CECECE_34.34%,#8F8F8F_50.25%,#464646_72.22%,#696969_94.18%)]
+            shadow-[inset_0px_3.30363px_4.95545px_rgba(255,255,255,0.6)]
+          "
           >
-            <h1 className="text-xl md:text-2xl font-bold text-black/85">
+            <StrokeText
+                tag="h1"
+                strokeWidth={3}
+                strokeColor="black"
+                shadowSize={2}
+                className="text-2xl md:text-3xl font-extrabold italic tracking-tight"
+            >
               Details
-            </h1>
-            <p className="text-sm text-black/70">
-              Detailný prehľad služieb – diagnostika, servis a opravy na jednom
-              mieste.
-            </p>
-          </div>
-        </div>
-      </section>
+            </StrokeText>
 
-      <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome" />
-
-      <section className="flex flex-col items-center">
-        <StrokeText
-          strokeWidth={7.8}
-          tag="h2"
-          shadowSize={7}
-          className="text-[3rem] md:text-[4rem] font-bold translate-y-13 text-center"
-        >
-          Naše služby
-        </StrokeText>
-
-        <div className="pt-20 bg-chrome2 bg-size-[100%_30%] bg-no-repeat w-full">
-          <div className="container mx-auto px-4 pb-16">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((s) => (
-                <article
-                  key={s.title}
-                  className="rounded-2xl bg-white border border-black/10 shadow-sm p-6 hover:bg-black/5 transition-colors"
-                >
-                  <h3 className="text-xl font-bold">{s.title}</h3>
-
-                  <ul className="mt-4 space-y-2 text-gray-700">
-                    {s.description.map((line) => (
-                      <li key={line} className="leading-relaxed">
-                        {line}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {s.note ? (
-                    <p className="mt-4 text-sm text-gray-600 border-t border-black/10 pt-4">
-                      {s.note}
-                    </p>
-                  ) : null}
-                </article>
-              ))}
+            <div className="mt-1">
+              <StrokeText
+                  tag="p"
+                  strokeWidth={2}
+                  strokeColor="black"
+                  shadowSize={2}
+                  className="text-sm md:text-base text-white/90"
+              >
+                Detailný prehľad služieb – diagnostika, servis a opravy na jednom
+                mieste.
+              </StrokeText>
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+
+          <ChromePanel>
+            <div>
+              <h2 className="text-3xl md:text-4xl font-extrabold italic text-red-500">
+                Naše služby
+              </h2>
+              <p className="mt-2 text-sm md:text-base text-zinc-300">
+                Prehľadne podľa oblastí. Ak si neviete vybrať, napíšte značku/model
+                a popis problému.
+              </p>
+            </div>
+
+            <div className="mt-6 h-px w-full bg-zinc-700/70" />
+
+            {/* Upravené: karty dizajnovo bližšie k FAQ (glass + shine + jemný hover) */}
+            <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
+              {services.map((s) => (
+                  <article
+                      key={s.title}
+                      className="
+                  group relative overflow-hidden
+                  rounded-2xl
+                  border border-white/10
+                  bg-white/5
+                  shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+                  backdrop-blur-md
+                  p-6
+                  transition
+                  hover:bg-white/10
+                  hover:border-white/15
+                  hover:-translate-y-[2px]
+                  hover:shadow-[0_18px_55px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]
+                  focus-within:ring-2 focus-within:ring-white/15
+                "
+                  >
+                    <div className="pointer-events-none absolute inset-0">
+                      <div className="absolute -top-12 left-[-40%] h-28 w-[180%] rotate-[-8deg] bg-white/10 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <div className="absolute inset-0 ring-1 ring-white/5" />
+                    </div>
+
+                    <div className="relative z-10">
+                      <h3
+                          className="
+                      text-lg md:text-xl
+                      font-extrabold
+                      text-white
+                      tracking-tight
+                      transition-colors
+                      group-hover:text-red-400
+                    "
+                      >
+                        {s.title}
+                      </h3>
+
+                      <ul className="mt-4 space-y-2 text-sm md:text-[15px] text-zinc-200">
+                        {s.description.map((line) => (
+                            <li key={line} className="leading-relaxed text-zinc-200/95">
+                              {line}
+                            </li>
+                        ))}
+                      </ul>
+
+                      {s.note ? (
+                          <div className="mt-4 border-t border-white/10 pt-4">
+                            <p className="text-xs md:text-sm text-zinc-300/95">
+                              {s.note}
+                            </p>
+                          </div>
+                      ) : null}
+                    </div>
+                  </article>
+              ))}
+            </div>
+
+            <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
+            <p className="mt-4 text-xs text-zinc-400">
+              Tip: V kontakte uveďte typ služby (prehliadka/sklo/pneu/porucha/podozrenie),
+              značku a model auta a stručný popis problému.
+            </p>
+          </ChromePanel>
+        </section>
+      </main>
   );
 }
