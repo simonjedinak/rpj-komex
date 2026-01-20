@@ -31,7 +31,7 @@ const items = {
     "Vymieňame a kontrolujeme všetky typy svetiel na vozidle. Postaráme sa o svetlomety aj vnútorné osvetlenie profesionálne. Rýchla a kvalitná výmena je u nás štandardom.",
   Pneumatiky:
     "Zabezpečujeme kompletný pneuservis – výmenu, vyvažovanie aj kontrolu tlaku. Používame moderné vybavenie pre presnú montáž pneumatík. Každý servis prispôsobujeme značke a typu vozidla.",
-  "Mechanické systémy":
+  Mechanika:
     "Opravujeme mechanické časti vozidiel pomocou špičkových nástrojov. Venovanosť detailom a odborné know-how sú našou výhodou. Kontroly mechaniky vykonávame podľa špecifikácie výrobcu.",
   Klíma:
     "Vykonávame plnenie, čistenie a opravu klimatizačných systémov. Zabezpečíme optimálne chladenie aj v horúcich podmienkach. Kontroly realizujeme podľa odporúčaní pre konkrétnu značku vozidla.",
@@ -53,37 +53,40 @@ export default function Display({ className = "" }: { className?: string }) {
       className={`rounded-t-[7rem] p-2 bg-[linear-gradient(150deg,#404040_0%,#888888_13%,#2d2c2c_22%,#171717_100%)]
         shadow-[0px_-4px_14px_2px_#000002]${className}`}
     >
-      <div className="bg-black rounded-t-[calc(7rem-8px)] py-10 px-50 w-full min-h-100">
+      <div className="bg-black rounded-t-[calc(7rem-8px)] pb-20 pt-21 px-50 w-full h-150">
         {selectedItem ? (
           // Detail View
-          <div className="relative flex items-center justify-between h-full">
+          <div className="flex flex-col h-full">
             <button
               onClick={handleBack}
-              className="absolute top-0 left-0 text-white hover:text-gray-300 transition-colors p-2"
+              className="self-start text-white hover:text-gray-300 transition-colors p-2 -ml-4 -mt-4 mb-2"
               aria-label="Go back"
             >
               <ArrowLeftIcon />
             </button>
-            <div className="flex-1 pl-12">
-              <h2 className="text-white font-bold text-4xl mb-6">
-                {selectedItem}
-              </h2>
-              <p className="text-white text-lg">
-                {items[selectedItem as keyof typeof items]}
-              </p>
-            </div>
-            <div className="shrink-0">
-              <div className="bg-red-500 w-48 h-48 rounded-full" />
+            <div className="flex items-center justify-between flex-1">
+              <div className="mr-20">
+                <h3 className="text-white font-bold text-6xl mb-6">
+                  {selectedItem}
+                </h3>
+                <p className="text-white text-xl">
+                  {items[selectedItem as keyof typeof items]}
+                </p>
+              </div>
+
+              <div className="w-full">
+                <div className="bg-red-500 aspect-square rounded-full" />
+              </div>
             </div>
           </div>
         ) : (
           // Grid View
-          <div className="grid grid-cols-4 grid-rows-2">
+          <div className="grid grid-cols-4 grid-rows-2 gap-y-5">
             {Object.entries(items).map(([key, value], index) => (
               <button
                 key={index}
                 onClick={() => handleItemClick(key)}
-                className="flex flex-col gap-4 items-center justify-center px-7 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
+                className="flex flex-col gap-4 items-center justify-center px-7 hover:scale-105 transition-transform transition-10 cursor-pointer"
               >
                 <div className="bg-red-500 w-full aspect-square rounded-full" />
                 <p className="text-white text-center font-bold text-xl">
