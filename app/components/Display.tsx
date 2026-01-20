@@ -21,6 +21,13 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
+const iconColors = [
+  "bg-red-500",
+  "bg-yellow-500",
+  "bg-green-500",
+  "bg-blue-500",
+  "bg-orange-500",
+];
 const items: Record<string, string> = {
   Motor:
     "Naši odborníci vykonávajú podrobnú diagnostiku motora. Vykonávame špecifické kontroly podľa typu a modelu vozidla. Generálne opravy motora realizujeme rýchlo, precízne a v najvyššej kvalite.",
@@ -90,19 +97,23 @@ export default function Display({ className = "" }: { className?: string }) {
                   </div>
 
                   <div className="w-full">
-                    <div className="bg-red-500 aspect-square rounded-full" />
+                    <div
+                      className={`${iconColors[Object.keys(items).indexOf(selectedItem) % iconColors.length]} aspect-square rounded-full`}
+                    />
                   </div>
                 </div>
               </div>
             ) : (
               <div className="grid grid-cols-4 grid-rows-2 gap-y-5">
-                {Object.entries(items).map(([key, value], index) => (
+                {Object.entries(items).map(([key], index) => (
                   <button
                     key={index}
                     onClick={() => handleItemClick(key)}
                     className="flex flex-col gap-4 items-center justify-center px-7 hover:scale-105 transition-transform cursor-pointer"
                   >
-                    <div className="bg-red-500 w-full aspect-square rounded-full" />
+                    <div
+                      className={`${iconColors[index % iconColors.length]} w-full aspect-square rounded-full`}
+                    />
                     <p className="text-white text-center font-bold text-xl">
                       {key}
                     </p>
