@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import CRTEffect from "vault66-crt-effect";
+// @ts-ignore
+import "vault66-crt-effect/dist/vault66-crt-effect.css";
 
 const ArrowLeftIcon = () => (
   <svg
@@ -18,7 +21,7 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
-const items = {
+const items: Record<string, string> = {
   Motor:
     "Naši odborníci vykonávajú podrobnú diagnostiku motora. Vykonávame špecifické kontroly podľa typu a modelu vozidla. Generálne opravy motora realizujeme rýchlo, precízne a v najvyššej kvalite.",
   "Výmena oleja":
@@ -50,55 +53,66 @@ export default function Display({ className = "" }: { className?: string }) {
 
   return (
     <div
-      className={`rounded-t-[7rem] p-2 bg-[linear-gradient(150deg,#404040_0%,#888888_13%,#2d2c2c_22%,#171717_100%)]
-        shadow-[0px_-4px_14px_2px_#000002]${className}`}
+      className={`rounded-t-[7rem] p-2 bg-[linear-gradient(150deg,#404040_0%,#888888_13%,#2d2c2c_22%,#171717_100%)] shadow-[0px_-4px_14px_2px_#000002] ${className}`}
     >
-      <div className="bg-black rounded-t-[calc(7rem-8px)] pb-20 pt-21 px-50 w-full h-150">
-        {selectedItem ? (
-          // Detail View
-          <div className="flex flex-col h-full">
-            <button
-              onClick={handleBack}
-              className="self-start text-white hover:text-gray-300 transition-colors p-2 -ml-4 -mt-4 mb-2"
-              aria-label="Go back"
-            >
-              <ArrowLeftIcon />
-            </button>
-            <div className="flex items-center justify-between flex-1">
-              <div className="mr-20">
-                <h3 className="text-white font-bold text-6xl mb-6">
-                  {selectedItem}
-                </h3>
-                <p className="text-white text-xl">
-                  {items[selectedItem as keyof typeof items]}
-                </p>
-              </div>
+      <div className="rounded-t-[calc(7rem-8px)] overflow-hidden">
+        <CRTEffect
+          enabled={true}
+          sweepDuration={5}
+          sweepThickness={10}
+          scanlineOpacity={0.1}
+          theme="custom"
+          enableScanlines={true}
+          enableSweep={true}
+          enableGlow={true}
+          glowColor="rgba(255, 0, 0, 0.2)"
+          enableEdgeGlow={true}
+          edgeGlowColor="rgba(255, 255, 255, 0.1)"
+          edgeGlowSize={200}
+          enableFlicker={true}
+        >
+          <div className="bg-black pb-20 pt-21 px-50 w-full h-150">
+            {selectedItem ? (
+              <div className="flex flex-col h-full">
+                <button
+                  onClick={handleBack}
+                  className="self-start text-white hover:text-gray-300 transition-colors p-2 -ml-4 -mt-4 mb-2"
+                  aria-label="Go back"
+                >
+                  <ArrowLeftIcon />
+                </button>
+                <div className="flex items-center justify-between flex-1">
+                  <div className="mr-20">
+                    <h3 className="text-white font-bold text-6xl mb-6">
+                      {selectedItem}
+                    </h3>
+                    <p className="text-white text-xl">{items[selectedItem]}</p>
+                  </div>
 
-              <div className="w-full">
-                <div className="bg-red-500 aspect-square rounded-full" />
+                  <div className="w-full">
+                    <div className="bg-red-500 aspect-square rounded-full" />
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-4 grid-rows-2 gap-y-5">
+                {Object.entries(items).map(([key, value], index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleItemClick(key)}
+                    className="flex flex-col gap-4 items-center justify-center px-7 hover:scale-105 transition-transform cursor-pointer"
+                  >
+                    <div className="bg-red-500 w-full aspect-square rounded-full" />
+                    <p className="text-white text-center font-bold text-xl">
+                      {key}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        ) : (
-          // Grid View
-          <div className="grid grid-cols-4 grid-rows-2 gap-y-5">
-            {Object.entries(items).map(([key, value], index) => (
-              <button
-                key={index}
-                onClick={() => handleItemClick(key)}
-                className="flex flex-col gap-4 items-center justify-center px-7 hover:scale-105 transition-transform transition-10 cursor-pointer"
-              >
-                <div className="bg-red-500 w-full aspect-square rounded-full" />
-                <p className="text-white text-center font-bold text-xl">
-                  {key}
-                </p>
-              </button>
-            ))}
-          </div>
-        )}
+        </CRTEffect>
       </div>
     </div>
   );
 }
-
-//https://www.npmjs.com/package/vault66-crt-effect
