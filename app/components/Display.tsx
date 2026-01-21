@@ -72,11 +72,14 @@ export default function Display({ className = "" }: { className?: string }) {
           enableScanlines={true}
           enableSweep={true}
           enableGlow={true}
-          glowColor="rgba(255, 0, 0, 0.2)"
+          glowColor="rgba(0, 0, 0, 1)"
           enableEdgeGlow={true}
           edgeGlowColor="rgba(255, 255, 255, 0.1)"
           edgeGlowSize={200}
           enableFlicker={true}
+          enableGlitch={true}
+          glitchIntensity={0.2}
+          glitchSpeed={0.6}
         >
           <div className="bg-black pb-20 pt-21 px-50 w-full h-150">
             {selectedItem ? (

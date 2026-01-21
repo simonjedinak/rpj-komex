@@ -4,6 +4,7 @@ import ChromeDivider from "./ChromeDivider";
 import { ButtonLink } from "./ButtonLink";
 
 const navTopTexts: string[] = [
+  // "" = divider
   "",
   "info@komex-auto.sk",
   "",
@@ -12,7 +13,12 @@ const navTopTexts: string[] = [
   "6A, Strojnícka 13179, 080 06 Prešov",
 ];
 
-const navLinks: string[] = ["Domov", "O nás", "Servis", "Kontakt"];
+const navLinks: { [key: string]: string } = {
+  Domov: "/",
+  "O nás": "/o-nas",
+  Servis: "/servis",
+  Kontakt: "/kontakt",
+};
 
 export default function Navbar() {
   return (
@@ -31,7 +37,7 @@ export default function Navbar() {
               >
                 {text}
               </StrokeText>
-            )
+            ),
           )}
         </div>
       </div>
@@ -55,14 +61,9 @@ export default function Navbar() {
       <div className="w-full flex flex-row h-10 gap-1.5 bg-chrome1 inset-chrome">
         <div className="container w-80"></div>
         <ul className="w-full h-full flex items-center gap-10 py-2 -ml-0.5">
-          {navLinks.map((link: string, index: number) => (
+          {Object.entries(navLinks).map(([name, href], index: number) => (
             <li key={`nav-link-${index}`}>
-              <ButtonLink
-                href={link === "Domov" ? "/" : `/${link.toLowerCase()}`}
-                variant="small"
-                text={link}
-                arrow={true}
-              />
+              <ButtonLink href={href} variant="small" text={name} arrow />
             </li>
           ))}
         </ul>
