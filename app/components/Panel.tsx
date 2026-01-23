@@ -5,15 +5,21 @@ interface PanelProps {
   title?: string;
   children?: ReactNode;
   className?: string;
+  titleBar?: boolean;
 }
 
-export function Panel({ title, children, className }: PanelProps) {
+export function Panel({
+  title,
+  children,
+  className,
+  titleBar = true,
+}: PanelProps) {
   return (
     <div className={`relative max-w-full shadow-lg ${className}`}>
       {/* Panel (front) */}
       <div className="relative z-10 bg-[#E5E5E5] p-1.5 border-2 border-white">
         {/* Handle (behind) */}
-        <div className="absolute -left-px -top-4 h-6.5 w-80">
+        <div className="absolute -left-px -top-6 h-8 w-100">
           {/* Fill (clipped) */}
           <div
             className="
@@ -50,36 +56,40 @@ export function Panel({ title, children, className }: PanelProps) {
         <div className="border-2 border-[#c9c9c9] bg-white">
           {/* inner bevel line */}
           <div>
-            {/* Title bar */}
-            <div className="relative px-6 py-4 text-white">
-              <div
-                className="
-                  absolute inset-0
-                  bg-linear-to-b from-[#840000] to-[#E31E24] border-2 border-[#999997]
+            {titleBar && (
+              <>
+                {/* Title bar */}
+                <div className="relative px-7 py-5 text-white">
+                  <div
+                    className="
+                      absolute inset-0
+                      bg-linear-to-b from-[#840000] to-[#E31E24] border-2 border-[#999997]
                 "
-              />
-              {/* subtle inner line like in the screenshot */}
-              <div className="absolute inset-x-0 top-0 h-0.5 bg-[#b00000]/70" />
-              <div className="absolute inset-x-0 bottom-0 h-0.5 bg-black/15" />
+                  />
+                  {/* subtle inner line like in the screenshot */}
+                  <div className="absolute inset-x-0 top-0 h-0.5 bg-[#b00000]/70" />
+                  <div className="absolute inset-x-0 bottom-0 h-0.5 bg-black/15" />
 
-              <div className="relative flex items-center justify-between">
-                {/* Title */}
-                <StrokeText
-                  strokeWidth={4}
-                  tag="h4"
-                  className="text-5xl font-bold text-shadow-main"
-                >
-                  {title}
-                </StrokeText>
-              </div>
-            </div>
+                  <div className="relative flex items-center justify-between">
+                    {/* Title */}
+                    <StrokeText
+                      strokeWidth={6}
+                      tag="h4"
+                      className="text-6xl font-bold text-shadow-main"
+                    >
+                      {title}
+                    </StrokeText>
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Body */}
-            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-xl">
+            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-2xl">
               {Children.map(children, (child, index) => (
                 <div
                   key={index}
-                  className={`py-3 px-5 ${index % 2 === 1 ? "bg-neutral-200" : ""}`}
+                  className={`py-6 px-8 ${index % 2 === 1 ? "bg-neutral-200" : ""}`}
                 >
                   {child}
                 </div>

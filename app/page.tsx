@@ -46,13 +46,10 @@ export default function Home() {
             vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
           </p>
         </Panel>
-        <Panel title="O nás" className="w-150 translate-x-50">
-          <p>
-            Pri práci používame overené náhradné diely a moderné vybavenie,
-            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
-          </p>
+        <Panel title="O nás" className="w-150 translate-x-50 " titleBar={false}>
+          <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
         </Panel>
-        <Panel title="O nás" className="w-150 -translate-x-50">
+        <Panel title="O nás" className="w-150 -translate-x-50" titleBar={false}>
           <p>
             Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
             úžitkové vozidlá všetkých bežných značiek.
