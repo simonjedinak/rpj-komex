@@ -1,8 +1,15 @@
+import { Children, ReactNode } from "react";
 import StrokeText from "./StrokeText";
 
-export function Panel({ title = "O nás" }) {
+interface PanelProps {
+  title?: string;
+  children?: ReactNode;
+  className?: string;
+}
+
+export function Panel({ title, children, className }: PanelProps) {
   return (
-    <div className="relative w-140  max-w-full">
+    <div className={`relative max-w-full shadow-lg ${className}`}>
       {/* Panel (front) */}
       <div className="relative z-10 bg-[#E5E5E5] p-1.5 border-2 border-white">
         {/* Handle (behind) */}
@@ -68,26 +75,15 @@ export function Panel({ title = "O nás" }) {
             </div>
 
             {/* Body */}
-            <div className="border-t-2 border-[#c9c9c9] flex flex-col">
-              <div className="py-3 px-5">
-                <p>
-                  Nezávislý autoservis zameraný na kompletnú starostlivosť o
-                  osobné a úžitkové vozidlá všetkých bežných značiek
-                </p>
-              </div>
-              <div className="bg-neutral-200 py-3 px-5">
-                <p>
-                  Staviame na dlhoročných skúsenostiach, poctivej práci a
-                  individuálnom prístupe ku každému zákazníkovi.
-                </p>
-              </div>
-              <div className="py-3 px-5">
-                <p>
-                  Pri práci používame overené náhradné diely a moderné
-                  vybavenie, vďaka ktorému dokážeme rýchlo nájsť a odstrániť
-                  poruchu.
-                </p>
-              </div>
+            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-xl">
+              {Children.map(children, (child, index) => (
+                <div
+                  key={index}
+                  className={`py-3 px-5 ${index % 2 === 1 ? "bg-neutral-200" : ""}`}
+                >
+                  {child}
+                </div>
+              ))}
             </div>
           </div>
         </div>

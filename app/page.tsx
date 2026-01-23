@@ -31,8 +31,33 @@ export default function Home() {
         <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome " />
       </section>
 
-      <section className="py-16 bg-neutral-300">
-        <Panel title="O nás"></Panel>
+      <section className="py-16 flex flex-col items-center gap-10 bg-neutral-300">
+        <Panel title="O nás" className="w-200 ">
+          <p>
+            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
+            úžitkové vozidlá všetkých bežných značiek.
+          </p>
+          <p>
+            Staviame na dlhoročných skúsenostiach, poctivej práci a
+            individuálnom prístupe ku každému zákazníkovi.
+          </p>
+          <p>
+            Pri práci používame overené náhradné diely a moderné vybavenie,
+            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+          </p>
+        </Panel>
+        <Panel title="O nás" className="w-150 translate-x-50">
+          <p>
+            Pri práci používame overené náhradné diely a moderné vybavenie,
+            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+          </p>
+        </Panel>
+        <Panel title="O nás" className="w-150 -translate-x-50">
+          <p>
+            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
+            úžitkové vozidlá všetkých bežných značiek.
+          </p>
+        </Panel>
       </section>
     </main>
   );
