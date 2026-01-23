@@ -21,37 +21,84 @@ const ArrowLeftIcon = () => (
   </svg>
 );
 
-const iconColors = [
-  "bg-red-500",
-  "bg-yellow-500",
-  "bg-green-500",
-  "bg-blue-500",
-  "bg-orange-500",
-];
-const items: Record<string, string> = {
-  Motor:
-    "Naši odborníci vykonávajú podrobnú diagnostiku motora. Vykonávame špecifické kontroly podľa typu a modelu vozidla. Generálne opravy motora realizujeme rýchlo, precízne a v najvyššej kvalite.",
-  "Výmena oleja":
-    "Špecialista sa postará o kompletnú výmenu oleja vrátane filtrov. Pracujeme podľa odporúčaní výrobcu pre každý typ motora. Ponúkame aj individuálne olejové servisy šité na mieru modelu vozidla.",
-  Brzdy:
-    "Zabezpečujeme detailnú opravu a kontrolu brzdového systému. Brzdy testujeme a servisujeme s maximálnou presnosťou. Venovanosť kvalite a rýchlosti opravy je u nás samozrejmosťou.",
-  Elektronika:
-    "Realizujeme kompletnú diagnostiku elektronických systémov vozidla. Analyzujeme a riešime chybové hlásenia riadiacej jednotky. Zabezpečujeme aj špecializované kontroly elektroniky podľa značky.",
-  Osvetlenie:
-    "Vymieňame a kontrolujeme všetky typy svetiel na vozidle. Postaráme sa o svetlomety aj vnútorné osvetlenie profesionálne. Rýchla a kvalitná výmena je u nás štandardom.",
-  Pneumatiky:
-    "Zabezpečujeme kompletný pneuservis – výmenu, vyvažovanie aj kontrolu tlaku. Používame moderné vybavenie pre presnú montáž pneumatík. Každý servis prispôsobujeme značke a typu vozidla.",
-  Mechanika:
-    "Opravujeme mechanické časti vozidiel pomocou špičkových nástrojov. Venovanosť detailom a odborné know-how sú našou výhodou. Kontroly mechaniky vykonávame podľa špecifikácie výrobcu.",
-  Klíma:
-    "Vykonávame plnenie, čistenie a opravu klimatizačných systémov. Zabezpečíme optimálne chladenie aj v horúcich podmienkach. Kontroly realizujeme podľa odporúčaní pre konkrétnu značku vozidla.",
+const iconColors = {
+  red: "bg-[#f00]",
+  orange: "bg-[#ff7400]",
+  green: "bg-[#0FBD06]",
+  blue: "bg-[#007ffb]",
 };
 
-export default function Display({ className = "" }: { className?: string }) {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+const items: {
+  key: string;
+  description: string;
+  icon: string;
+  color?: string;
+}[] = [
+  {
+    key: "Motor",
+    description:
+      "Naši odborníci vykonávajú podrobnú diagnostiku motora. Vykonávame špecifické kontroly podľa typu a modelu vozidla. Generálne opravy motora realizujeme rýchlo, precízne a v najvyššej kvalite.",
+    icon: "/services/motor.svg",
+    color: iconColors.red,
+  },
+  {
+    key: "Výmena oleja",
+    description:
+      "Špecialista sa postará o kompletnú výmenu oleja vrátane filtrov. Pracujeme podľa odporúčaní výrobcu pre každý typ motora. Ponúkame aj individuálne olejové servisy šité na mieru modelu vozidla.",
+    icon: "/services/olej.svg",
+    color: iconColors.orange,
+  },
+  {
+    key: "Brzdy",
+    description:
+      "Zabezpečujeme detailnú opravu a kontrolu brzdového systému. Brzdy testujeme a servisujeme s maximálnou presnosťou. Venovanosť kvalite a rýchlosti opravy je u nás samozrejmosťou.",
+    icon: "/services/brzdy.svg",
+    color: iconColors.green,
+  },
+  {
+    key: "Elektronika",
+    description:
+      "Realizujeme kompletnú diagnostiku elektronických systémov vozidla. Analyzujeme a riešime chybové hlásenia riadiacej jednotky. Zabezpečujeme aj špecializované kontroly elektroniky podľa značky.",
+    icon: "/services/elektronika.svg",
+    color: iconColors.blue,
+  },
+  {
+    key: "Osvetlenie",
+    description:
+      "Vymieňame a kontrolujeme všetky typy svetiel na vozidle. Postaráme sa o svetlomety aj vnútorné osvetlenie profesionálne. Rýchla a kvalitná výmena je u nás štandardom.",
+    icon: "/services/osvetlenie.svg",
+    color: iconColors.orange,
+  },
+  {
+    key: "Pneumatiky",
+    description:
+      "Zabezpečujeme kompletný pneuservis – výmenu, vyvažovanie aj kontrolu tlaku. Používame moderné vybavenie pre presnú montáž pneumatík. Každý servis prispôsobujeme značke a typu vozidla.",
+    icon: "/services/pneumatiky.svg",
+    color: iconColors.green,
+  },
+  {
+    key: "Klíma",
+    description:
+      "Vykonávame plnenie, čistenie a opravu klimatizačných systémov. Zabezpečíme optimálne chladenie aj v horúcich podmienkach. Kontroly realizujeme podľa odporúčaní pre konkrétnu značku vozidla.",
+    icon: "/services/klima.svg",
+    color: iconColors.blue,
+  },
+  {
+    key: "Mechanika",
+    description:
+      "Opravujeme mechanické časti vozidiel pomocou špičkových nástrojov. Venovanosť detailom a odborné know-how sú našou výhodou. Kontroly mechaniky vykonávame podľa špecifikácie výrobcu.",
+    icon: "/services/mechanika.svg",
+    color: iconColors.red,
+  },
+];
 
-  const handleItemClick = (key: string) => {
-    setSelectedItem(key);
+export default function Display({ className = "" }: { className?: string }) {
+  const [selectedItem, setSelectedItem] = useState<
+    (typeof items)[number] | null
+  >(null);
+
+  const handleItemClick = (item: (typeof items)[number]) => {
+    setSelectedItem(item);
   };
 
   const handleBack = () => {
@@ -94,31 +141,53 @@ export default function Display({ className = "" }: { className?: string }) {
                 <div className="flex items-center justify-between flex-1">
                   <div className="mr-20">
                     <h3 className="text-white font-bold text-6xl mb-6">
-                      {selectedItem}
+                      {selectedItem.key}
                     </h3>
-                    <p className="text-white text-xl">{items[selectedItem]}</p>
+                    <p className="text-white text-xl">
+                      {selectedItem.description}
+                    </p>
                   </div>
 
                   <div className="w-full">
                     <div
-                      className={`${iconColors[Object.keys(items).indexOf(selectedItem) % iconColors.length]} aspect-square rounded-full`}
+                      className={`${selectedItem.color} aspect-square w-full h-full`}
+                      style={{
+                        maskImage: `url(${selectedItem.icon})`,
+                        WebkitMaskImage: `url(${selectedItem.icon})`,
+                        maskSize: "contain",
+                        WebkitMaskSize: "contain",
+                        maskRepeat: "no-repeat",
+                        WebkitMaskRepeat: "no-repeat",
+                        maskPosition: "center",
+                        WebkitMaskPosition: "center",
+                      }}
                     />
                   </div>
                 </div>
               </div>
             ) : (
               <div className="grid grid-cols-4 grid-rows-2 gap-y-5">
-                {Object.entries(items).map(([key], index) => (
+                {items.map((item, index) => (
                   <button
                     key={index}
-                    onClick={() => handleItemClick(key)}
+                    onClick={() => handleItemClick(item)}
                     className="flex flex-col gap-4 items-center justify-center px-7 hover:scale-105 transition-transform cursor-pointer"
                   >
                     <div
-                      className={`${iconColors[index % iconColors.length]} w-full aspect-square rounded-full`}
+                      className={`${item.color} w-full aspect-square`}
+                      style={{
+                        maskImage: `url(${item.icon})`,
+                        WebkitMaskImage: `url(${item.icon})`,
+                        maskSize: "contain",
+                        WebkitMaskSize: "contain",
+                        maskRepeat: "no-repeat",
+                        WebkitMaskRepeat: "no-repeat",
+                        maskPosition: "center",
+                        WebkitMaskPosition: "center",
+                      }}
                     />
                     <p className="text-white text-center font-bold text-xl">
-                      {key}
+                      {item.key}
                     </p>
                   </button>
                 ))}
