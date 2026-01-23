@@ -15,15 +15,15 @@ export default function Footer() {
             <nav className="flex flex-col gap-4 h-full justify-center items-start">
               <ButtonLink href="/" text="Domov" arrow />
               <ButtonLink href="/o-nas" text="O nás" arrow />
-
-              {/* ZMENENÉ: pôvodné "/nieco" -> "/details" */}
               <ButtonLink href="/details" text="Details" arrow />
             </nav>
 
             <nav className="flex flex-col gap-4 justify-center items-start ">
               <ButtonLink href="/faq" text="Často kladené otázky" arrow />
               <ButtonLink href="/o-nas" text="O nás" arrow />
-              <ButtonLink href="/details" text="Niečo" arrow />
+
+              {/* ZMENENÉ: "Niečo" -> "Kalendár" */}
+              <ButtonLink href="/kalendar" text="Kalendár" arrow />
             </nav>
           </div>
 
@@ -37,6 +37,7 @@ export default function Footer() {
                 © 2026 KOMEX. Všetky práva vyhradené.
               </StrokeText>
             </div>
+
             <div className="relative z-10 w-80 pl-1 pb-2 rounded-[3px] bg-chrome2 inset-chrome flex justify-center items-end">
               <img
                 src="/logo.svg"
