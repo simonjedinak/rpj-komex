@@ -3,6 +3,7 @@ import FisheyeCarousel from "./components/FisheyeCarousel";
 import Panel from "./components/Panel";
 import StrokeText from "./components/StrokeText";
 import SvgBar from "./components/SvgBar";
+import AboutGallery from "./components/AboutGallery";
 
 export default function Home() {
   return (
@@ -46,32 +47,7 @@ export default function Home() {
             vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
           </p>
         </Panel>
-        <div className="container grid grid-cols-1 md:grid-cols-2 gap-y-20 items-center">
-          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
-            <p>
-              Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné
-              a úžitkové vozidlá všetkých bežných značiek.
-            </p>
-          </Panel>
-          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
-            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
-          </Panel>
-          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
-            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
-          </Panel>
-          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
-            <p>
-              Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné
-              a úžitkové vozidlá všetkých bežných značiek.
-            </p>
-          </Panel>
-          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
-            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
-          </Panel>
-          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
-            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
-          </Panel>
-        </div>
+        <AboutGallery />
       </section>
     </main>
   );
