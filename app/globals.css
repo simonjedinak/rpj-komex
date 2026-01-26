@@ -145,3 +145,23 @@ body {
 .crt-screen-blink {
   animation: crtScreenBlink 0.13s steps(3) forwards;
 }
+
+.inset-bevel {
+  position: relative;
+  box-shadow:
+    0px 4px 5px rgba(0, 0, 0, 0.2),
+    0px 0px 4px rgba(0, 0, 0, 0.61);
+}
+
+.inset-bevel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0px 0px 40px 2px rgba(255, 255, 255, 0.2),
+    inset 0px 20px 12px rgba(255, 255, 255, 0.2),
+    inset 0px -20px 12px rgba(255, 255, 255, 0.2);
+  border: 3px solid #000000;
+}

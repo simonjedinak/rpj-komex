@@ -8,7 +8,7 @@ interface PanelProps {
   titleBar?: boolean;
 }
 
-export function Panel({
+export default function Panel({
   title,
   children,
   className,

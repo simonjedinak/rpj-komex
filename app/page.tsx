@@ -1,6 +1,6 @@
 import Display from "./components/Display";
 import FisheyeCarousel from "./components/FisheyeCarousel";
-import { Panel } from "./components/Panel";
+import Panel from "./components/Panel";
 import StrokeText from "./components/StrokeText";
 import SvgBar from "./components/SvgBar";
 
@@ -26,9 +26,9 @@ export default function Home() {
         <div className="pt-20 bg-chrome2 bg-size-[100%_30%] bg-no-repeat w-full">
           <Display className="w-full" />
         </div>
-        <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome " />
+        <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome" />
         <div className="w-full h-32 bg-amber-950" />
-        <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome " />
+        <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome" />
       </section>
 
       <section className="py-16 px-28 flex flex-col items-center gap-10 bg-neutral-300">
