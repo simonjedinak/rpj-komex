@@ -143,5 +143,5 @@ body {
   animation: crtBlink 0.05s steps(2);
 }
 .crt-screen-blink {
-  animation: crtScreenBlink 0.1s steps(3) forwards;
+  animation: crtScreenBlink 0.13s steps(3) forwards;
 }

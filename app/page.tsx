@@ -31,7 +31,7 @@ export default function Home() {
         <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome " />
       </section>
 
-      <section className="py-16 flex flex-col items-center gap-10 bg-neutral-300">
+      <section className="py-16 px-28 flex flex-col items-center gap-10 bg-neutral-300">
         <Panel title="O nás" className="w-200 ">
           <p>
             Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
@@ -46,15 +46,32 @@ export default function Home() {
             vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
           </p>
         </Panel>
-        <Panel title="O nás" className="w-150 translate-x-50 " titleBar={false}>
-          <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
-        </Panel>
-        <Panel title="O nás" className="w-150 -translate-x-50" titleBar={false}>
-          <p>
-            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
-            úžitkové vozidlá všetkých bežných značiek.
-          </p>
-        </Panel>
+        <div className="container grid grid-cols-1 md:grid-cols-2 gap-y-20 items-center">
+          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+            <p>
+              Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné
+              a úžitkové vozidlá všetkých bežných značiek.
+            </p>
+          </Panel>
+          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
+          </Panel>
+          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
+          </Panel>
+          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+            <p>
+              Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné
+              a úžitkové vozidlá všetkých bežných značiek.
+            </p>
+          </Panel>
+          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
+          </Panel>
+          <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+            <img src="/images/o-nas/IMG_20251221_232348_556 1.png" />
+          </Panel>
+        </div>
       </section>
     </main>
   );

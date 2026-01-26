@@ -118,9 +118,7 @@ export default function Display({ className = "" }: { className?: string }) {
     <div
       className={`rounded-t-[7rem] crt p-2 bg-[linear-gradient(150deg,#404040_0%,#888888_13%,#2d2c2c_22%,#171717_100%)] shadow-[0px_-4px_14px_2px_#000002] ${className}`}
     >
-      <div
-        className={`rounded-t-[calc(7rem-8px)] overflow-hidden ${isBlinking ? "crt-screen-blink" : ""}`}
-      >
+      <div className={`rounded-t-[calc(7rem-8px)] overflow-hidden `}>
         <CRTEffect
           enabled={true}
           // Scanlines: visible but not “stripy”
@@ -156,9 +154,7 @@ export default function Display({ className = "" }: { className?: string }) {
           theme="custom"
         >
           <div
-            className={
-              "bg-black py-6 px-4 sm:py-10 sm:px-8 md:py-16 md:px-16 lg:pb-20 lg:pt-21 lg:px-50 w-full h-150 lg:h-190"
-            }
+            className={` ${isBlinking ? "crt-screen-blink" : ""} bg-black py-6 px-4 sm:py-10 sm:px-8 md:py-16 md:px-16 lg:pb-20 lg:pt-21 lg:px-50 w-full h-150 lg:h-190`}
           >
             {selectedItem ? (
               <div className="flex flex-col h-full">
