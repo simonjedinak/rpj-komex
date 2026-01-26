@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import CRTEffect from "vault66-crt-effect";
 // @ts-ignore
 import "vault66-crt-effect/dist/vault66-crt-effect.css";
@@ -97,20 +97,30 @@ export default function Display({ className = "" }: { className?: string }) {
     (typeof items)[number] | null
   >(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isBlinking, setIsBlinking] = useState(false);
+
+  const triggerScreenBlink = () => {
+    setIsBlinking(true);
+    setTimeout(() => setIsBlinking(false), 150);
+  };
 
   const handleItemClick = (item: (typeof items)[number]) => {
-    setSelectedItem(item);
+    triggerScreenBlink();
+    setTimeout(() => setSelectedItem(item), 50);
   };
 
   const handleBack = () => {
-    setSelectedItem(null);
+    triggerScreenBlink();
+    setTimeout(() => setSelectedItem(null), 50);
   };
 
   return (
     <div
       className={`rounded-t-[7rem] crt p-2 bg-[linear-gradient(150deg,#404040_0%,#888888_13%,#2d2c2c_22%,#171717_100%)] shadow-[0px_-4px_14px_2px_#000002] ${className}`}
     >
-      <div className="rounded-t-[calc(7rem-8px)] overflow-hidden">
+      <div
+        className={`rounded-t-[calc(7rem-8px)] overflow-hidden ${isBlinking ? "crt-screen-blink" : ""}`}
+      >
         <CRTEffect
           enabled={true}
           // Scanlines: visible but not “stripy”
@@ -124,7 +134,7 @@ export default function Display({ className = "" }: { className?: string }) {
           enableSweep={true}
           sweepStyle="classic"
           sweepDuration={5}
-          sweepThickness={6}
+          sweepThickness={7}
           // Glow/bloom: monochrome “phosphor bloom” is mostly brightness spread, not colored
           enableGlow={true}
           glowColor="rgba(255,255,255,0.10)" // your current black glow kills bloom; use white w/ low alpha
@@ -145,27 +155,31 @@ export default function Display({ className = "" }: { className?: string }) {
           glitchSpeed={0.4}
           theme="custom"
         >
-          <div className="bg-black pb-20 pt-21 px-50 w-full h-150">
+          <div
+            className={
+              "bg-black py-6 px-4 sm:py-10 sm:px-8 md:py-16 md:px-16 lg:pb-20 lg:pt-21 lg:px-50 w-full h-150 lg:h-190"
+            }
+          >
             {selectedItem ? (
               <div className="flex flex-col h-full">
                 <button
                   onClick={handleBack}
-                  className="self-start text-white hover:text-gray-300 transition-colors p-2 -ml-4 -mt-4 mb-2"
+                  className="self-start text-white hover:text-gray-300 transition-colors p-2 -ml-2 -mt-2 mb-1 sm:-ml-4 sm:-mt-4 sm:mb-2"
                   aria-label="Go back"
                 >
                   <ArrowLeftIcon />
                 </button>
-                <div className="flex items-center justify-between flex-1">
-                  <div className="mr-20">
-                    <h3 className="text-white font-bold text-[5rem] mb-6 text-crt">
+                <div className="flex flex-col md:flex-row items-center justify-between flex-1 gap-4 md:gap-8">
+                  <div className="md:mr-10 lg:mr-20 text-center md:text-left order-2 md:order-1 flex-1">
+                    <h3 className="text-white font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[5rem] mb-2 sm:mb-4 lg:mb-6 text-crt">
                       {selectedItem.key}
                     </h3>
-                    <p className="text-white text-[1.5rem] font-mono">
+                    <p className="text-white text-sm sm:text-base md:text-lg lg:text-[1.5rem] font-mono">
                       {selectedItem.description}
                     </p>
                   </div>
 
-                  <div className="w-full">
+                  <div className="w-24 sm:w-32 md:w-48 lg:w-full max-w-xs order-1 md:order-2 shrink-0">
                     <div
                       style={{
                         filter: `drop-shadow(0 0 12px rgba(${selectedItem.color.glow}, 0.7)) drop-shadow(0 0 24px rgba(${selectedItem.color.glow}, 0.7))`,
@@ -183,17 +197,17 @@ export default function Display({ className = "" }: { className?: string }) {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-4 grid-rows-2 gap-y-5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 grid-rows-4 sm:grid-rows-3 md:grid-rows-2 gap-y-3 sm:gap-y-4 lg:gap-y-5 h-full content-center">
                 {items.map((item, index) => (
                   <button
                     key={index}
                     onClick={() => handleItemClick(item)}
                     onMouseEnter={() => setHoveredIndex(index)}
                     onMouseLeave={() => setHoveredIndex(null)}
-                    className="flex flex-col gap-4 items-center justify-center px-7 hover:scale-105 transition-transform cursor-pointer"
+                    className="flex flex-col gap-1 sm:gap-2 md:gap-4 items-center justify-center px-2 sm:px-4 md:px-7 hover:scale-105 transition-transform cursor-pointer"
                   >
                     <div
-                      className="w-full transition-[filter] duration-200"
+                      className={`w-full max-w-16 sm:max-w-20 md:max-w-none transition-[filter] duration-200 ${hoveredIndex === index ? "crt-blink-hover" : ""}`}
                       style={{
                         filter: `drop-shadow(0 0 2px rgba(${item.color.glow}, 1)) drop-shadow(0 0 5px rgba(${item.color.glow}, 0.6))${hoveredIndex === index ? ` drop-shadow(0 0 16px rgba(${item.color.glow}, 0.5))` : ""}`,
                       }}
@@ -206,7 +220,7 @@ export default function Display({ className = "" }: { className?: string }) {
                         }}
                       />
                     </div>
-                    <p className="text-white text-center font-bold text-3xl text-crt">
+                    <p className="text-white text-center font-bold text-sm sm:text-lg md:text-xl lg:text-3xl text-crt">
                       {item.key}
                     </p>
                   </button>

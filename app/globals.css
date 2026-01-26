@@ -103,3 +103,45 @@ body {
   background: #fff;
   color: #000000;
 }
+
+@keyframes crtBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  75% {
+    opacity: 0.6;
+  }
+}
+@keyframes crtScreenBlink {
+  0% {
+    filter: brightness(1);
+  }
+  20% {
+    filter: brightness(0.2);
+  }
+  40% {
+    filter: brightness(0.6);
+  }
+  60% {
+    filter: brightness(0.1);
+  }
+  80% {
+    filter: brightness(0.5);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+.crt-blink-hover:hover {
+  animation: crtBlink 0.05s steps(2);
+}
+.crt-screen-blink {
+  animation: crtScreenBlink 0.1s steps(3) forwards;
+}
