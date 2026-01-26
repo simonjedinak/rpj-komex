@@ -20,7 +20,7 @@ export default function Footer() {
 
             <nav className="flex flex-col gap-4 justify-center items-start ">
               <ButtonLink href="/faq" text="Často kladené otázky" arrow />
-              <ButtonLink href="/o-nas" text="O nás" arrow />
+              <ButtonLink href="/kontakt" text="Kontakt" arrow />
 
               {/* ZMENENÉ: "Niečo" -> "Kalendár" */}
               <ButtonLink href="/kalendar" text="Kalendár" arrow />
