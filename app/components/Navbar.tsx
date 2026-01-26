@@ -3,14 +3,19 @@ import StrokeText from "./StrokeText";
 import ChromeDivider from "./ChromeDivider";
 import { ButtonLink } from "./ButtonLink";
 
-const navTopTexts: string[] = [
+type NavTextItem = string | { text: string; href: string };
+
+const navTopTexts: NavTextItem[] = [
   // "" = divider
   "",
   "info@komex-auto.sk",
   "",
   "0905 489 092",
   "",
-  "6A, Strojnícka 13179, 080 06 Prešov",
+  {
+    text: "6A, Strojnícka 13179, 080 06 Prešov",
+    href: "https://www.google.com/maps?hl=en&gl=sk&um=1&ie=UTF-8&fb=1&sa=X&ftid=0x473eed541c4adaf5:0xcd04b9c6de01d2fc",
+  },
 ];
 
 const navLinks: { [key: string]: string } = {
@@ -26,10 +31,16 @@ export default function Navbar() {
       <div className="w-full h-10 flex gap-1.5 bg-chrome1 inset-chrome">
         <div className="container w-80"></div>
         <div className="w-full h-full flex justify-between items-center py-2 -ml-0.5 pr-20">
-          {navTopTexts.map((text: string, index: number) =>
-            text === "" ? (
-              <ChromeDivider key={`divider-${index}`} />
-            ) : (
+          {navTopTexts.map((item: NavTextItem, index: number) => {
+            const isDivider = item === "";
+            const text = typeof item === "string" ? item : item.text;
+            const href = typeof item === "object" ? item.href : null;
+
+            if (isDivider) {
+              return <ChromeDivider key={`divider-${index}`} />;
+            }
+
+            const Content = (
               <StrokeText
                 key={`text-${index}`}
                 strokeWidth={2}
@@ -37,8 +48,18 @@ export default function Navbar() {
               >
                 {text}
               </StrokeText>
-            ),
-          )}
+            );
+
+            if (href) {
+              return (
+                <a key={`link-${index}`} href={href} target="_blank" rel="noopener noreferrer">
+                  {Content}
+                </a>
+              )
+            }
+
+            return Content;
+          })}
         </div>
       </div>
       <div className="flex flex-row gap-1.5">
