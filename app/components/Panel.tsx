@@ -21,13 +21,7 @@ export default function Panel({
         {/* Handle (behind) */}
         <div className="absolute -left-px -top-6 h-8 w-100">
           {/* Fill (clipped) */}
-          <div
-            className="
-      absolute inset-0
-      bg-linear-to-r from-[#e5e5e5] via-[#dadada] to-[#c9c7c8]
-      [clip-path:polygon(5%_0%,90%_0%,100%_100%,0_100%,0%_50%)]
-    "
-          />
+          <div className="absolute inset-0 bg-linear-to-r from-[#e5e5e5] via-[#dadada] to-[#c9c7c8] [clip-path:polygon(5%_0%,90%_0%,100%_100%,0_100%,0%_50%)]" />
 
           {/* Border (not clipped) */}
           <svg
@@ -60,12 +54,7 @@ export default function Panel({
               <>
                 {/* Title bar */}
                 <div className="relative px-7 py-5 text-white">
-                  <div
-                    className="
-                      absolute inset-0
-                      bg-linear-to-b from-[#840000] to-[#E31E24] border-2 border-[#999997]
-                "
-                  />
+                  <div className="absolute inset-0 bg-linear-to-b from-[#840000] to-[#E31E24] border-2 border-[#999997]" />
                   {/* subtle inner line like in the screenshot */}
                   <div className="absolute inset-x-0 top-0 h-0.5 bg-[#b00000]/70" />
                   <div className="absolute inset-x-0 bottom-0 h-0.5 bg-black/15" />
