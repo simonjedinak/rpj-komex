@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, useCallback } from "react";
-import FisheyeShader from "./FisheyeShader";
+import * as THREE from "three";
 
 interface FisheyeCarouselProps {
   imageUrls?: string[];
@@ -8,7 +8,7 @@ interface FisheyeCarouselProps {
   animationDuration?: number;
   className?: string;
   aspectRatio?: number;
-  fisheyeAmount?: number; // New prop for fisheye strength
+  fisheyeAmount?: number;
 }
 
 const easeInOutSine = (t: number): number => -(Math.cos(Math.PI * t) - 1) / 2;
@@ -19,21 +19,27 @@ export default function FisheyeCarousel({
   animationDuration = 700,
   className = "",
   aspectRatio = 16 / 9,
-  fisheyeAmount = 0.7, // 0.5 = no effect, <0.5 = anti-fisheye, >0.5 = fisheye
+  fisheyeAmount = 0.7,
 }: FisheyeCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sourceCanvasRef = useRef<HTMLCanvasElement>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.OrthographicCamera | null>(null);
+  const meshesRef = useRef<THREE.Mesh[]>([]);
+  const texturesRef = useRef<THREE.Texture[]>([]);
+  const composerTargetRef = useRef<THREE.WebGLRenderTarget | null>(null);
+  const fisheyeMaterialRef = useRef<THREE.ShaderMaterial | null>(null);
 
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isReady, setIsReady] = useState(false);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
-  const [canvasReady, setCanvasReady] = useState(false);
 
   const currentIndexRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
   const isAnimatingRef = useRef(false);
+  const progressRef = useRef(0);
 
-  // Observe container size with debounce
+  // Observe container size
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -63,7 +69,7 @@ export default function FisheyeCarousel({
     };
   }, [aspectRatio]);
 
-  // Load all images
+  // Load images
   useEffect(() => {
     let cancelled = false;
 
@@ -112,223 +118,298 @@ export default function FisheyeCarousel({
     };
   }, [imageUrls]);
 
-  const getLayoutDimensions = useCallback((canvas: HTMLCanvasElement) => {
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const centerImageWidth = canvas.width * 0.7;
-    const centerImageHeight = canvas.height * 1.2;
-    const sideImageWidth = canvas.width * 0.5;
-    const sideImageHeight = canvas.height * 0.6;
-    const gap = canvas.width * 0.01;
+  // Initialize Three.js
+  useEffect(() => {
+    if (
+      !containerRef.current ||
+      containerSize.width === 0 ||
+      images.length === 0
+    )
+      return;
 
-    return {
-      centerX,
-      centerY,
-      centerImageWidth,
-      centerImageHeight,
-      sideImageWidth,
-      sideImageHeight,
-      gap,
-    };
-  }, []);
+    const container = containerRef.current;
+    const width = containerSize.width;
+    const height = containerSize.height;
+    const dpr = Math.min(window.devicePixelRatio, 2);
 
-  const drawCarousel = useCallback(
-    (progress: number, baseIndex: number, imgArray: HTMLImageElement[]) => {
-      const canvas = sourceCanvasRef.current;
-      if (!canvas || imgArray.length === 0 || containerSize.width === 0) return;
+    // Clear existing
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const targetWidth = Math.floor(containerSize.width * dpr);
-      const targetHeight = Math.floor(containerSize.height * dpr);
+    // Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(dpr);
+    renderer.setClearColor(0xffffff);
+    container.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
 
-      if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
-      }
+    // Scene for carousel
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
+    sceneRef.current = scene;
 
-      const ctx = canvas.getContext("2d", { alpha: false });
-      if (!ctx) return;
+    // Orthographic camera matching pixel coordinates
+    const camera = new THREE.OrthographicCamera(
+      0,
+      width,
+      height,
+      0,
+      -1000,
+      1000,
+    );
+    camera.position.z = 1;
+    cameraRef.current = camera;
 
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
+    // Create textures and meshes for each image
+    const textures: THREE.Texture[] = [];
+    const meshes: THREE.Mesh[] = [];
 
-      const {
-        centerX,
-        centerY,
-        centerImageWidth,
-        centerImageHeight,
-        sideImageWidth,
-        sideImageHeight,
-        gap,
-      } = getLayoutDimensions(canvas);
+    images.forEach((img) => {
+      const texture = new THREE.Texture(img);
+      texture.needsUpdate = true;
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      textures.push(texture);
 
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const geometry = new THREE.PlaneGeometry(1, 1);
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.visible = false;
+      scene.add(mesh);
+      meshes.push(mesh);
+    });
 
-      const len = imgArray.length;
-      const totalLayoutWidth =
-        sideImageWidth + gap + centerImageWidth + gap + sideImageWidth;
-      const layoutStartX = (canvas.width - totalLayoutWidth) / 2;
+    texturesRef.current = textures;
+    meshesRef.current = meshes;
 
-      const leftImageLeft = layoutStartX;
-      const centerImageLeft = layoutStartX + sideImageWidth + gap;
-      const rightImageLeft = centerImageLeft + centerImageWidth + gap;
-      const farRightImageLeft = rightImageLeft + sideImageWidth + gap;
+    // Render target for carousel scene
+    const renderTarget = new THREE.WebGLRenderTarget(width * dpr, height * dpr);
+    composerTargetRef.current = renderTarget;
 
-      const slideDistance = centerImageWidth + gap;
+    // Fisheye post-process scene
+    const postScene = new THREE.Scene();
+    const postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-      const lerp = (start: number, end: number, t: number) =>
-        start + (end - start) * t;
-
-      const slots = [
-        {
-          indexOffset: -1,
-          startX: leftImageLeft,
-          endX: leftImageLeft - slideDistance,
-          startWidth: sideImageWidth,
-          endWidth: sideImageWidth,
-          startHeight: sideImageHeight,
-          endHeight: sideImageHeight,
-        },
-        {
-          indexOffset: 0,
-          startX: centerImageLeft,
-          endX: leftImageLeft,
-          startWidth: centerImageWidth,
-          endWidth: sideImageWidth,
-          startHeight: centerImageHeight,
-          endHeight: sideImageHeight,
-        },
-        {
-          indexOffset: 1,
-          startX: rightImageLeft,
-          endX: centerImageLeft,
-          startWidth: sideImageWidth,
-          endWidth: centerImageWidth,
-          startHeight: sideImageHeight,
-          endHeight: centerImageHeight,
-        },
-        {
-          indexOffset: 2,
-          startX: farRightImageLeft,
-          endX: rightImageLeft,
-          startWidth: sideImageWidth,
-          endWidth: sideImageWidth,
-          startHeight: sideImageHeight,
-          endHeight: sideImageHeight,
-        },
-      ];
-
-      for (const slot of slots) {
-        const imgIndex = (baseIndex + slot.indexOffset + len) % len;
-        const img = imgArray[imgIndex];
-        if (img) {
-          const slotX = lerp(slot.startX, slot.endX, progress);
-          const slotWidth = lerp(slot.startWidth, slot.endWidth, progress);
-          const slotHeight = lerp(slot.startHeight, slot.endHeight, progress);
-          const slotY = centerY - slotHeight / 2;
-
-          const imgAspect = img.naturalWidth / img.naturalHeight;
-          const slotAspect = slotWidth / slotHeight;
-
-          let drawWidth: number, drawHeight: number;
-          if (imgAspect > slotAspect) {
-            drawWidth = slotWidth;
-            drawHeight = slotWidth / imgAspect;
-          } else {
-            drawHeight = slotHeight;
-            drawWidth = slotHeight * imgAspect;
-          }
-
-          const drawX = slotX + (slotWidth - drawWidth) / 2;
-          const drawY = slotY + (slotHeight - drawHeight) / 2;
-
-          ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+    const fisheyeMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        iChannel0: { value: renderTarget.texture },
+        iResolution: { value: new THREE.Vector2(width, height) },
+        amount: { value: fisheyeAmount },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
-      }
-    },
-    [getLayoutDimensions, containerSize],
-  );
+      `,
+      fragmentShader: `
+        precision highp float;
+        uniform sampler2D iChannel0;
+        uniform vec2 iResolution;
+        uniform float amount;
+        varying vec2 vUv;
+        
+        void main() {
+          vec2 p = vUv;
+          float prop = iResolution.x / iResolution.y;
+          vec2 m = vec2(0.5, 0.5 / prop);
+          vec2 d = p - vec2(0.5, 0.5);
+          d.y /= prop;
+          float r = length(d);
+          float power = (2.0 * 3.141592 / (2.0 * sqrt(dot(m, m)))) * (amount - 0.5);
+          float bind = power > 0.0 ? sqrt(dot(m, m)) : (prop < 1.0 ? m.x : m.y);
+          
+          vec2 uv;
+          if (power > 0.0)
+            uv = vec2(0.5, 0.5) + normalize(d) * tan(r * power) * bind / tan(bind * power);
+          else if (power < 0.0)
+            uv = vec2(0.5, 0.5) + normalize(d) * atan(r * -power * 10.0) * bind / atan(-power * bind * 10.0);
+          else
+            uv = p;
+          
+          uv.y = (uv.y - 0.5) * prop + 0.5;
+          gl_FragColor = texture2D(iChannel0, uv);
+        }
+      `,
+    });
+    fisheyeMaterialRef.current = fisheyeMaterial;
 
+    const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), fisheyeMaterial);
+    postScene.add(quad);
+
+    // Layout helper
+    const getSlotPositions = (progress: number, baseIndex: number) => {
+      const centerW = width * 0.7;
+      const centerH = height * 1.2;
+      const sideW = width * 0.5;
+      const sideH = height * 0.6;
+      const gap = width * 0.01;
+
+      const totalW = sideW + gap + centerW + gap + sideW;
+      const startX = (width - totalW) / 2;
+      const leftX = startX;
+      const centerX = startX + sideW + gap;
+      const rightX = centerX + centerW + gap;
+      const farRightX = rightX + sideW + gap;
+      const slideD = centerW + gap;
+
+      const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+      return [
+        {
+          offset: -1,
+          x: lerp(leftX, leftX - slideD, progress),
+          w: sideW,
+          h: sideH,
+        },
+        {
+          offset: 0,
+          x: lerp(centerX, leftX, progress),
+          w: lerp(centerW, sideW, progress),
+          h: lerp(centerH, sideH, progress),
+        },
+        {
+          offset: 1,
+          x: lerp(rightX, centerX, progress),
+          w: lerp(sideW, centerW, progress),
+          h: lerp(sideH, centerH, progress),
+        },
+        { offset: 2, x: lerp(farRightX, rightX, progress), w: sideW, h: sideH },
+      ].map((slot) => ({
+        ...slot,
+        index: (baseIndex + slot.offset + images.length) % images.length,
+      }));
+    };
+
+    // Render loop
+    let running = true;
+    const render = () => {
+      if (!running) return;
+
+      const slots = getSlotPositions(
+        progressRef.current,
+        currentIndexRef.current,
+      );
+
+      // Hide all meshes
+      meshes.forEach((m) => (m.visible = false));
+
+      // Position and show active slots
+      slots.forEach((slot) => {
+        const mesh = meshes[slot.index];
+        const img = images[slot.index];
+        if (!mesh || !img) return;
+
+        const imgAspect = img.naturalWidth / img.naturalHeight;
+        const slotAspect = slot.w / slot.h;
+
+        let drawW: number, drawH: number;
+        if (imgAspect > slotAspect) {
+          drawW = slot.w;
+          drawH = slot.w / imgAspect;
+        } else {
+          drawH = slot.h;
+          drawW = slot.h * imgAspect;
+        }
+
+        // Scale images based on how far their center is from the carousel center.
+        const slotCenterX = slot.x + slot.w / 2;
+        const carouselCenterX = width / 2;
+        const distanceNormalized = Math.min(
+          1,
+          Math.abs(slotCenterX - carouselCenterX) / (width / 2),
+        );
+        const maxExtraScale = 0.6; // tweak to control how large off-center images grow
+        const scaleMultiplier = 1 + distanceNormalized * maxExtraScale;
+
+        mesh.scale.set(drawW * scaleMultiplier, drawH * scaleMultiplier, 1);
+        mesh.position.set(
+          slot.x + slot.w / 2,
+          height / 2,
+          slot.offset, // z-order
+        );
+        mesh.visible = true;
+      });
+
+      // Render carousel to target
+      renderer.setRenderTarget(renderTarget);
+      renderer.render(scene, camera);
+
+      // Render fisheye to screen
+      renderer.setRenderTarget(null);
+      renderer.render(postScene, postCamera);
+
+      animationFrameRef.current = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      running = false;
+      if (animationFrameRef.current)
+        cancelAnimationFrame(animationFrameRef.current);
+      textures.forEach((t) => t.dispose());
+      meshes.forEach((m) => {
+        m.geometry.dispose();
+        (m.material as THREE.Material).dispose();
+      });
+      renderTarget.dispose();
+      fisheyeMaterial.dispose();
+      renderer.dispose();
+    };
+  }, [containerSize, images, fisheyeAmount]);
+
+  // Update fisheye amount
+  useEffect(() => {
+    if (fisheyeMaterialRef.current) {
+      fisheyeMaterialRef.current.uniforms.amount.value = fisheyeAmount;
+    }
+  }, [fisheyeAmount]);
+
+  // Animation
   const animateToNext = useCallback(() => {
     if (isAnimatingRef.current || images.length === 0) return;
 
     isAnimatingRef.current = true;
-    const startIndex = currentIndexRef.current;
     const startTime = performance.now();
+    const startIndex = currentIndexRef.current;
 
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const rawProgress = Math.min(elapsed / animationDuration, 1);
-      const easedProgress = easeInOutSine(rawProgress);
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const raw = Math.min(elapsed / animationDuration, 1);
+      progressRef.current = easeInOutSine(raw);
 
-      drawCarousel(easedProgress, startIndex, images);
-
-      if (rawProgress < 1) {
-        animationFrameRef.current = requestAnimationFrame(animate);
+      if (raw < 1) {
+        requestAnimationFrame(animate);
       } else {
         currentIndexRef.current = (startIndex + 1) % images.length;
+        progressRef.current = 0;
         isAnimatingRef.current = false;
-        animationFrameRef.current = null;
-
-        setTimeout(() => {
-          drawCarousel(0, currentIndexRef.current, images);
-        }, 16);
       }
     };
 
-    animationFrameRef.current = requestAnimationFrame(animate);
-  }, [images, animationDuration, drawCarousel]);
-
-  // Initialize canvas
-  useEffect(() => {
-    if (
-      images.length === 0 ||
-      !sourceCanvasRef.current ||
-      containerSize.width === 0
-    )
-      return;
-
-    currentIndexRef.current = 0;
-    drawCarousel(0, 0, images);
-
-    // Signal that canvas is ready for FisheyeShader
-    setCanvasReady(true);
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
-      isAnimatingRef.current = false;
-    };
-  }, [images, containerSize, drawCarousel]);
+    requestAnimationFrame(animate);
+  }, [images.length, animationDuration]);
 
   // Autoplay
   useEffect(() => {
     if (!isReady || images.length === 0) return;
 
-    const intervalId = setInterval(() => {
-      if (!isAnimatingRef.current) {
-        animateToNext();
-      }
+    const id = setInterval(() => {
+      if (!isAnimatingRef.current) animateToNext();
     }, autoplayInterval);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(id);
   }, [isReady, images.length, autoplayInterval, animateToNext]);
 
   return (
-    <div ref={containerRef} className={`w-full ${className}`}>
-      <canvas ref={sourceCanvasRef} className="hidden" />
-      {canvasReady && sourceCanvasRef.current && (
-        <FisheyeShader
-          sourceCanvas={sourceCanvasRef.current}
-          width={containerSize.width}
-          height={containerSize.height}
-          amount={fisheyeAmount}
-          className="w-full h-auto"
-        />
-      )}
-    </div>
+    <div
+      ref={containerRef}
+      className={`w-full ${className}`}
+      style={{ height: containerSize.height || "auto" }}
+    />
   );
 }

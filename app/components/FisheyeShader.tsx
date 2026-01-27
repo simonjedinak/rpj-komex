@@ -31,6 +31,14 @@ export default function FisheyeShader({
     if (!containerRef.current || !sourceCanvas || width === 0 || height === 0)
       return;
 
+    // Capture container reference for cleanup
+    const container = containerRef.current;
+
+    // Clear any existing children first
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
     // Initialize Three.js scene
     const scene = new THREE.Scene();
     sceneRef.current = scene;
@@ -44,7 +52,7 @@ export default function FisheyeShader({
     });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
     // Create texture from source canvas
@@ -160,8 +168,12 @@ export default function FisheyeShader({
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (
+        container &&
+        renderer.domElement &&
+        renderer.domElement.parentNode === container
+      ) {
+        container.removeChild(renderer.domElement);
       }
       renderer.dispose();
       geometry.dispose();
