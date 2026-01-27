@@ -1,8 +1,7 @@
 // app/kalendar/page.tsx
 "use client";
 
-import { useMemo, useState } from "react";
-import StrokeText from "../components/StrokeText";
+import React, { useMemo, useState } from "react";
 
 function ChromePanel({
   children,
@@ -200,37 +199,6 @@ export default function KalendarPage() {
   return (
     <main className="min-h-[70vh] bg-neutral-200 py-10">
       <section className="mx-auto w-[min(1100px,92vw)]">
-        <div
-          className="
-            mb-8
-            rounded-[10px]
-            px-6 py-4
-            [background:linear-gradient(180deg,#3A3A3A_-29.23%,#A4A4A4_-5.96%,#606060_11.48%,#CECECE_34.34%,#8F8F8F_50.25%,#464646_72.22%,#696969_94.18%)]
-            shadow-[inset_0px_3.30363px_4.95545px_rgba(255,255,255,0.6)]
-          "
-        >
-          <StrokeText
-            tag="h1"
-            strokeWidth={3}
-            strokeColor="black"
-            shadowSize={2}
-            className="text-2xl md:text-3xl font-extrabold italic tracking-tight"
-          >
-            Kalendár
-          </StrokeText>
-
-          <div className="mt-1">
-            <StrokeText
-              tag="p"
-              strokeWidth={2}
-              strokeColor="black"
-              shadowSize={2}
-              className="text-sm md:text-base text-white/90"
-            >
-              Viditeľné sú iba časové bloky obsadenosti (bez mien a detailov).
-            </StrokeText>
-          </div>
-        </div>
 
         <ChromePanel>
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -445,9 +413,7 @@ export default function KalendarPage() {
               )}
             </div>
 
-            <p className="mt-4 text-xs text-zinc-400">
-              Pozn.: Zobrazuje sa iba interval a stav (bez mien a detailov).
-            </p>
+
           </div>
         </ChromePanel>
       </section>

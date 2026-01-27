@@ -254,10 +254,7 @@ export default function FaqPage() {
                             </div>
 
                             <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
-                            <p className="mt-4 text-xs text-zinc-400">
-                                Tip: Pre rýchle vybavenie napíšte do kontaktu značku/model, rok
-                                výroby a stručný popis problému.
-                            </p>
+
                         </ChromeCard>
 
                         {/* CTA */}
