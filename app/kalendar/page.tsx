@@ -1,7 +1,7 @@
 // app/kalendar/page.tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import StrokeText from "../components/StrokeText";
 
 function ChromePanel({
@@ -445,9 +445,7 @@ export default function KalendarPage() {
               )}
             </div>
 
-            <p className="mt-4 text-xs text-zinc-400">
-              Pozn.: Zobrazuje sa iba interval a stav (bez mien a detailov).
-            </p>
+
           </div>
         </ChromePanel>
       </section>
