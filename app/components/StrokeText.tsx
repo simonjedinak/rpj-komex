@@ -2,6 +2,7 @@ interface StrokeTextProps {
   children: React.ReactNode;
   strokeWidth?: number;
   strokeColor?: string;
+  textColor?: string;
   className?: string;
   tag?: "span" | "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   shadowSize?: number;
@@ -11,6 +12,7 @@ export default function StrokeText({
   children,
   strokeWidth = 4,
   strokeColor = "black",
+  textColor = "white",
   className = "",
   tag = "span",
   shadowSize = 2,
@@ -33,7 +35,9 @@ export default function StrokeText({
         {children}
       </span>
       {/* Text layer (on top) */}
-      <Tag className="relative">{children}</Tag>
+      <Tag className="relative" style={{ color: textColor }}>
+        {children}
+      </Tag>
     </span>
   );
 }

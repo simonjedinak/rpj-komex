@@ -18,7 +18,7 @@ export default function Home() {
             "/images/o-nas/IMG_20251221_232357_750 1.png",
             "/images/o-nas/IMG_20251221_232351_217 1.png",
           ]}
-          fisheyeAmount={0.84} // 0.5 = no effect, 0.8 = strong fisheye, 0.2 = anti-fisheye
+          fisheyeAmount={0.84}
           autoplayInterval={3000}
           animationDuration={1000}
         />
