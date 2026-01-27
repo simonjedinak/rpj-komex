@@ -1,5 +1,6 @@
 // app/details/page.tsx
-import StrokeText from "../components/StrokeText";
+
+import React from "react";
 
 type Service = {
   title: string;
@@ -135,38 +136,7 @@ export default function DetailsPage() {
   return (
       <main className="min-h-[70vh] bg-neutral-200 py-10">
         <section className="mx-auto w-[min(1100px,92vw)]">
-          <div
-              className="
-            mb-8
-            rounded-[10px]
-            px-6 py-4
-            [background:linear-gradient(180deg,#3A3A3A_-29.23%,#A4A4A4_-5.96%,#606060_11.48%,#CECECE_34.34%,#8F8F8F_50.25%,#464646_72.22%,#696969_94.18%)]
-            shadow-[inset_0px_3.30363px_4.95545px_rgba(255,255,255,0.6)]
-          "
-          >
-            <StrokeText
-                tag="h1"
-                strokeWidth={3}
-                strokeColor="black"
-                shadowSize={2}
-                className="text-2xl md:text-3xl font-extrabold italic tracking-tight"
-            >
-              Details
-            </StrokeText>
 
-            <div className="mt-1">
-              <StrokeText
-                  tag="p"
-                  strokeWidth={2}
-                  strokeColor="black"
-                  shadowSize={2}
-                  className="text-sm md:text-base text-white/90"
-              >
-                Detailný prehľad služieb – diagnostika, servis a opravy na jednom
-                mieste.
-              </StrokeText>
-            </div>
-          </div>
 
           <ChromePanel>
             <div>
@@ -242,10 +212,7 @@ export default function DetailsPage() {
             </div>
 
             <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
-            <p className="mt-4 text-xs text-zinc-400">
-              Tip: V kontakte uveďte typ služby (prehliadka/sklo/pneu/porucha/podozrenie),
-              značku a model auta a stručný popis problému.
-            </p>
+
           </ChromePanel>
         </section>
       </main>
