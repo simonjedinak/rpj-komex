@@ -10,7 +10,19 @@ export default function Home() {
     <main className="flex-1 text-black bg-white">
       <section className="relative from-gray-900 to-gray-800 text-white overflow-hidden">
         <SvgBar className="rotate-180 top-0" />
-        <FisheyeCarousel />
+        <FisheyeCarousel
+          imageUrls={[
+            "/images/o-nas/IMG_20251221_232348_556 1.png",
+            "/images/o-nas/IMG_20251221_232350_319 1.png ",
+            "/images/o-nas/IMG_20251221_232359_182 1.png",
+            "/images/o-nas/IMG_20251221_232357_750 1.png",
+            "/images/o-nas/IMG_20251221_232351_217 1.png",
+          ]}
+          fisheyeAmount={0.8} // 0.5 = no effect, 0.8 = strong fisheye, 0.2 = anti-fisheye
+          autoplayInterval={1000}
+          animationDuration={500}
+        />
+
         <SvgBar className="bottom-0" />
       </section>
       <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome "></div>
