@@ -242,11 +242,17 @@ export default function FisheyeCarousel({
 
     // Layout helper
     const getSlotPositions = (progress: number, baseIndex: number) => {
-      const centerW = width * 0.7;
+      const centerW = width * 0.6;
       const centerH = height * 1.2;
-      const sideW = width * 0.5;
-      const sideH = height * 0.6;
-      const gap = width * 0.01;
+      const sideW = width * 0.8;
+      const sideH = height;
+      const gap = width * 0.02;
+
+      // const centerW = width * 0.7;
+      // const centerH = height * 1.2;
+      // const sideW = width * 0.8;
+      // const sideH = height * 0.6;
+      // const gap = width * 0.01;
 
       const totalW = sideW + gap + centerW + gap + sideW;
       const startX = (width - totalW) / 2;
@@ -316,16 +322,42 @@ export default function FisheyeCarousel({
         }
 
         // Scale images based on how far their center is from the carousel center.
+        // Cap the final width so the gap between slots never collapses.
+        // Also apply a small boost to side images to compensate for the fisheye effect
+        // and enforce a minimum size so they don't shrink too much.
         const slotCenterX = slot.x + slot.w / 2;
         const carouselCenterX = width / 2;
         const distanceNormalized = Math.min(
           1,
           Math.abs(slotCenterX - carouselCenterX) / (width / 2),
         );
-        const maxExtraScale = 0.6; // tweak to control how large off-center images grow
+
+        const maxExtraScale = 0.6; // how much off-center images can grow
         const scaleMultiplier = 1 + distanceNormalized * maxExtraScale;
 
-        mesh.scale.set(drawW * scaleMultiplier, drawH * scaleMultiplier, 1);
+        const gapLocal = width * 0.01; // should match layout gap calculation
+        const isSide = slot.offset !== 0;
+
+        // Keep the visual gap constant throughout the animation
+        const gapReserve = gapLocal;
+
+        const desiredWidth = drawW * scaleMultiplier;
+
+        // Apply a fisheye compensation for side images (scales with fisheyeAmount)
+        const sideCompensation = isSide ? 1 + Math.abs(fisheyeAmount) * 0.5 : 1;
+
+        const maxAllowedWidth = Math.max(slot.w - gapReserve, 1);
+        const minAllowedWidth = Math.min(slot.w * 0.8, maxAllowedWidth); // don't shrink below 80% of slot
+
+        let finalWidth = Math.min(
+          desiredWidth * sideCompensation,
+          maxAllowedWidth,
+        );
+        finalWidth = Math.max(finalWidth, minAllowedWidth);
+
+        const finalHeight = finalWidth / imgAspect;
+
+        mesh.scale.set(finalWidth, finalHeight, 1);
         mesh.position.set(
           slot.x + slot.w / 2,
           height / 2,
@@ -385,9 +417,13 @@ export default function FisheyeCarousel({
       if (raw < 1) {
         requestAnimationFrame(animate);
       } else {
-        currentIndexRef.current = (startIndex + 1) % images.length;
-        progressRef.current = 0;
-        isAnimatingRef.current = false;
+        // keep the final eased state for one frame to avoid snapping
+        progressRef.current = 1;
+        requestAnimationFrame(() => {
+          currentIndexRef.current = (startIndex + 1) % images.length;
+          progressRef.current = 0;
+          isAnimatingRef.current = false;
+        });
       }
     };
 
