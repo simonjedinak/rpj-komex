@@ -130,7 +130,7 @@ export default function FisheyeCarousel({
     const container = containerRef.current;
     const width = containerSize.width;
     const height = containerSize.height;
-    const dpr = Math.min(window.devicePixelRatio, 2);
+    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 4));
 
     // Clear existing
     while (container.firstChild) {
@@ -143,6 +143,9 @@ export default function FisheyeCarousel({
     renderer.setPixelRatio(dpr);
     renderer.setClearColor(0xffffff);
     container.appendChild(renderer.domElement);
+    // ensure canvas CSS size matches container pixels
+    renderer.domElement.style.width = `${width}px`;
+    renderer.domElement.style.height = `${height}px`;
     rendererRef.current = renderer;
 
     // Scene for carousel
@@ -185,7 +188,10 @@ export default function FisheyeCarousel({
     meshesRef.current = meshes;
 
     // Render target for carousel scene
-    const renderTarget = new THREE.WebGLRenderTarget(width * dpr, height * dpr);
+    const renderTarget = new THREE.WebGLRenderTarget(
+      Math.floor(width * dpr),
+      Math.floor(height * dpr),
+    );
     composerTargetRef.current = renderTarget;
 
     // Fisheye post-process scene
@@ -195,7 +201,7 @@ export default function FisheyeCarousel({
     const fisheyeMaterial = new THREE.ShaderMaterial({
       uniforms: {
         iChannel0: { value: renderTarget.texture },
-        iResolution: { value: new THREE.Vector2(width, height) },
+        iResolution: { value: new THREE.Vector2(width * dpr, height * dpr) },
         amount: { value: fisheyeAmount },
       },
       vertexShader: `
