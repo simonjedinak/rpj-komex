@@ -37,7 +37,9 @@ const BRAND_MODELS: Record<string, string[]> = {
 };
 
 export default function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle",
+  );
   const [errorText, setErrorText] = useState("");
 
   const [form, setForm] = useState<FormState>({
@@ -82,10 +84,9 @@ export default function ContactForm() {
       });
 
       const contentType = res.headers.get("content-type") || "";
-      const payload =
-        contentType.includes("application/json")
-          ? await res.json().catch(() => ({}))
-          : { error: await res.text().catch(() => "") };
+      const payload = contentType.includes("application/json")
+        ? await res.json().catch(() => ({}))
+        : { error: await res.text().catch(() => "") };
 
       if (!res.ok) {
         throw new Error(payload?.error || `Server error (${res.status})`);
@@ -122,7 +123,8 @@ export default function ContactForm() {
         <div
           className="rounded-[26px] p-[12px]"
           style={{
-            background: "linear-gradient(180deg,#0a0f15 0%,#141a22 55%,#070a0f 100%)",
+            background:
+              "linear-gradient(180deg,#0a0f15 0%,#141a22 55%,#070a0f 100%)",
             boxShadow:
               "inset 0 2px 0 rgba(255,255,255,.08), inset 0 -10px 30px rgba(0,0,0,.85)",
           }}
@@ -141,7 +143,8 @@ export default function ContactForm() {
                     Napíšte nám
                   </h2>
                   <p className="mt-2 text-sm md:text-base text-zinc-300">
-                    Odpovieme čo najskôr. Pre urýchlenie vyplňte značku, model a typ problému.
+                    Odpovieme čo najskôr. Pre urýchlenie vyplňte značku, model a
+                    typ problému.
                   </p>
                 </div>
 
@@ -155,7 +158,10 @@ export default function ContactForm() {
 
               <div className="mt-6 h-px w-full bg-zinc-700/70" />
 
-              <form onSubmit={onSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form
+                onSubmit={onSubmit}
+                className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
                 <Field
                   label="Meno a priezvisko"
                   required
@@ -235,7 +241,9 @@ export default function ContactForm() {
                   </label>
                   <select
                     value={form.model}
-                    onChange={(e) => setForm((s) => ({ ...s, model: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, model: e.target.value }))
+                    }
                     disabled={!form.brand}
                     className="w-full rounded-md bg-zinc-950/40 text-zinc-100
                                ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
@@ -262,14 +270,18 @@ export default function ContactForm() {
                   </label>
                   <textarea
                     value={form.message}
-                    onChange={(e) => setForm((s) => ({ ...s, message: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, message: e.target.value }))
+                    }
                     rows={6}
                     placeholder="Popíšte problém, prípadne VIN/ŠPZ a preferovaný termín..."
                     className="w-full rounded-md bg-zinc-950/40 text-zinc-100
                                ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
                                px-3 py-2 outline-none resize-y"
                   />
-                  <div className="text-xs text-zinc-400">Minimum 10 znakov.</div>
+                  <div className="text-xs text-zinc-400">
+                    Minimum 10 znakov.
+                  </div>
                 </div>
 
                 <div className="md:col-span-2 mt-1 flex items-start gap-3">
@@ -277,7 +289,9 @@ export default function ContactForm() {
                     id="consent"
                     type="checkbox"
                     checked={form.consent}
-                    onChange={(e) => setForm((s) => ({ ...s, consent: e.target.checked }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, consent: e.target.checked }))
+                    }
                     className="mt-1 h-4 w-4 accent-red-500"
                   />
                   <label htmlFor="consent" className="text-sm text-zinc-300">
@@ -289,14 +303,18 @@ export default function ContactForm() {
                 <div className="md:col-span-2 mt-3 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                   <div className="text-sm">
                     {status === "sent" && (
-                      <span className="text-green-400">Správa bola odoslaná.</span>
+                      <span className="text-green-400">
+                        Správa bola odoslaná.
+                      </span>
                     )}
                     {status === "error" && (
                       <span className="text-red-400">
                         {errorText || "Nepodarilo sa odoslať. Skúste znova."}
                       </span>
                     )}
-                    {status === "sending" && <span className="text-zinc-300">Odosielanie…</span>}
+                    {status === "sending" && (
+                      <span className="text-zinc-300">Odosielanie…</span>
+                    )}
                   </div>
 
                   <button
@@ -324,7 +342,9 @@ export default function ContactForm() {
                   <div className="mt-1">Po–Pi 08:00–16:00</div>
                 </div>
                 <div className="rounded-lg bg-black/20 ring-1 ring-white/5 p-4">
-                  <div className="text-xs text-zinc-400">Preferovaný kontakt</div>
+                  <div className="text-xs text-zinc-400">
+                    Preferovaný kontakt
+                  </div>
                   <div className="mt-1">Telefón alebo e-mail</div>
                 </div>
               </div>
@@ -346,6 +366,9 @@ function Field(props: {
 }) {
   const { label, value, onChange, placeholder, required, type } = props;
 
+  const common =
+    "w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none";
+
   return (
     <div className="space-y-2">
       <label className="text-sm text-zinc-200">
@@ -356,9 +379,7 @@ function Field(props: {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-md bg-zinc-950/40 text-zinc-100
-                   ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
-                   px-3 py-2 outline-none"
+        className={common}
       />
     </div>
   );
