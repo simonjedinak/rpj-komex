@@ -6,7 +6,7 @@ export default function AboutPage() {
     <main className="flex-1 bg-white p-20 text-white">
       <section className="bg-gray-400 inset-shadow-xl flex flex-col gap-y-8 p-8">
         <div className="p-5 gap-20 pl-16 container flex flex-row from-[#2A2D30] to-[#0D0F15] bg-linear-to-b rounded-3xl border-black border-3">
-          <div className="w-1/2 flex flex-col gap-y-6 text-xl pt-3">
+          <div className="w-1/2 flex flex-col gap-y-16 text-xl pt-3">
             <StrokeText
               key="about-title-1"
               tag="h2"
@@ -17,16 +17,18 @@ export default function AboutPage() {
             >
               O nás
             </StrokeText>
-            <p>
-              Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na
-              Strojníckej ulici, kde dodnes sídli a dlhodobo poskytuje servis
-              osobným aj úžitkovým vozidlám.
-            </p>
-            <p>
-              Postupne sa z menšieho pracoviska stal plnohodnotný servis so
-              zameraním na mechanické opravy, diagnostiku, pneuservis a údržbu
-              klimatizácií.
-            </p>
+            <div className="space-y-16">
+              <p>
+                Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na
+                Strojníckej ulici, kde dodnes sídli a dlhodobo poskytuje servis
+                osobným aj úžitkovým vozidlám.
+              </p>
+              <p>
+                Postupne sa z menšieho pracoviska stal plnohodnotný servis so
+                zameraním na mechanické opravy, diagnostiku, pneuservis a údržbu
+                klimatizácií.
+              </p>
+            </div>
           </div>
           <div className="w-1/2 flex flex-col gap-y-4">
             <ImageWrapper>
@@ -51,49 +53,50 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-        <div className="container overflow-hidden flex flex-row bg-gradient-to-b from-[#2A2D30] to-[#0D0F15] rounded-3xl border-black border-[3px]">
+        <div className="container overflow-hidden flex flex-row bg-linear-to-b from-[#2A2D30] to-[#0D0F15] rounded-3xl border-black border-[3px]">
           {/* Left Side - About Section */}
-          <div className="w-1/2 flex flex-col border-r-2 border-black relative">
-            <div className="w-full h-full absolute top-0 left-0">
+          <div className="w-2/3 flex flex-col border-r-2 border-gray-400 relative min-h-144">
+            {/* Top: image area occupying ~50% height with title anchored at bottom */}
+            <div className="w-full h-1/2 relative overflow-hidden">
               <img
                 src="/images/o-nas/IMG_20251221_232348_556 1.png"
                 alt="Workshop background"
-                className="w-full h-full object-cover opacity-30"
+                className="w-full h-full object-cover "
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-            </div>
+              <div className="absolute inset-0 bg-linear-to-t from-[#1b1e22] to-transparent" />
 
-            <div className="relative z-10 flex flex-col h-full">
-              <div className="pt-12 pl-16">
+              <div className="absolute bottom-6 pl-16 z-20">
                 <StrokeText
                   key="about-title-1"
                   tag="h2"
                   strokeWidth={8}
                   shadowSize={7}
                   textColor="#ff2627"
-                  className="text-[5rem] font-bold italic leading-none"
+                  className="text-5xl font-bold italic leading-none"
                 >
-                  O nás
+                  Servis a repasovanie autochladičov na jednom mieste
                 </StrokeText>
               </div>
+            </div>
 
-              <div className="px-16 pb-16 mt-auto text-white text-lg leading-relaxed space-y-4">
+            {/* Bottom: textual content */}
+            <div className="relative z-10 flex flex-col flex-1">
+              <div className="px-16 pt-16 text-white text-xl leading-relaxed space-y-16">
                 <p>
-                  Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na
-                  Strojníckej ulici, kde dodnes sídli a dlhodobo poskytuje
-                  servis osobným aj úžitkovým vozidlám.
+                  Dôležitou súčasťou KOMEXu je aj špecializácia na opravy a
+                  repasovanie autochladičov, ktorá dopĺňa klasické servisné
+                  práce.
                 </p>
                 <p>
-                  Postupne sa z menšieho pracoviska stal plnohodnotný servis so
-                  zameraním na mechanické opravy, diagnostiku, pneuservis a
-                  údržbu klimatizácií.
+                  Vďaka tomu vie dielňa vyriešiť bežné opravy aj špecifické
+                  problémy s chladením motora na jednom mieste.
                 </p>
               </div>
             </div>
           </div>
 
           {/* Right Side - Images */}
-          <div className="w-1/2 flex flex-col gap-4 p-4">
+          <div className="w-1/3 flex flex-col gap-4 p-4">
             <ImageWrapper className="flex-1">
               <img
                 src="/images/o-nas/IMG_20251221_232348_556 1.png"
