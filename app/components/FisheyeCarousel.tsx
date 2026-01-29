@@ -19,7 +19,7 @@ export default function FisheyeCarousel({
   animationDuration = 700,
   className = "",
   aspectRatio = 16 / 9,
-  fisheyeAmount = 0.7,
+  fisheyeAmount = 0.78,
 }: FisheyeCarouselProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -236,7 +236,13 @@ export default function FisheyeCarousel({
           else
             uv = p;
           
-          uv.y = (uv.y - 0.5) * prop + 0.5;
+          // Radial Y-stretch: increase vertical stretch towards the sides
+          float rd = length(uv - vec2(0.5));
+          float stretchCurve = smoothstep(0.2, 1.0, rd) * rd;
+          float yStretch = 1.0 + amount * -(1.2) * stretchCurve;
+
+          // Apply aspect correction together with vertical stretch for smooth fisheye look
+          uv.y = (uv.y - 0.5) * prop * yStretch + 0.5;
           gl_FragColor = texture2D(iChannel0, uv);
         }
       `,
@@ -248,48 +254,44 @@ export default function FisheyeCarousel({
 
     // Layout helper
     const getSlotPositions = (progress: number, baseIndex: number) => {
-      const centerW = width * 0.6;
-      const centerH = height * 1.2;
-      const sideW = width * 0.8;
-      const sideH = height;
+      // All images have the same size, and only slide left
+      const imgW = width * 0.6;
+      const imgH = height * 0.8;
       const gap = width * 0.02;
-
-      // const centerW = width * 0.7;
-      // const centerH = height * 1.2;
-      // const sideW = width * 0.8;
-      // const sideH = height * 0.6;
-      // const gap = width * 0.01;
-
-      const totalW = sideW + gap + centerW + gap + sideW;
+      const totalW = imgW * 3 + gap * 2;
       const startX = (width - totalW) / 2;
-      const leftX = startX;
-      const centerX = startX + sideW + gap;
-      const rightX = centerX + centerW + gap;
-      const farRightX = rightX + sideW + gap;
-      const slideD = centerW + gap;
-
+      const slideD = imgW + gap;
       const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
       return [
         {
           offset: -1,
-          x: lerp(leftX, leftX - slideD, progress),
-          w: sideW,
-          h: sideH,
+          x: lerp(startX, startX - slideD, progress),
+          w: imgW,
+          h: imgH,
         },
         {
           offset: 0,
-          x: lerp(centerX, leftX, progress),
-          w: lerp(centerW, sideW, progress),
-          h: lerp(centerH, sideH, progress),
+          x: lerp(startX + imgW + gap, startX, progress),
+          w: imgW,
+          h: imgH,
         },
         {
           offset: 1,
-          x: lerp(rightX, centerX, progress),
-          w: lerp(sideW, centerW, progress),
-          h: lerp(sideH, centerH, progress),
+          x: lerp(startX + (imgW + gap) * 2, startX + imgW + gap, progress),
+          w: imgW,
+          h: imgH,
         },
-        { offset: 2, x: lerp(farRightX, rightX, progress), w: sideW, h: sideH },
+        {
+          offset: 2,
+          x: lerp(
+            startX + (imgW + gap) * 3,
+            startX + (imgW + gap) * 2,
+            progress,
+          ),
+          w: imgW,
+          h: imgH,
+        },
       ].map((slot) => ({
         ...slot,
         index: (baseIndex + slot.offset + images.length) % images.length,
@@ -315,55 +317,17 @@ export default function FisheyeCarousel({
         const img = images[slot.index];
         if (!mesh || !img) return;
 
+        // Always use the same size for all images
         const imgAspect = img.naturalWidth / img.naturalHeight;
-        const slotAspect = slot.w / slot.h;
-
-        let drawW: number, drawH: number;
-        if (imgAspect > slotAspect) {
-          drawW = slot.w;
-          drawH = slot.w / imgAspect;
+        let drawW = slot.w;
+        let drawH = slot.h;
+        if (imgAspect > drawW / drawH) {
+          drawH = drawW / imgAspect;
         } else {
-          drawH = slot.h;
-          drawW = slot.h * imgAspect;
+          drawW = drawH * imgAspect;
         }
 
-        // Scale images based on how far their center is from the carousel center.
-        // Cap the final width so the gap between slots never collapses.
-        // Also apply a small boost to side images to compensate for the fisheye effect
-        // and enforce a minimum size so they don't shrink too much.
-        const slotCenterX = slot.x + slot.w / 2;
-        const carouselCenterX = width / 2;
-        const distanceNormalized = Math.min(
-          1,
-          Math.abs(slotCenterX - carouselCenterX) / (width / 2),
-        );
-
-        const maxExtraScale = 0.6; // how much off-center images can grow
-        const scaleMultiplier = 1 + distanceNormalized * maxExtraScale;
-
-        const gapLocal = width * 0.01; // should match layout gap calculation
-        const isSide = slot.offset !== 0;
-
-        // Keep the visual gap constant throughout the animation
-        const gapReserve = gapLocal;
-
-        const desiredWidth = drawW * scaleMultiplier;
-
-        // Apply a fisheye compensation for side images (scales with fisheyeAmount)
-        const sideCompensation = isSide ? 1 + Math.abs(fisheyeAmount) * 0.5 : 1;
-
-        const maxAllowedWidth = Math.max(slot.w - gapReserve, 1);
-        const minAllowedWidth = Math.min(slot.w * 0.8, maxAllowedWidth); // don't shrink below 80% of slot
-
-        let finalWidth = Math.min(
-          desiredWidth * sideCompensation,
-          maxAllowedWidth,
-        );
-        finalWidth = Math.max(finalWidth, minAllowedWidth);
-
-        const finalHeight = finalWidth / imgAspect;
-
-        mesh.scale.set(finalWidth, finalHeight, 1);
+        mesh.scale.set(drawW, drawH, 1);
         mesh.position.set(
           slot.x + slot.w / 2,
           height / 2,
