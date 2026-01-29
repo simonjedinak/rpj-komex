@@ -235,11 +235,9 @@ export default function FisheyeCarousel({
             uv = vec2(0.5, 0.5) + normalize(d) * atan(r * -power * 10.0) * bind / atan(-power * bind * 10.0);
           else
             uv = p;
-          
-          // Radial Y-stretch: increase vertical stretch towards the sides
-          float rd = length(uv - vec2(0.5));
-          float stretchCurve = smoothstep(0.2, 1.0, rd) * rd;
-          float yStretch = 1.0 + amount * -(1.2) * stretchCurve;
+          float rd = length(uv - vec2(0.5, 0.5));
+          float stretchCurve = smoothstep(0.0, 0.1, rd) * rd;
+          float yStretch = 1.0 + amount * -(0.8) * stretchCurve;
 
           // Apply aspect correction together with vertical stretch for smooth fisheye look
           uv.y = (uv.y - 0.5) * prop * yStretch + 0.5;

@@ -12,11 +12,10 @@ export default function Home() {
         <SvgBar className="rotate-180 top-0" />
         <FisheyeCarousel
           imageUrls={[
-            "/images/o-nas/IMG_20251221_232348_556 1.png",
-            "/images/o-nas/IMG_20251221_232350_319 1.png ",
-            "/images/o-nas/IMG_20251221_232359_182 1.png",
-            "/images/o-nas/IMG_20251221_232357_750 1.png",
-            "/images/o-nas/IMG_20251221_232351_217 1.png",
+            "/images/car2.avif",
+            "/images/car2.avif",
+            "/images/car2.avif",
+            "/images/car2.avif",
           ]}
           autoplayInterval={4000}
           animationDuration={1200}
