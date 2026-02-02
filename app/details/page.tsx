@@ -1,6 +1,6 @@
 // app/details/page.tsx
-
 import React from "react";
+import StrokeText from "../components/StrokeText";
 
 type Service = {
   title: string;
@@ -93,127 +93,126 @@ const services: Service[] = [
   },
 ];
 
-function ChromePanel({
-                       children,
-                       className = "",
-                     }: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-      <div
-          className={`rounded-[34px] p-[22px] shadow-2xl ${className}`}
-          style={{
-            background:
-                "linear-gradient(90deg,#6b7077 0%,#c7cbd1 10%,#70757c 22%,#cfd3d8 36%,#6e737a 52%,#b8bcc2 66%,#5b6067 82%,#c7cbd1 92%,#5a5f66 100%)",
-            boxShadow:
-                "inset 0 16px 34px rgba(0,0,0,.70), inset 0 -14px 26px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35)",
-          }}
-      >
-        <div
-            className="rounded-[26px] p-[12px]"
-            style={{
-              background:
-                  "linear-gradient(180deg,#0a0f15 0%,#141a22 55%,#070a0f 100%)",
-              boxShadow:
-                  "inset 0 2px 0 rgba(255,255,255,.08), inset 0 -10px 30px rgba(0,0,0,.85)",
-            }}
-        >
-          <div className="rounded-[20px] bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white overflow-hidden relative">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-x-0 top-0 h-12 bg-white/10 blur-md" />
-              <div className="absolute inset-0 ring-1 ring-white/5" />
-              <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
-            </div>
-            <div className="relative z-10 p-6 md:p-8">{children}</div>
-          </div>
-        </div>
-      </div>
-  );
-}
-
 export default function DetailsPage() {
   return (
-      <main className="min-h-[70vh] bg-neutral-200 py-10">
-        <section className="mx-auto w-[min(1100px,92vw)]">
+      <main className="flex-1 bg-white px-4 md:px-10 lg:px-20 py-4 md:py-8 text-white">
+        <section className="bg-metal inset-shadow-xl flex flex-col gap-y-4 md:gap-y-8 p-4 md:p-8 relative">
+          {/* rovnaký “light streak” background ako v About */}
+          <div
+              className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+              aria-hidden="true"
+          >
+            <div className="fixed left-0 right-0 top-2/5 h-30 blur-xl rotate-15 bg-linear-to-r from-white/50 via-white/70 to-white/50 shadow-[0_0_100px_10px_rgba(255,255,255,0.6)]" />
+          </div>
 
-
-          <ChromePanel>
-            <div>
-              <h2 className="text-3xl md:text-4xl font-extrabold italic text-red-500">
+          {/* HERO panel (ako prvý blok v About) */}
+          <div className="shadow-xl shadow-black/50 p-4 md:p-5 gap-6 md:gap-20 pl-4 md:pl-16 container flex flex-col from-[#2a2b2c] to-[#0c0d0f] bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
+            <div className="w-full flex flex-col pt-2 md:pt-5">
+              <StrokeText
+                  key="details-title"
+                  tag="h2"
+                  strokeWidth={8}
+                  shadowSize={7}
+                  textColor="#ff2627"
+                  className="text-3xl md:text-5xl lg:text-[5rem] font-bold italic mb-3 md:mb-6"
+              >
                 Naše služby
-              </h2>
-              <p className="mt-2 text-sm md:text-base text-zinc-300">
+              </StrokeText>
+
+              <p className="text-base md:text-xl text-white/90 max-w-4xl leading-relaxed">
                 Prehľadne podľa oblastí. Ak si neviete vybrať, napíšte značku/model
                 a popis problému.
               </p>
+
+              <div className="mt-6 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
             </div>
+          </div>
 
-            <div className="mt-6 h-px w-full bg-zinc-700/70" />
+          {/* GRID panel (vizuálne podobné “sekciám” v About) */}
+          <div className="shadow-xl shadow-black/50 container overflow-hidden flex flex-col bg-linear-to-b from-[#2a2b2c] to-[#0c0d0f] rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
+            <div className="px-4 md:px-16 pt-6 md:pt-10 pb-6 md:pb-10">
+              <StrokeText
+                  key="details-subtitle"
+                  tag="h2"
+                  strokeWidth={6}
+                  shadowSize={5}
+                  textColor="#ff2627"
+                  className="text-2xl md:text-4xl lg:text-5xl font-bold italic leading-none"
+              >
+                Detailný prehľad
+              </StrokeText>
 
-            {/* Upravené: karty dizajnovo bližšie k FAQ (glass + shine + jemný hover) */}
-            <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
-              {services.map((s) => (
-                  <article
-                      key={s.title}
-                      className="
-                  group relative overflow-hidden
-                  rounded-2xl
-                  border border-white/10
-                  bg-white/5
-                  shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
-                  backdrop-blur-md
-                  p-6
-                  transition
-                  hover:bg-white/10
-                  hover:border-white/15
-                  hover:-translate-y-[2px]
-                  hover:shadow-[0_18px_55px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]
-                  focus-within:ring-2 focus-within:ring-white/15
-                "
-                  >
-                    <div className="pointer-events-none absolute inset-0">
-                      <div className="absolute -top-12 left-[-40%] h-28 w-[180%] rotate-[-8deg] bg-white/10 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                      <div className="absolute inset-0 ring-1 ring-white/5" />
-                    </div>
+              <p className="mt-3 text-sm md:text-base text-zinc-200/90 max-w-3xl">
+                Každá karta vysvetľuje, čo vieme spraviť, čo kontrolujeme a na čo
+                si dať pozor.
+              </p>
 
-                    <div className="relative z-10">
-                      <h3
-                          className="
-                      text-lg md:text-xl
-                      font-extrabold
-                      text-white
-                      tracking-tight
-                      transition-colors
-                      group-hover:text-red-400
-                    "
-                      >
-                        {s.title}
-                      </h3>
+              <div className="mt-6 h-px w-full bg-zinc-700/70" />
 
-                      <ul className="mt-4 space-y-2 text-sm md:text-[15px] text-zinc-200">
-                        {s.description.map((line) => (
-                            <li key={line} className="leading-relaxed text-zinc-200/95">
-                              {line}
-                            </li>
-                        ))}
-                      </ul>
+              {/* Karty: glass + shine + hover (ako v tvojom pôvodnom Details) */}
+              <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
+                {services.map((s) => (
+                    <article
+                        key={s.title}
+                        className="
+                    group relative overflow-hidden
+                    rounded-2xl
+                    border border-white/10
+                    bg-white/5
+                    shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+                    backdrop-blur-md
+                    p-6
+                    transition
+                    hover:bg-white/10
+                    hover:border-white/15
+                    hover:-translate-y-[2px]
+                    hover:shadow-[0_18px_55px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]
+                    focus-within:ring-2 focus-within:ring-white/15
+                  "
+                    >
+                      <div className="pointer-events-none absolute inset-0">
+                        <div className="absolute -top-12 left-[-40%] h-28 w-[180%] rotate-[-8deg] bg-white/10 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                        <div className="absolute inset-0 ring-1 ring-white/5" />
+                        <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
+                      </div>
 
-                      {s.note ? (
-                          <div className="mt-4 border-t border-white/10 pt-4">
-                            <p className="text-xs md:text-sm text-zinc-300/95">
-                              {s.note}
-                            </p>
-                          </div>
-                      ) : null}
-                    </div>
-                  </article>
-              ))}
+                      <div className="relative z-10">
+                        <h3
+                            className="
+                        text-lg md:text-xl
+                        font-extrabold
+                        text-white
+                        tracking-tight
+                        transition-colors
+                        group-hover:text-red-400
+                      "
+                        >
+                          {s.title}
+                        </h3>
+
+                        <ul className="mt-4 space-y-2 text-sm md:text-[15px] text-zinc-200">
+                          {s.description.map((line) => (
+                              <li key={line} className="leading-relaxed text-zinc-200/95">
+                                {line}
+                              </li>
+                          ))}
+                        </ul>
+
+                        {s.note ? (
+                            <div className="mt-4 border-t border-white/10 pt-4">
+                              <p className="text-xs md:text-sm text-zinc-300/95">
+                                {s.note}
+                              </p>
+                            </div>
+                        ) : null}
+                      </div>
+                    </article>
+                ))}
+              </div>
+
+              <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
             </div>
-
-            <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
-
-          </ChromePanel>
+          </div>
         </section>
       </main>
   );
