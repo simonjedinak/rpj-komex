@@ -2,24 +2,25 @@
 
 import React, { useMemo, useState } from "react";
 
+type Subject = "prehliadka" | "sklo" | "pneu" | "porucha" | "podozrenie";
+
 type FormState = {
   name: string;
   email: string;
   phone: string;
-
   brand: string;
   model: string;
-
-  subject: "prehliadka" | "sklo" | "pneu" | "porucha" | "podozrenie";
+  subject: Subject;
   message: string;
   consent: boolean;
 };
 
+// ASCII keys kvôli ESLint varovaniam, pekné názvy riešime cez BRAND_LABELS
 const BRAND_MODELS: Record<string, string[]> = {
   "": ["— Vyberte značku —"],
   Audi: ["A3", "A4", "A6", "Q5", "Q7", "Iné"],
   BMW: ["1", "3", "5", "X3", "X5", "Iné"],
-  Citroën: ["Berlingo", "C3", "C4", "Jumper", "Iné"],
+  Citroen: ["Berlingo", "C3", "C4", "Jumper", "Iné"],
   Dacia: ["Duster", "Logan", "Sandero", "Iné"],
   Fiat: ["Ducato", "Panda", "Punto", "Iné"],
   Ford: ["Fiesta", "Focus", "Transit", "Iné"],
@@ -29,17 +30,32 @@ const BRAND_MODELS: Record<string, string[]> = {
   Opel: ["Astra", "Corsa", "Insignia", "Vivaro", "Iné"],
   Peugeot: ["Partner", "308", "Boxer", "Iné"],
   Renault: ["Clio", "Megane", "Master", "Trafic", "Iné"],
-  Škoda: ["Fabia", "Octavia", "Superb", "Kodiaq", "Iné"],
+  Skoda: ["Fabia", "Octavia", "Superb", "Kodiaq", "Iné"],
   Toyota: ["Corolla", "Yaris", "RAV4", "Hilux", "Iné"],
   Volkswagen: ["Golf", "Passat", "Tiguan", "Transporter", "Iné"],
   Volvo: ["S60", "XC60", "XC90", "Iné"],
-  "Iná značka": ["Iné"],
+  InaZnacka: ["Iné"],
 };
 
+const BRAND_LABELS: Record<string, string> = {
+  Citroen: "Citroën",
+  Skoda: "Škoda",
+  InaZnacka: "Iná značka",
+};
+
+function brandLabel(key: string) {
+  return BRAND_LABELS[key] ?? key;
+}
+
+function getErrorMessage(err: unknown) {
+  // catch value nemusí byť Error -> treba bezpečne ošetriť [web:112]
+  if (err instanceof Error) return err.message;
+  if (typeof err === "string") return err;
+  return "Nepodarilo sa odoslať. Skúste znova.";
+}
+
 export default function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle",
-  );
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errorText, setErrorText] = useState("");
 
   const [form, setForm] = useState<FormState>({
@@ -84,12 +100,15 @@ export default function ContactForm() {
       });
 
       const contentType = res.headers.get("content-type") || "";
-      const payload = contentType.includes("application/json")
+      const payload: unknown = contentType.includes("application/json")
         ? await res.json().catch(() => ({}))
         : { error: await res.text().catch(() => "") };
 
+      const payloadObj = (payload && typeof payload === "object") ? (payload as Record<string, unknown>) : null;
+      const payloadError = payloadObj && typeof payloadObj.error === "string" ? payloadObj.error : "";
+
       if (!res.ok) {
-        throw new Error(payload?.error || `Server error (${res.status})`);
+        throw new Error(payloadError || `Server error (${res.status})`);
       }
 
       setStatus("sent");
@@ -103,9 +122,9 @@ export default function ContactForm() {
         message: "",
         consent: false,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus("error");
-      setErrorText(err?.message || "Nepodarilo sa odoslať. Skúste znova.");
+      setErrorText(getErrorMessage(err)); // bez any [web:111]
     }
   }
 
@@ -143,8 +162,7 @@ export default function ContactForm() {
                     Napíšte nám
                   </h2>
                   <p className="mt-2 text-sm md:text-base text-zinc-300">
-                    Odpovieme čo najskôr. Pre urýchlenie vyplňte značku, model a
-                    typ problému.
+                    Odpovieme čo najskôr. Pre urýchlenie vyplňte značku, model a typ problému.
                   </p>
                 </div>
 
@@ -152,16 +170,13 @@ export default function ContactForm() {
                   <div className="text-xs text-zinc-400">Telefón</div>
                   <div className="text-sm text-zinc-200">+421 905 489 092</div>
                   <div className="mt-2 text-xs text-zinc-400">E-mail</div>
-                  <div className="text-sm text-zinc-200">info@komex.sk</div>
+                  <div className="text-sm text-zinc-200">komex.autos@gmail.com</div>
                 </div>
               </div>
 
               <div className="mt-6 h-px w-full bg-zinc-700/70" />
 
-              <form
-                onSubmit={onSubmit}
-                className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4"
-              >
+              <form onSubmit={onSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Field
                   label="Meno a priezvisko"
                   required
@@ -195,7 +210,7 @@ export default function ContactForm() {
                     onChange={(e) =>
                       setForm((s) => ({
                         ...s,
-                        subject: e.target.value as FormState["subject"],
+                        subject: e.target.value as Subject,
                       }))
                     }
                     className="w-full rounded-md bg-zinc-950/40 text-zinc-100
@@ -229,7 +244,7 @@ export default function ContactForm() {
                       .filter((b) => b !== "")
                       .map((b) => (
                         <option key={b} value={b}>
-                          {b}
+                          {brandLabel(b)}
                         </option>
                       ))}
                   </select>
@@ -241,9 +256,7 @@ export default function ContactForm() {
                   </label>
                   <select
                     value={form.model}
-                    onChange={(e) =>
-                      setForm((s) => ({ ...s, model: e.target.value }))
-                    }
+                    onChange={(e) => setForm((s) => ({ ...s, model: e.target.value }))}
                     disabled={!form.brand}
                     className="w-full rounded-md bg-zinc-950/40 text-zinc-100
                                ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
@@ -270,18 +283,14 @@ export default function ContactForm() {
                   </label>
                   <textarea
                     value={form.message}
-                    onChange={(e) =>
-                      setForm((s) => ({ ...s, message: e.target.value }))
-                    }
+                    onChange={(e) => setForm((s) => ({ ...s, message: e.target.value }))}
                     rows={6}
                     placeholder="Popíšte problém, prípadne VIN/ŠPZ a preferovaný termín..."
                     className="w-full rounded-md bg-zinc-950/40 text-zinc-100
                                ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
                                px-3 py-2 outline-none resize-y"
                   />
-                  <div className="text-xs text-zinc-400">
-                    Minimum 10 znakov.
-                  </div>
+                  <div className="text-xs text-zinc-400">Minimum 10 znakov.</div>
                 </div>
 
                 <div className="md:col-span-2 mt-1 flex items-start gap-3">
@@ -289,9 +298,7 @@ export default function ContactForm() {
                     id="consent"
                     type="checkbox"
                     checked={form.consent}
-                    onChange={(e) =>
-                      setForm((s) => ({ ...s, consent: e.target.checked }))
-                    }
+                    onChange={(e) => setForm((s) => ({ ...s, consent: e.target.checked }))}
                     className="mt-1 h-4 w-4 accent-red-500"
                   />
                   <label htmlFor="consent" className="text-sm text-zinc-300">
@@ -302,19 +309,11 @@ export default function ContactForm() {
 
                 <div className="md:col-span-2 mt-3 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
                   <div className="text-sm">
-                    {status === "sent" && (
-                      <span className="text-green-400">
-                        Správa bola odoslaná.
-                      </span>
-                    )}
+                    {status === "sent" && <span className="text-green-400">Správa bola odoslaná.</span>}
                     {status === "error" && (
-                      <span className="text-red-400">
-                        {errorText || "Nepodarilo sa odoslať. Skúste znova."}
-                      </span>
+                      <span className="text-red-400">{errorText || "Nepodarilo sa odoslať. Skúste znova."}</span>
                     )}
-                    {status === "sending" && (
-                      <span className="text-zinc-300">Odosielanie…</span>
-                    )}
+                    {status === "sending" && <span className="text-zinc-300">Odosielanie…</span>}
                   </div>
 
                   <button
@@ -342,9 +341,7 @@ export default function ContactForm() {
                   <div className="mt-1">Po–Pi 08:00–16:00</div>
                 </div>
                 <div className="rounded-lg bg-black/20 ring-1 ring-white/5 p-4">
-                  <div className="text-xs text-zinc-400">
-                    Preferovaný kontakt
-                  </div>
+                  <div className="text-xs text-zinc-400">Preferovaný kontakt</div>
                   <div className="mt-1">Telefón alebo e-mail</div>
                 </div>
               </div>
