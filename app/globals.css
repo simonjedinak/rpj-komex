@@ -188,3 +188,37 @@ body {
     inset 0px 11px 20px rgba(0, 0, 0, 0.4),
     inset 0px -11px 20px rgba(0, 0, 0, 0.4);
 }
+
+.knob {
+  position: relative;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #3a3a3a 0deg,
+    #a4a4a4 64.8deg,
+    #606060 113.4deg,
+    #cecece 177.09deg,
+    #8f8f8f 221.4deg,
+    #464646 282.6deg,
+    #696969 343.8deg,
+    #3a3a3a 360deg
+  );
+  box-shadow: 4px 10px 6.6px #000000;
+  border-radius: 100%;
+}
+
+.knob::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 3px;
+  background: linear-gradient(to bottom, #bebebe, #403f3f);
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
