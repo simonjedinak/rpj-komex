@@ -31,8 +31,9 @@ export default function Footer() {
           <div className="flex bg-black gap-1.5">
             <div className="relative z-10 w-full rounded-[3px] bg-chrome2 inset-chrome py-7 px-24">
               <StrokeText
-                strokeWidth={2}
-                className="text-lg font-bold text-shadow-small text-white"
+                strokeWidth={2.6}
+                shadowSize={2.5}
+                className="text-lg font-bold italic text-white"
               >
                 © 2026 KOMEX. Všetky práva vyhradené.
               </StrokeText>

@@ -63,8 +63,9 @@ export default function Panel({
                     {/* Title */}
                     <StrokeText
                       strokeWidth={6}
+                      shadowSize={6}
                       tag="h4"
-                      className="text-6xl font-bold text-shadow-main"
+                      className="text-6xl font-bold "
                     >
                       {title}
                     </StrokeText>

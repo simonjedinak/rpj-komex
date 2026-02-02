@@ -28,7 +28,8 @@ export function ButtonLink({
     >
       <StrokeText
         strokeWidth={2}
-        className="text-lg font-bold text-shadow-small flex items-center gap-1"
+        shadowSize={2}
+        className="text-lg font-bold flex items-center gap-1"
       >
         {arrow && (
           <span className="inline-block transform mr-2 -translate-y-0.2">
