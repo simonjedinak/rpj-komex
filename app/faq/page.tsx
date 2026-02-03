@@ -1,4 +1,5 @@
 // app/faq/page.tsx
+import React from "react";
 import StrokeText from "../components/StrokeText";
 import { ButtonLink } from "../components/ButtonLink";
 
@@ -118,40 +119,83 @@ const FAQ = [
   },
 ];
 
-function ChromeCard({
-  children,
+const faqGallery = [
+  { src: "/images/o-nas/IMG_20251221_232348_556 1.png", alt: "Servis - foto 1" },
+  { src: "/images/o-nas/IMG_20251221_232348_556 1.png", alt: "Servis - foto 2" },
+  { src: "/images/o-nas/IMG_20251221_232348_556 1.png", alt: "Servis - foto 3" },
+  { src: "/images/o-nas/IMG_20251221_232348_556 1.png", alt: "Servis - foto 4" },
+];
+
+function CaretIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 20 20" fill="currentColor" className={className} aria-hidden="true">
+      <path
+        fillRule="evenodd"
+        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function GalleryBlock({
+  images,
   className = "",
 }: {
-  children: React.ReactNode;
+  images: { src: string; alt: string }[];
   className?: string;
 }) {
+  const main = images.slice(0, 2);
+  const thumbs = images.slice(2, 6);
+
   return (
-    <div
-      className={`rounded-[34px] p-[22px] shadow-2xl ${className}`}
-      style={{
-        background:
-          "linear-gradient(90deg,#6b7077 0%,#c7cbd1 10%,#70757c 22%,#cfd3d8 36%,#6e737a 52%,#b8bcc2 66%,#5b6067 82%,#c7cbd1 92%,#5a5f66 100%)",
-        boxShadow:
-          "inset 0 16px 34px rgba(0,0,0,.70), inset 0 -14px 26px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35)",
-      }}
-    >
-      <div
-        className="rounded-[26px] p-[12px]"
-        style={{
-          background:
-            "linear-gradient(180deg,#0a0f15 0%,#141a22 55%,#070a0f 100%)",
-          boxShadow:
-            "inset 0 2px 0 rgba(255,255,255,.08), inset 0 -10px 30px rgba(0,0,0,.85)",
-        }}
-      >
-        <div className="rounded-[20px] bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white overflow-hidden relative">
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-x-0 top-0 h-12 bg-white/10 blur-md" />
-            <div className="absolute inset-0 ring-1 ring-white/5" />
-            <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
-          </div>
-          <div className="relative z-10 p-5 md:p-6">{children}</div>
+    <div className={className}>
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <div className="text-xs text-zinc-300/80 font-extrabold tracking-wide">Fotogaléria</div>
+
+        <div className="mt-3 grid grid-cols-1 gap-3">
+          {main.map((img) => (
+            <div
+              key={img.src + img.alt}
+              className="
+                relative overflow-hidden rounded-2xl
+                border border-white/10 bg-black/20
+                shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+              "
+            >
+              <div className="aspect-[16/10]">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
+            </div>
+          ))}
         </div>
+
+        {thumbs.length ? (
+          <div className="mt-3 grid grid-cols-4 gap-2">
+            {thumbs.map((img) => (
+              <div
+                key={img.src + img.alt}
+                className="relative overflow-hidden rounded-xl border border-white/10 bg-black/20"
+                title={img.alt}
+              >
+                <div className="aspect-square">
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -159,135 +203,158 @@ function ChromeCard({
 
 export default function FaqPage() {
   return (
-    <main className="min-h-[70vh]">
-      <section className="relative overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-slate-950" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-950 to-black" />
+    <main className="flex-1 bg-white px-4 md:px-10 lg:px-20 py-4 md:py-8 text-white">
+      <section className="bg-metal inset-shadow-xl flex flex-col gap-y-4 md:gap-y-8 p-4 md:p-8 relative">
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <div className="fixed left-0 right-0 top-2/5 h-30 blur-xl rotate-15 bg-linear-to-r from-white/50 via-white/70 to-white/50 shadow-[0_0_100px_10px_rgba(255,255,255,0.6)]" />
+        </div>
 
-        <div className="relative container mx-auto px-4 py-10">
-          {/* Chrome header with StrokeText (like footer style) */}
-          <div
-            className="
-              mb-8
-              rounded-[2px]
-              px-5 py-4
-              [background:linear-gradient(180deg,#3A3A3A_-29.23%,#A4A4A4_-5.96%,#606060_11.48%,#CECECE_34.34%,#8F8F8F_50.25%,#464646_72.22%,#696969_94.18%)]
-              shadow-[inset_0px_3.30363px_4.95545px_rgba(255,255,255,0.6)]
-            "
-          >
+        {/* header like About */}
+        <div className="shadow-xl shadow-black/50 p-4 md:p-5 gap-6 md:gap-20 pl-4 md:pl-16 container flex flex-col from-[#2a2b2c] to-[#0c0d0f] bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
+          <div className="w-full flex flex-col text-base md:text-xl pt-5">
             <StrokeText
-              tag="h1"
-              strokeWidth={3}
-              strokeColor="black"
-              shadowSize={2}
-              className="text-2xl md:text-3xl font-extrabold italic tracking-tight"
+              key="faq-title"
+              tag="h2"
+              strokeWidth={8}
+              shadowSize={7}
+              textColor="#ff2627"
+              className="text-3xl md:text-5xl lg:text-[5rem] font-bold italic mb-4 md:mb-10"
             >
-              Často kladené otázky
+              FAQ
             </StrokeText>
 
-            <div className="mt-1">
-              <StrokeText
-                tag="p"
-                strokeWidth={2}
-                strokeColor="black"
-                shadowSize={2}
-                className="text-sm md:text-base text-white/90"
-              >
-                Rýchle odpovede k STK príprave, pneuservisu, autosklu a servisu.
-              </StrokeText>
+            <div className="space-y-2 md:space-y-4 text-white/90">
+              <p>Často kladené otázky k termínom, STK príprave, pneuservisu, autosklu a servisu.</p>
+              <p>Kliknite na otázku pre rozbalenie odpovede.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="container grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-4 md:gap-8 relative z-10">
+          {/* left: faq */}
+          <div className="shadow-xl shadow-black/50 overflow-hidden flex flex-col bg-linear-to-b from-[#2a2b2c] to-[#0c0d0f] rounded-2xl md:rounded-4xl border-black border-3">
+            <div className="px-4 md:px-16 pt-6 md:pt-10 pb-6 md:pb-10">
+              {FAQ.map((group) => (
+                <div key={group.section} className="mb-10 last:mb-0">
+                  <StrokeText
+                    tag="h3"
+                    strokeWidth={4}
+                    shadowSize={3}
+                    textColor="#ff2627"
+                    className="text-xl md:text-2xl font-bold italic leading-none"
+                  >
+                    {group.section}
+                  </StrokeText>
+
+                  <div className="mt-4 space-y-3">
+                    {group.items.map((item) => (
+                      <details
+                        key={item.q}
+                        className="
+                          group relative overflow-hidden
+                          rounded-2xl
+                          border border-white/10
+                          bg-white/5
+                          shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]
+                          transition
+                          hover:bg-white/10
+                          hover:border-white/15
+                          hover:-translate-y-[2px]
+                          hover:shadow-[0_18px_55px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]
+                          focus-within:ring-2 focus-within:ring-white/15
+                          open:bg-white/10
+                        "
+                      >
+                        <div className="pointer-events-none absolute inset-0">
+                          <div className="absolute -top-12 left-[-40%] h-28 w-[180%] rotate-[-8deg] bg-white/10 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                          <div className="absolute inset-0 ring-1 ring-white/5" />
+                        </div>
+
+                        <summary
+                          className="
+                            relative z-10
+                            cursor-pointer list-none
+                            px-4 py-4
+                            grid grid-cols-[1fr_auto] items-center gap-4
+                            [&::-webkit-details-marker]:hidden
+                          "
+                        >
+                          <StrokeText
+                            tag="span"
+                            strokeWidth={2}
+                            strokeColor="black"
+                            shadowSize={2}
+                            className="text-base md:text-lg font-bold leading-snug pr-2"
+                          >
+                            {item.q}
+                          </StrokeText>
+
+                          <span
+                            className="
+                              inline-flex items-center justify-center
+                              h-10 w-10 rounded-xl
+                              border border-white/10
+                              bg-white/5
+                              text-white/80
+                              transition-transform
+                              group-open:rotate-90
+                            "
+                            aria-hidden="true"
+                          >
+                            <CaretIcon className="h-5 w-5" />
+                          </span>
+                        </summary>
+
+                        <div className="relative z-10 px-4 pb-5 text-sm md:text-[15px] text-white/85 leading-relaxed">
+                          {item.a}
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
-            {/* FAQ */}
-            <ChromeCard>
-              <div className="flex items-end justify-between gap-6">
-                <div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold italic text-red-500">
-                    FAQ
-                  </h2>
-                  <p className="mt-2 text-sm md:text-base text-zinc-300">
-                    Kliknite na otázku pre rozbalenie odpovede.
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-6 h-px w-full bg-zinc-700/70" />
-
-              <div className="mt-6 space-y-10">
-                {FAQ.map((group) => (
-                  <div key={group.section}>
-                    <h3 className="text-white/90 font-bold mb-3">
-                      {group.section}
-                    </h3>
-
-                    <div className="space-y-3">
-                      {group.items.map((item) => (
-                        <details
-                          key={item.q}
-                          className="group rounded-md border border-white/10 bg-white/5 open:bg-white/10"
-                        >
-                          <summary className="cursor-pointer list-none px-4 py-3 grid grid-cols-[1fr_auto] items-center gap-4">
-                            <StrokeText
-                              strokeWidth={2}
-                              strokeColor="black"
-                              shadowSize={2}
-                              className="text-base md:text-lg font-bold leading-snug pr-2"
-                            >
-                              {item.q}
-                            </StrokeText>
-
-                            <span className="text-white/70 group-open:rotate-90 transition-transform">
-                              ▸
-                            </span>
-                          </summary>
-
-                          <div className="px-4 pb-4 text-sm text-white/80 leading-relaxed">
-                            {item.a}
-                          </div>
-                        </details>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
-            </ChromeCard>
-
-            {/* CTA */}
-            <ChromeCard className="lg:sticky lg:top-24">
-              <h3 className="text-2xl font-extrabold italic text-red-500">
+          {/* right: cta + images */}
+          <aside className="shadow-xl shadow-black/50 p-4 md:p-5 pl-4 md:pl-10 flex flex-col from-[#242425] to-[#0c0d0f] bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative lg:sticky lg:top-24 h-fit">
+            <div className="pt-4 md:pt-8">
+              <StrokeText
+                key="faq-cta"
+                tag="h2"
+                strokeWidth={6}
+                shadowSize={5}
+                textColor="#ff2627"
+                className="text-2xl md:text-4xl font-bold italic leading-none"
+              >
                 Nenašli ste odpoveď?
-              </h3>
-              <p className="mt-2 text-sm text-zinc-300">
-                Napíšte nám a uveďte značku/model + popis problému alebo
-                požadovanú službu.
+              </StrokeText>
+
+              <p className="mt-4 text-sm md:text-base text-white/85 leading-relaxed">
+                Napíšte nám a uveďte značku/model + popis problému alebo požadovanú službu.
               </p>
 
-              <div className="mt-6 h-px w-full bg-zinc-700/70" />
-
-              <div className="mt-5">
-                <ButtonLink
-                  href="/kontakt"
-                  text="Kontakt"
-                  arrow
-                  variant="small"
-                />
+              <div className="mt-6">
+                <ButtonLink href="/kontakt" text="Kontakt" arrow variant="small" />
               </div>
 
-              <div className="mt-6 rounded-lg bg-black/20 ring-1 ring-white/5 p-4 text-sm text-zinc-300">
-                <div className="text-xs text-zinc-400">Najčastejšie témy</div>
-                <ul className="mt-2 space-y-1">
+              <GalleryBlock images={faqGallery} className="mt-6" />
+
+              <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs text-zinc-300/80 font-extrabold tracking-wide">
+                  Najčastejšie témy
+                </div>
+                <ul className="mt-2 space-y-1 text-sm text-white/80">
                   <li>• STK príprava</li>
                   <li>• Pneu (prezúvanie + vyváženie)</li>
                   <li>• Autosklo (oprava/výmena)</li>
                   <li>• Diagnostika a poruchy</li>
                 </ul>
               </div>
-            </ChromeCard>
-          </div>
+            </div>
+          </aside>
         </div>
       </section>
     </main>
