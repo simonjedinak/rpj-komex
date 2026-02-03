@@ -1,3 +1,4 @@
+// app/kontakt/ContactForm.tsx (alebo kde to máš)
 "use client";
 
 import React, { useMemo, useState } from "react";
@@ -48,10 +49,38 @@ function brandLabel(key: string) {
 }
 
 function getErrorMessage(err: unknown) {
-  // catch value nemusí byť Error -> treba bezpečne ošetriť [web:112]
   if (err instanceof Error) return err.message;
   if (typeof err === "string") return err;
   return "Nepodarilo sa odoslať. Skúste znova.";
+}
+
+function Field(props: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  required?: boolean;
+  type?: string;
+}) {
+  const { label, value, onChange, placeholder, required, type } = props;
+
+  const common =
+    "w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none";
+
+  return (
+    <div className="space-y-2">
+      <label className="text-sm text-zinc-200">
+        {label} {required ? <span className="text-red-500">*</span> : null}
+      </label>
+      <input
+        type={type ?? "text"}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={common}
+      />
+    </div>
+  );
 }
 
 export default function ContactForm() {
@@ -104,7 +133,8 @@ export default function ContactForm() {
         ? await res.json().catch(() => ({}))
         : { error: await res.text().catch(() => "") };
 
-      const payloadObj = (payload && typeof payload === "object") ? (payload as Record<string, unknown>) : null;
+      const payloadObj =
+        payload && typeof payload === "object" ? (payload as Record<string, unknown>) : null;
       const payloadError = payloadObj && typeof payloadObj.error === "string" ? payloadObj.error : "";
 
       if (!res.ok) {
@@ -124,260 +154,211 @@ export default function ContactForm() {
       });
     } catch (err: unknown) {
       setStatus("error");
-      setErrorText(getErrorMessage(err)); // bez any [web:111]
+      setErrorText(getErrorMessage(err));
     }
   }
 
   return (
-    <section className="w-full">
-      <div
-        className="rounded-[34px] p-[22px] shadow-2xl"
-        style={{
-          background:
-            "linear-gradient(90deg,#6b7077 0%,#c7cbd1 10%,#70757c 22%,#cfd3d8 36%,#6e737a 52%,#b8bcc2 66%,#5b6067 82%,#c7cbd1 92%,#5a5f66 100%)",
-          boxShadow:
-            "inset 0 16px 34px rgba(0,0,0,.70), inset 0 -14px 26px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35)",
-        }}
-      >
-        <div
-          className="rounded-[26px] p-[12px]"
-          style={{
-            background:
-              "linear-gradient(180deg,#0a0f15 0%,#141a22 55%,#070a0f 100%)",
-            boxShadow:
-              "inset 0 2px 0 rgba(255,255,255,.08), inset 0 -10px 30px rgba(0,0,0,.85)",
-          }}
-        >
-          <div className="rounded-[20px] bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white overflow-hidden relative">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute inset-x-0 top-0 h-12 bg-white/10 blur-md" />
-              <div className="absolute inset-0 ring-1 ring-white/5" />
-              <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.65)]" />
+    <main className="flex-1 bg-white px-4 md:px-10 lg:px-20 py-4 md:py-8 text-white">
+      <section className="bg-metal inset-shadow-xl flex flex-col gap-y-4 md:gap-y-8 p-4 md:p-8 relative">
+        {/* rovnaký “light streak” ako About */}
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <div className="fixed left-0 right-0 top-2/5 h-30 blur-xl rotate-15 bg-linear-to-r from-white/50 via-white/70 to-white/50 shadow-[0_0_100px_10px_rgba(255,255,255,0.6)]" />
+        </div>
+
+        {/* panel v štýle About (jeden veľký blok) */}
+        <div className="shadow-xl shadow-black/50 p-4 md:p-5 gap-6 md:gap-10 pl-4 md:pl-16 container flex flex-col from-[#2a2b2c] to-[#0c0d0f] bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
+          <div className="w-full flex flex-col text-base md:text-xl pt-3 md:pt-6">
+            <h2 className="text-3xl md:text-5xl lg:text-[5rem] font-bold italic mb-3 md:mb-6 text-red-500">
+              Napíšte nám
+            </h2>
+            <p className="text-sm md:text-base text-zinc-200/90 max-w-4xl">
+              Odpovieme čo najskôr. Pre urýchlenie vyplňte značku, model a typ problému.
+            </p>
+
+            <div className="mt-6 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
+          </div>
+
+          {/* kontakt info (ostáva responsívne, len dizajn zarovnaný) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-xs text-zinc-400">Telefón</div>
+              <div className="mt-1 text-sm md:text-base text-zinc-100">+421 905 489 092</div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-xs text-zinc-400">E-mail</div>
+              <div className="mt-1 text-sm md:text-base text-zinc-100">komex.autos@gmail.com</div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-xs text-zinc-400">Preferovaný kontakt</div>
+              <div className="mt-1 text-sm md:text-base text-zinc-100">Telefón alebo e-mail</div>
+            </div>
+          </div>
+
+          <div className="mt-2 h-px w-full bg-zinc-700/70" />
+
+          <form onSubmit={onSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Field
+              label="Meno a priezvisko"
+              required
+              value={form.name}
+              onChange={(v) => setForm((s) => ({ ...s, name: v }))}
+              placeholder="napr. Ján Novák"
+            />
+
+            <Field
+              label="E-mail"
+              required
+              value={form.email}
+              onChange={(v) => setForm((s) => ({ ...s, email: v }))}
+              placeholder="napr. jan.novak@email.sk"
+              type="email"
+            />
+
+            <Field
+              label="Telefón"
+              value={form.phone}
+              onChange={(v) => setForm((s) => ({ ...s, phone: v }))}
+              placeholder="napr. +421 9xx xxx xxx"
+            />
+
+            <div className="space-y-2">
+              <label className="text-sm text-zinc-200">
+                Typ <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={form.subject}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    subject: e.target.value as Subject,
+                  }))
+                }
+                className="w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none"
+              >
+                <option value="prehliadka">Prehliadka</option>
+                <option value="sklo">Sklo</option>
+                <option value="pneu">Pneu</option>
+                <option value="porucha">Porucha</option>
+                <option value="podozrenie">Podozrenie</option>
+              </select>
             </div>
 
-            <div className="relative z-10 p-6 md:p-8">
-              <div className="flex items-start justify-between gap-6">
-                <div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold italic text-red-500">
-                    Napíšte nám
-                  </h2>
-                  <p className="mt-2 text-sm md:text-base text-zinc-300">
-                    Odpovieme čo najskôr. Pre urýchlenie vyplňte značku, model a typ problému.
-                  </p>
-                </div>
+            <div className="space-y-2">
+              <label className="text-sm text-zinc-200">
+                Značka auta <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={form.brand}
+                onChange={(e) => {
+                  const brand = e.target.value;
+                  setForm((s) => ({ ...s, brand, model: "" }));
+                }}
+                className="w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none"
+              >
+                <option value="">— Vyberte značku —</option>
+                {Object.keys(BRAND_MODELS)
+                  .filter((b) => b !== "")
+                  .map((b) => (
+                    <option key={b} value={b}>
+                      {brandLabel(b)}
+                    </option>
+                  ))}
+              </select>
+            </div>
 
-                <div className="hidden md:block text-right">
-                  <div className="text-xs text-zinc-400">Telefón</div>
-                  <div className="text-sm text-zinc-200">+421 905 489 092</div>
-                  <div className="mt-2 text-xs text-zinc-400">E-mail</div>
-                  <div className="text-sm text-zinc-200">komex.autos@gmail.com</div>
-                </div>
+            <div className="space-y-2">
+              <label className="text-sm text-zinc-200">
+                Model / názov auta <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={form.model}
+                onChange={(e) => setForm((s) => ({ ...s, model: e.target.value }))}
+                disabled={!form.brand}
+                className="w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none disabled:opacity-40"
+              >
+                {!form.brand ? (
+                  <option value="">Najprv vyberte značku</option>
+                ) : (
+                  <>
+                    <option value="">— Vyberte model —</option>
+                    {modelsForBrand.map((m) => (
+                      <option key={m} value={m}>
+                        {m}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </select>
+            </div>
+
+            <div className="md:col-span-2 space-y-2">
+              <label className="text-sm text-zinc-200">
+                Správa <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                value={form.message}
+                onChange={(e) => setForm((s) => ({ ...s, message: e.target.value }))}
+                rows={6}
+                placeholder="Popíšte problém, prípadne VIN/ŠPZ a preferovaný termín..."
+                className="w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none resize-y"
+              />
+              <div className="text-xs text-zinc-400">Minimum 10 znakov.</div>
+            </div>
+
+            <div className="md:col-span-2 mt-1 flex items-start gap-3">
+              <input
+                id="consent"
+                type="checkbox"
+                checked={form.consent}
+                onChange={(e) => setForm((s) => ({ ...s, consent: e.target.checked }))}
+                className="mt-1 h-4 w-4 accent-red-500"
+              />
+              <label htmlFor="consent" className="text-sm text-zinc-300">
+                Súhlasím so spracovaním údajov pre účely kontaktovania.
+                <span className="text-red-500"> *</span>
+              </label>
+            </div>
+
+            <div className="md:col-span-2 mt-3 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+              <div className="text-sm">
+                {status === "sent" && <span className="text-green-400">Správa bola odoslaná.</span>}
+                {status === "error" && (
+                  <span className="text-red-400">
+                    {errorText || "Nepodarilo sa odoslať. Skúste znova."}
+                  </span>
+                )}
+                {status === "sending" && <span className="text-zinc-300">Odosielanie…</span>}
               </div>
 
-              <div className="mt-6 h-px w-full bg-zinc-700/70" />
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="inline-flex items-center justify-center rounded-md bg-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-900 shadow transition hover:bg-white disabled:opacity-40 disabled:hover:bg-zinc-200"
+              >
+                Odoslať správu
+              </button>
+            </div>
+          </form>
 
-              <form onSubmit={onSubmit} className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Field
-                  label="Meno a priezvisko"
-                  required
-                  value={form.name}
-                  onChange={(v) => setForm((s) => ({ ...s, name: v }))}
-                  placeholder="napr. Ján Novák"
-                />
+          <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
 
-                <Field
-                  label="E-mail"
-                  required
-                  value={form.email}
-                  onChange={(v) => setForm((s) => ({ ...s, email: v }))}
-                  placeholder="napr. jan.novak@email.sk"
-                  type="email"
-                />
-
-                <Field
-                  label="Telefón"
-                  value={form.phone}
-                  onChange={(v) => setForm((s) => ({ ...s, phone: v }))}
-                  placeholder="napr. +421 9xx xxx xxx"
-                />
-
-                <div className="space-y-2">
-                  <label className="text-sm text-zinc-200">
-                    Typ <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={form.subject}
-                    onChange={(e) =>
-                      setForm((s) => ({
-                        ...s,
-                        subject: e.target.value as Subject,
-                      }))
-                    }
-                    className="w-full rounded-md bg-zinc-950/40 text-zinc-100
-                               ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
-                               px-3 py-2 outline-none"
-                  >
-                    <option value="prehliadka">Prehliadka</option>
-                    <option value="sklo">Sklo</option>
-                    <option value="pneu">Pneu</option>
-                    <option value="porucha">Porucha</option>
-                    <option value="podozrenie">Podozrenie</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-zinc-200">
-                    Značka auta <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={form.brand}
-                    onChange={(e) => {
-                      const brand = e.target.value;
-                      setForm((s) => ({ ...s, brand, model: "" }));
-                    }}
-                    className="w-full rounded-md bg-zinc-950/40 text-zinc-100
-                               ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
-                               px-3 py-2 outline-none"
-                  >
-                    <option value="">— Vyberte značku —</option>
-                    {Object.keys(BRAND_MODELS)
-                      .filter((b) => b !== "")
-                      .map((b) => (
-                        <option key={b} value={b}>
-                          {brandLabel(b)}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm text-zinc-200">
-                    Model / názov auta <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={form.model}
-                    onChange={(e) => setForm((s) => ({ ...s, model: e.target.value }))}
-                    disabled={!form.brand}
-                    className="w-full rounded-md bg-zinc-950/40 text-zinc-100
-                               ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
-                               px-3 py-2 outline-none disabled:opacity-40"
-                  >
-                    {!form.brand ? (
-                      <option value="">Najprv vyberte značku</option>
-                    ) : (
-                      <>
-                        <option value="">— Vyberte model —</option>
-                        {modelsForBrand.map((m) => (
-                          <option key={m} value={m}>
-                            {m}
-                          </option>
-                        ))}
-                      </>
-                    )}
-                  </select>
-                </div>
-
-                <div className="md:col-span-2 space-y-2">
-                  <label className="text-sm text-zinc-200">
-                    Správa <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    value={form.message}
-                    onChange={(e) => setForm((s) => ({ ...s, message: e.target.value }))}
-                    rows={6}
-                    placeholder="Popíšte problém, prípadne VIN/ŠPZ a preferovaný termín..."
-                    className="w-full rounded-md bg-zinc-950/40 text-zinc-100
-                               ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70
-                               px-3 py-2 outline-none resize-y"
-                  />
-                  <div className="text-xs text-zinc-400">Minimum 10 znakov.</div>
-                </div>
-
-                <div className="md:col-span-2 mt-1 flex items-start gap-3">
-                  <input
-                    id="consent"
-                    type="checkbox"
-                    checked={form.consent}
-                    onChange={(e) => setForm((s) => ({ ...s, consent: e.target.checked }))}
-                    className="mt-1 h-4 w-4 accent-red-500"
-                  />
-                  <label htmlFor="consent" className="text-sm text-zinc-300">
-                    Súhlasím so spracovaním údajov pre účely kontaktovania.
-                    <span className="text-red-500"> *</span>
-                  </label>
-                </div>
-
-                <div className="md:col-span-2 mt-3 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                  <div className="text-sm">
-                    {status === "sent" && <span className="text-green-400">Správa bola odoslaná.</span>}
-                    {status === "error" && (
-                      <span className="text-red-400">{errorText || "Nepodarilo sa odoslať. Skúste znova."}</span>
-                    )}
-                    {status === "sending" && <span className="text-zinc-300">Odosielanie…</span>}
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={!canSubmit}
-                    className="inline-flex items-center justify-center rounded-md
-                               bg-zinc-200 px-6 py-3 text-sm font-semibold text-zinc-900
-                               shadow transition hover:bg-white
-                               disabled:opacity-40 disabled:hover:bg-zinc-200"
-                  >
-                    Odoslať správu
-                  </button>
-                </div>
-              </form>
-
-              <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
-
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-zinc-300">
-                <div className="rounded-lg bg-black/20 ring-1 ring-white/5 p-4">
-                  <div className="text-xs text-zinc-400">Adresa</div>
-                  <div className="mt-1">Strojnícka ulica, Prešov</div>
-                </div>
-                <div className="rounded-lg bg-black/20 ring-1 ring-white/5 p-4">
-                  <div className="text-xs text-zinc-400">Otváracie hodiny</div>
-                  <div className="mt-1">Po–Pi 08:00–16:00</div>
-                </div>
-                <div className="rounded-lg bg-black/20 ring-1 ring-white/5 p-4">
-                  <div className="text-xs text-zinc-400">Preferovaný kontakt</div>
-                  <div className="mt-1">Telefón alebo e-mail</div>
-                </div>
-              </div>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-zinc-300">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-xs text-zinc-400">Adresa</div>
+              <div className="mt-1">Strojnícka ulica, Prešov</div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-xs text-zinc-400">Otváracie hodiny</div>
+              <div className="mt-1">Po–Pi 08:00–16:00</div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="text-xs text-zinc-400">Tip</div>
+              <div className="mt-1">Pridajte VIN/ŠPZ a preferovaný termín.</div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function Field(props: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-  required?: boolean;
-  type?: string;
-}) {
-  const { label, value, onChange, placeholder, required, type } = props;
-
-  const common =
-    "w-full rounded-md bg-zinc-950/40 text-zinc-100 ring-1 ring-zinc-700/70 focus:ring-2 focus:ring-red-500/70 px-3 py-2 outline-none";
-
-  return (
-    <div className="space-y-2">
-      <label className="text-sm text-zinc-200">
-        {label} {required ? <span className="text-red-500">*</span> : null}
-      </label>
-      <input
-        type={type ?? "text"}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className={common}
-      />
-    </div>
+      </section>
+    </main>
   );
 }
