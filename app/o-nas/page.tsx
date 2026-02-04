@@ -32,7 +32,10 @@ export default function AboutPage() {
     <>
       <main className="flex-1 bg-white px-4 md:px-10 lg:px-20 py-4 md:py-8 text-white">
         <section className="bg-metal inset-shadow-xl flex flex-col gap-y-4 md:gap-y-8 p-4 md:p-8 relative">
-          <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+          <div
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+            aria-hidden="true"
+          >
             <div className="fixed left-0 right-0 top-2/5 h-30 blur-xl rotate-15 bg-linear-to-r from-white/50 via-white/70 to-white/50 shadow-[0_0_100px_10px_rgba(255,255,255,0.6)]" />
           </div>
 
@@ -51,12 +54,14 @@ export default function AboutPage() {
               </StrokeText>
               <div className="space-y-4 md:space-y-8">
                 <p>
-                  Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na Strojníckej ulici,
-                  kde dodnes sídli a dlhodobo poskytuje servis osobným aj úžitkovým vozidlám.
+                  Autoservis KOMEX vznikol ako rodinná dielňa v Prešove na
+                  Strojníckej ulici, kde dodnes sídli a dlhodobo poskytuje
+                  servis osobným aj úžitkovým vozidlám.
                 </p>
                 <p>
-                  Postupne sa z menšieho pracoviska stal plnohodnotný servis so zameraním na
-                  mechanické opravy, diagnostiku, pneuservis a údržbu klimatizácií.
+                  Postupne sa z menšieho pracoviska stal plnohodnotný servis so
+                  zameraním na mechanické opravy, diagnostiku, pneuservis a
+                  údržbu klimatizácií.
                 </p>
               </div>
             </div>
@@ -129,16 +134,18 @@ export default function AboutPage() {
               <div className="relative flex flex-col flex-1">
                 <div className="px-4 md:px-16 pt-4 md:pt-8 pb-4 space-y-4 md:space-y-8 text-white text-base md:text-xl leading-relaxed">
                   <p>
-                    Dôležitou súčasťou KOMEXu je aj špecializácia na opravy a repasovanie
-                    autochladičov, ktorá dopĺňa klasické servisné práce.
+                    Dôležitou súčasťou KOMEXu je aj špecializácia na opravy a
+                    repasovanie autochladičov, ktorá dopĺňa klasické servisné
+                    práce.
                   </p>
                   <p>
-                    Vďaka tomu vie dielňa vyriešiť bežné opravy aj špecifické problémy s chladením
-                    motora na jednom mieste.
+                    Vďaka tomu vie dielňa vyriešiť bežné opravy aj špecifické
+                    problémy s chladením motora na jednom mieste.
                   </p>
                   <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
                   </p>
                 </div>
               </div>
@@ -208,13 +215,15 @@ export default function AboutPage() {
               </StrokeText>
               <div className="space-y-4 md:space-y-8">
                 <p>
-                  Rodinný charakter podniku a osobný prístup k zákazníkom sú základom dobrej
-                  povesti a stálej klientely servisu na Strojníckej ulici.
+                  Rodinný charakter podniku a osobný prístup k zákazníkom sú
+                  základom dobrej povesti a stálej klientely servisu na
+                  Strojníckej ulici.
                 </p>
                 <p>
-                  Autoservis KOMEX dnes funguje ako spolupráca dvoch generácií - samotný servis
-                  vozidiel vedie Marcel Komka, zatiaľ čo na opravy a repasovanie autochladičov sa
-                  špecializuje jeho otec Dušan Komka
+                  Autoservis KOMEX dnes funguje ako spolupráca dvoch generácií -
+                  samotný servis vozidiel vedie Marcel Komka, zatiaľ čo na
+                  opravy a repasovanie autochladičov sa špecializuje jeho otec
+                  Dušan Komka
                 </p>
               </div>
             </div>

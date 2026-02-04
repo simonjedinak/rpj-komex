@@ -39,8 +39,8 @@ export default function Home() {
         </div>
         <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome" />
         <div className="w-full h-32 bg-[#2d1a0e] flex flex-row justify-center items-center gap-10">
-          <div className="h-16 aspect-square rounded-full knob"></div>
-          <div className="h-22 aspect-square rounded-full knob"></div>
+          <div className="h-16 aspect-square rounded-full knob" />
+          <div className="h-22 aspect-square rounded-full knob" />
         </div>
         <div className="h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome" />
       </section>
