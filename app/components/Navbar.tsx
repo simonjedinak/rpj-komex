@@ -87,7 +87,7 @@ export default function Navbar() {
       </div>
 
       {/* BOTTOM BAR (buttons like footer) */}
-      <div className="w-full flex flex-row h-10 gap-1.5 bg-chrome1 inset-chrome">
+      <div className="w-full md:flex flex-row h-10 gap-1.5 bg-chrome1 inset-chrome hidden ">
         <div className="container w-80" />
 
         <ul className="w-full h-full flex items-center gap-10 py-2 -ml-0.5">
@@ -107,7 +107,12 @@ export default function Navbar() {
             <ButtonLink href="/kontakt" variant="small" text="Kontakt" arrow />
           </li>
           <li>
-            <ButtonLink href="/kalendar" variant="small" text="Kalendár" arrow />
+            <ButtonLink
+              href="/kalendar"
+              variant="small"
+              text="Kalendár"
+              arrow
+            />
           </li>
         </ul>
       </div>
