@@ -7,17 +7,42 @@ import "vault66-crt-effect/dist/vault66-crt-effect.css";
 
 const ArrowLeftIcon = () => (
   <svg
+    width="59"
+    height="54"
+    viewBox="0 0 59 54"
     xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    className="blinking overflow-visible"
   >
-    <path d="M19 12H5M12 19l-7-7 7-7" />
+    <defs>
+      <filter id="svgShadow" x="-100%" y="-100%" width="300%" height="300%">
+        <feDropShadow
+          dx="0"
+          dy="0"
+          stdDeviation="4"
+          floodColor="#8CFF00"
+          floodOpacity="0.4"
+        />
+        <feDropShadow
+          dx="0"
+          dy="0"
+          stdDeviation="34"
+          floodColor="#95ff00"
+          floodOpacity="1"
+        />
+        <feDropShadow
+          dx="0"
+          dy="0"
+          stdDeviation="30"
+          floodColor="#5aff00"
+          floodOpacity="0.8"
+        />
+      </filter>
+    </defs>
+    <path
+      d="M36.4726 15.3528V0L0 27L36.4726 54V38.6472H59V15.3528H36.4726Z"
+      fill="#F6FF47"
+      filter="url(#svgShadow)"
+    />
   </svg>
 );
 
@@ -160,7 +185,7 @@ export default function Display({ className = "" }: { className?: string }) {
               <div className="flex flex-col h-full">
                 <button
                   onClick={handleBack}
-                  className="self-start text-white hover:text-gray-300 transition-colors p-2 -ml-2 -mt-2 mb-1 sm:-ml-4 sm:-mt-4 sm:mb-2"
+                  className="self-start overflow-visible  p-2 -ml-2 -mt-2 mb-1 sm:-ml-4 sm:-mt-4 sm:mb-2"
                   aria-label="Go back"
                 >
                   <ArrowLeftIcon />

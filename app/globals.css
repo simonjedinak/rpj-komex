@@ -338,3 +338,21 @@ body {
     inset 0px 4px 6px rgba(255, 255, 255, 0.6),
     0px 0px 10px rgba(0, 0, 0, 1);
 }
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0;
+  }
+}
+
+.blinking {
+  animation: blink 1.4s infinite steps(1);
+}
+.blinking:hover {
+  animation: none;
+  transform: translateX(-5px);
+}
