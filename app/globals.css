@@ -263,16 +263,26 @@ body {
 .mobile-button-link {
   background: linear-gradient(
     180deg,
-    #171717 1%,
-    #535252 10%,
-    #181818 30%,
+    #000000 2%,
+    #838383 10%,
+    #3c3c3c 30%,
     #000000 45%,
-    #121212 85%,
+    #333333 85%,
     #000000 100%
   );
+
   box-shadow:
-    0px 0px 0px 2px rgba(0, 0, 0, 0.8),
-    0px 1px 4px 1px rgba(0, 0, 0, 0.4),
+    0px 0px 0px 2px rgba(0, 0, 0, 1),
+    0px 1px 5px 1px rgba(0, 0, 0, 0.8),
+    inset -22px 24px 73px rgba(255, 255, 255, 0.1),
+    inset 0px 3px 4px 0px rgba(255, 255, 255, 0.4),
+    inset 0px -3px 13px 6px #000000;
+}
+.mid-one {
+  box-shadow:
+    0px -10px 0px 2px rgba(0, 0, 0, 1),
+    0px 10px 0px 2px rgba(0, 0, 0, 1),
+    0px 1px 5px 1px rgba(0, 0, 0, 0.8),
     inset -22px 24px 73px rgba(255, 255, 255, 0.1),
     inset 0px 3px 4px 0px rgba(255, 255, 255, 0.4),
     inset 0px -3px 13px 6px #000000;
@@ -282,14 +292,21 @@ body {
   box-shadow:
     inset 0 4px 6px rgba(255, 255, 255, 0.612),
     inset 0 -4px 6px rgba(0, 0, 0, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.9);
+    0 1px 3px rgba(0, 0, 0, 0.9),
+    0px 0px 1px 2px rgba(72, 0, 0, 0.5);
+
   /* transform: rotate(180deg); */
 }
 
 .navbar-bg-stripe {
   box-shadow:
-    10px 0px 24px rgba(0, 0, 0, 0.35),
-    -10px 0px 24px rgba(0, 0, 0, 0.35);
+    10px 0px 24px rgba(0, 0, 0, 0.8),
+    -10px 0px 24px rgba(0, 0, 0, 0.8),
+    2px 0px 0px rgb(0, 0, 0),
+    -2px 0px 0px rgb(0, 0, 0);
+  transform: perspective(1200px) rotateX(50deg) translateY(-800px);
+  perspective-origin: 100%;
+  /* translateY(100px); */
 }
 .navbar-bg-stripe div {
   border: 2px solid #252525;
@@ -302,16 +319,16 @@ body {
   background: linear-gradient(
     25deg,
     #b0b0b0 12.96%,
-    #d6d6d6 25.39%,
+    #c9c9c9 25.39%,
     #929191 47.47%,
-    #eee8e8 66.8%,
+    #e2dddd 66.8%,
     #b3b3b3 81.98%
   );
   box-shadow:
     0px 0px 20px rgba(0, 0, 0, 0.3),
     0px 5px 20px rgba(0, 0, 0, 0.65),
-    0px 0px 0px 2px #000000,
     inset 0px 0px 5px 2px #ffffff,
-    inset 0px 0px 28px 2px #ffffff;
+    inset 0px 0px 28px 2px #ffffff,
+    0px 0px 0px 3px #000000;
   /* corner-shape: squircle; */
 }

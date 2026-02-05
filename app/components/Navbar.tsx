@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import StrokeText from "./StrokeText";
 import ChromeDivider from "./ChromeDivider";
