@@ -5,12 +5,12 @@ import Link from "next/link";
 import StrokeText from "./StrokeText";
 
 const navLinks = [
+  { text: "Domov", href: "/" },
   { text: "O nás", href: "/o-nas" },
-  { text: "O nás", href: "/o-nas" },
-  { text: "Niecoo", href: "/details" },
-  { text: "Niecoo", href: "/details" },
-  { text: "O nás", href: "/o-nas" },
-  { text: "O nás", href: "/o-nas" },
+  { text: "Details", href: "/details" },
+  { text: "Časté otázky", href: "/faq" },
+  { text: "Kontakt", href: "/kontakt" },
+  { text: "Kalendár", href: "/kalendar" },
 ];
 
 // Height of the bottom section (logo + 2 button rows) in pixels
@@ -70,9 +70,8 @@ export default function MobileNavbar() {
                   className={`${isExpanded ? "rounded-b-4xl" : "rounded-t-4xl"} duration-600 select-none ease-out rounded-md absolute inset-0 bg-linear-to-b from-[#ff0000] to-[#9d0000] flex items-center justify-center arrow-nav-button`}
                 >
                   <svg
-                    className={`w-8 h-8 text-white transition-transform duration-300 ${
-                      isExpanded ? "rotate-90" : "-rotate-90"
-                    }`}
+                    className={`w-8 h-8 text-white transition-transform duration-300 ${isExpanded ? "rotate-90" : "-rotate-90"
+                      }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -96,15 +95,7 @@ export default function MobileNavbar() {
                     alt="KOMEX Logo"
                     className="h-15 w-auto max-w-full opacity-85"
                   />
-                  <StrokeText
-                    tag="p"
-                    strokeWidth={2}
-                    shadowSize={1.5}
-                    strokeColor="rgba(0,0,0,0.6)"
-                    className="text-sm font-bold"
-                  >
-                    domov
-                  </StrokeText>
+
                 </Link>
               </div>
             </div>
