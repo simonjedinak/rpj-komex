@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import StrokeText from "./StrokeText";
 
 const navLinks = [
   { text: "O nás", href: "/o-nas" },
@@ -13,14 +14,14 @@ const navLinks = [
 ];
 
 // Height of the bottom section (logo + 2 button rows) in pixels
-const BOTTOM_SECTION_HEIGHT = 105;
+const BOTTOM_SECTION_HEIGHT = 104;
 
 export default function MobileNavbar() {
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
     <nav
-      className="fixed left-0 right-0 z-50 md:hidden transition-[bottom] duration-300 ease-in-out"
+      className="fixed left-0 pb-4 right-0 z-50 md:hidden transition-[bottom] duration-300 ease-out"
       style={{
         bottom: isExpanded ? "0px" : `-${BOTTOM_SECTION_HEIGHT}px`,
       }}
@@ -31,7 +32,7 @@ export default function MobileNavbar() {
           <div
             aria-hidden="true"
             //  w-4/9
-            className="h-[50rem] w-4/9 navbar-bg-stripe overflow-hidden absolute -translate-x-1/2 left-1/2 pointer-events-none"
+            className="h-200 w-4/9 navbar-bg-stripe overflow-hidden absolute -translate-x-1/2 left-1/2 pointer-events-none"
           >
             <div className="w-full h-[150%] relative bottom-5 bg-[#434343]"></div>
           </div>
@@ -65,7 +66,9 @@ export default function MobileNavbar() {
                 className="h-10 relative"
                 aria-label={isExpanded ? "Collapse navbar" : "Expand navbar"}
               >
-                <div className="absolute inset-0 bg-linear-to-b from-[#ff0000] to-[#9d0000] flex items-center justify-center rounded-md rounded-b-4xl arrow-nav-button">
+                <div
+                  className={`${isExpanded ? "rounded-b-4xl" : "rounded-t-4xl"} duration-600 select-none ease-out rounded-md absolute inset-0 bg-linear-to-b from-[#ff0000] to-[#9d0000] flex items-center justify-center arrow-nav-button`}
+                >
                   <svg
                     className={`w-8 h-8 text-white transition-transform duration-300 ${
                       isExpanded ? "rotate-90" : "-rotate-90"
@@ -86,13 +89,22 @@ export default function MobileNavbar() {
               <div className="flex-1 flex items-center justify-center">
                 <Link
                   href="/"
-                  className="rounded-full mobile-nav-logo flex items-center justify-center py-3.5 px-8 "
+                  className="rounded-full mobile-nav-logo flex flex-col items-center justify-center pt-2.5 pb-1 px-8 gap-0 "
                 >
                   <img
                     src="/icon.svg"
                     alt="KOMEX Logo"
-                    className="h-16 w-auto max-w-full"
+                    className="h-15 w-auto max-w-full opacity-85"
                   />
+                  <StrokeText
+                    tag="p"
+                    strokeWidth={2}
+                    shadowSize={1.5}
+                    strokeColor="rgba(0,0,0,0.6)"
+                    className="text-sm font-bold"
+                  >
+                    domov
+                  </StrokeText>
                 </Link>
               </div>
             </div>
