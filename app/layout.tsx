@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import ScrollNavbar from "./components/ScrollNavbar";
 import Footer from "./components/Footer";
 import MobileNavbar from "./components/MoibleNavbar";
 
@@ -20,6 +21,8 @@ export default function RootLayout({
   return (
     <html lang="sk">
       <body className={`antialiased flex flex-col min-h-screen bg-[#1e1e1e]`}>
+        {/* Sticky scroll navbar - desktop only */}
+        <ScrollNavbar />
         <div className="flex flex-col container mx-auto">
           {/* Desktop navbar - hidden on mobile */}
           <Navbar />

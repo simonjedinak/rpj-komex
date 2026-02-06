@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 type Breakpoint = "default" | "sm" | "md" | "lg" | "xl" | "2xl";
 type ResponsiveValue = number | Partial<Record<Breakpoint, number>>;
 
@@ -76,8 +78,6 @@ function generateResponsiveCSS(
   return cssRules.join("\n");
 }
 
-let idCounter = 0;
-
 export default function StrokeText({
   children,
   strokeWidth = 4,
@@ -88,7 +88,8 @@ export default function StrokeText({
   shadowSize = 2,
 }: StrokeTextProps) {
   const Tag = tag;
-  const id = `st-${idCounter++}`;
+  const reactId = useId();
+  const id = `st-${reactId.replace(/:/g, "")}`;
   const cssString = generateResponsiveCSS(
     id,
     strokeWidth,
