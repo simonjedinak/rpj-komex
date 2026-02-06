@@ -61,9 +61,8 @@ export default function MobileNavbar() {
                   className={`${isExpanded ? "rounded-b-4xl" : "rounded-t-4xl"} duration-600 select-none ease-out rounded-md absolute inset-0 bg-linear-to-b from-[#ff0000] to-[#9d0000] flex items-center justify-center arrow-nav-button`}
                 >
                   <svg
-                    className={`w-8 h-8 text-white transition-transform duration-300 ${
-                      isExpanded ? "rotate-90" : "-rotate-90"
-                    }`}
+                    className={`w-8 h-8 text-white transition-transform duration-300 ${isExpanded ? "rotate-90" : "-rotate-90"
+                      }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
