@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { primaryNavLinks } from "../data/navigation";
 
@@ -9,6 +9,23 @@ const BOTTOM_SECTION_HEIGHT = 104;
 
 export default function MobileNavbar() {
   const [isExpanded, setIsExpanded] = useState(true);
+
+  // Collapse navbar on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsExpanded(false);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Collapse navbar on link click
+  const handleLinkClick = () => {
+    setIsExpanded(false);
+  };
 
   return (
     <nav
@@ -22,7 +39,6 @@ export default function MobileNavbar() {
           {/* bg stripe */}
           <div
             aria-hidden="true"
-            //  w-4/9
             className="h-200 w-4/9 navbar-bg-stripe overflow-hidden absolute -translate-x-1/2 left-1/2 pointer-events-none"
           >
             <div className="w-full h-[150%] relative bottom-5 bg-[#434343]"></div>
@@ -30,22 +46,24 @@ export default function MobileNavbar() {
           {/* 3-column flexbox layout */}
           <div className="flex gap-5 px-2 py-2 relative z-10">
             {/* Left column */}
-
             <div className="flex-1 flex flex-col gap-1.25">
               <NavButton
                 href={primaryNavLinks[0].href}
                 text={primaryNavLinks[0].text}
                 className="rounded-tr-3xl relative z-10"
+                onClick={handleLinkClick}
               />
               <NavButton
                 href={primaryNavLinks[2].href}
                 text={primaryNavLinks[2].text}
                 className="mid-one relative z-0"
+                onClick={handleLinkClick}
               />
               <NavButton
                 href={primaryNavLinks[4].href}
                 text={primaryNavLinks[4].text}
                 className="rounded-br-3xl relative z-10"
+                onClick={handleLinkClick}
               />
             </div>
 
@@ -81,6 +99,7 @@ export default function MobileNavbar() {
                 <Link
                   href="/"
                   className=" rounded-full mobile-nav-logo px-8 flex flex-col items-center justify-center pt-1.75 pb-1  gap-0.5 "
+                  onClick={handleLinkClick}
                 >
                   <img
                     src="/icon.svg"
@@ -103,16 +122,19 @@ export default function MobileNavbar() {
                 href={primaryNavLinks[1].href}
                 text={primaryNavLinks[1].text}
                 className="rounded-tl-3xl relative z-10"
+                onClick={handleLinkClick}
               />
               <NavButton
                 href={primaryNavLinks[3].href}
                 text={primaryNavLinks[3].text}
                 className="mid-one relative z-0 "
+                onClick={handleLinkClick}
               />
               <NavButton
                 href={primaryNavLinks[5].href}
                 text={primaryNavLinks[5].text}
                 className="rounded-bl-3xl relative z-10"
+                onClick={handleLinkClick}
               />
             </div>
           </div>
@@ -126,15 +148,21 @@ function NavButton({
   href,
   text,
   className,
+  onClick,
 }: {
   href: string;
   text: string;
   className?: string;
+  onClick?: () => void;
 }) {
   const base =
     "relative h-11 flex items-center rounded-[3px] justify-center mobile-button-link";
   return (
-    <Link href={href} className={`${base} ${className ?? ""}`.trim()}>
+    <Link
+      href={href}
+      className={`${base} ${className ?? ""}`.trim()}
+      onClick={onClick}
+    >
       <p className="relative z-10 text-sm font-bold px-1">{text}</p>
     </Link>
   );
