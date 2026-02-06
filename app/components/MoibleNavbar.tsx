@@ -61,8 +61,9 @@ export default function MobileNavbar() {
                   className={`${isExpanded ? "rounded-b-4xl" : "rounded-t-4xl"} duration-600 select-none ease-out rounded-md absolute inset-0 bg-linear-to-b from-[#ff0000] to-[#9d0000] flex items-center justify-center arrow-nav-button`}
                 >
                   <svg
-                    className={`w-8 h-8 text-white transition-transform duration-300 ${isExpanded ? "rotate-90" : "-rotate-90"
-                      }`}
+                    className={`w-8 h-8 text-white transition-transform duration-300 ${
+                      isExpanded ? "rotate-90" : "-rotate-90"
+                    }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -79,7 +80,7 @@ export default function MobileNavbar() {
               <div className="flex-1 flex items-center justify-center select-none">
                 <Link
                   href="/"
-                  className="rounded-full mobile-nav-logo flex flex-col items-center justify-center pt-1.75 pb-1 px-8 gap-0.5 "
+                  className=" rounded-full mobile-nav-logo px-8 flex flex-col items-center justify-center pt-1.75 pb-1  gap-0.5 "
                 >
                   <img
                     src="/icon.svg"
@@ -89,7 +90,7 @@ export default function MobileNavbar() {
 
                   <img
                     src="/text-logo.svg"
-                    alt="Domov"
+                    alt="komex"
                     className="h-5 ml-1 w-auto max-w-full"
                   />
                 </Link>

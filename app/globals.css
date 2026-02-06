@@ -332,6 +332,11 @@ body {
     0px 0px 0px 3px #000000;
   /* corner-shape: squircle; */
 }
+@media screen and (max-width: 500px) {
+  .mobile-nav-logo {
+    padding-inline: 22% !important;
+  }
+}
 
 .mobile-bar {
   box-shadow:
