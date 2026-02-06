@@ -2,6 +2,7 @@ import Link from "next/link";
 import StrokeText from "./StrokeText";
 import ChromeDivider from "./ChromeDivider";
 import { ButtonLink } from "./ButtonLink";
+import { primaryNavLinks } from "../data/navigation";
 
 type NavTextItem = string | { text: string; href: string };
 
@@ -90,29 +91,16 @@ export default function Navbar() {
         <div className="container w-80" />
 
         <ul className="w-full h-full flex items-center gap-10 py-2 -ml-0.5">
-          <li>
-            <ButtonLink href="/" variant="small" text="Domov" arrow />
-          </li>
-          <li>
-            <ButtonLink href="/o-nas" variant="small" text="O nás" arrow />
-          </li>
-          <li>
-            <ButtonLink href="/details" variant="small" text="Details" arrow />
-          </li>
-          <li>
-            <ButtonLink href="/faq" variant="small" text="Časté otázky" arrow />
-          </li>
-          <li>
-            <ButtonLink href="/kontakt" variant="small" text="Kontakt" arrow />
-          </li>
-          <li>
-            <ButtonLink
-              href="/kalendar"
-              variant="small"
-              text="Kalendár"
-              arrow
-            />
-          </li>
+          {primaryNavLinks.map((link) => (
+            <li key={link.href}>
+              <ButtonLink
+                href={link.href}
+                variant="small"
+                text={link.text}
+                arrow
+              />
+            </li>
+          ))}
         </ul>
       </div>
     </nav>

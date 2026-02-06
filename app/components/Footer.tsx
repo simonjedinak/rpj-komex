@@ -1,8 +1,12 @@
 // components/Footer.tsx
 import { ButtonLink } from "./ButtonLink";
 import StrokeText from "./StrokeText";
+import { primaryNavLinks } from "../data/navigation";
 
 export default function Footer() {
+  const leftLinks = primaryNavLinks.slice(0, 3);
+  const rightLinks = primaryNavLinks.slice(3);
+
   return (
     <footer className="mt-auto shadow-footer">
       <div className="h-6 w-full bg-chrome2 inset-chrome" />
@@ -13,17 +17,25 @@ export default function Footer() {
         <div className="relative">
           <div className="flex flex-col md:flex-row gap-24 items-stretch px-24 py-12">
             <nav className="flex flex-col gap-4 h-full justify-center items-start">
-              <ButtonLink href="/" text="Domov" arrow />
-              <ButtonLink href="/o-nas" text="O nás" arrow />
-              <ButtonLink href="/details" text="Details" arrow />
+              {leftLinks.map((link) => (
+                <ButtonLink
+                  key={link.href}
+                  href={link.href}
+                  text={link.text}
+                  arrow
+                />
+              ))}
             </nav>
 
             <nav className="flex flex-col gap-4 justify-center items-start ">
-              <ButtonLink href="/faq" text="Často kladené otázky" arrow />
-              <ButtonLink href="/kontakt" text="Kontakt" arrow />
-
-              {/* ZMENENÉ: "Niečo" -> "Kalendár" */}
-              <ButtonLink href="/kalendar" text="Kalendár" arrow />
+              {rightLinks.map((link) => (
+                <ButtonLink
+                  key={link.href}
+                  href={link.href}
+                  text={link.text}
+                  arrow
+                />
+              ))}
             </nav>
           </div>
 

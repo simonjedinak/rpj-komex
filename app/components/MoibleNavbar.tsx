@@ -2,16 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import StrokeText from "./StrokeText";
-
-const navLinks = [
-  { text: "O nás", href: "/o-nas" },
-  { text: "O nás", href: "/o-nas" },
-  { text: "Niecoo", href: "/details" },
-  { text: "Niecoo", href: "/details" },
-  { text: "O nás", href: "/o-nas" },
-  { text: "O nás", href: "/o-nas" },
-];
+import { primaryNavLinks } from "../data/navigation";
 
 // Height of the bottom section (logo + 2 button rows) in pixels
 const BOTTOM_SECTION_HEIGHT = 104;
@@ -42,18 +33,18 @@ export default function MobileNavbar() {
 
             <div className="flex-1 flex flex-col gap-1.25">
               <NavButton
-                href={navLinks[0].href}
-                text={navLinks[0].text}
+                href={primaryNavLinks[0].href}
+                text={primaryNavLinks[0].text}
                 className="rounded-tr-3xl relative z-10"
               />
               <NavButton
-                href={navLinks[2].href}
-                text={navLinks[2].text}
+                href={primaryNavLinks[2].href}
+                text={primaryNavLinks[2].text}
                 className="mid-one relative z-0"
               />
               <NavButton
-                href={navLinks[4].href}
-                text={navLinks[4].text}
+                href={primaryNavLinks[4].href}
+                text={primaryNavLinks[4].text}
                 className="rounded-br-3xl relative z-10"
               />
             </div>
@@ -86,25 +77,22 @@ export default function MobileNavbar() {
               </button>
 
               {/* Logo */}
-              <div className="flex-1 flex items-center justify-center">
+              <div className="flex-1 flex items-center justify-center select-none">
                 <Link
                   href="/"
-                  className="rounded-full mobile-nav-logo flex flex-col items-center justify-center pt-2.5 pb-1 px-8 gap-0 "
+                  className="rounded-full mobile-nav-logo flex flex-col items-center justify-center pt-1.75 pb-1 px-8 gap-0.5 "
                 >
                   <img
                     src="/icon.svg"
                     alt="KOMEX Logo"
                     className="h-15 w-auto max-w-full opacity-85"
                   />
-                  <StrokeText
-                    tag="p"
-                    strokeWidth={2}
-                    shadowSize={1.5}
-                    strokeColor="rgba(0,0,0,0.6)"
-                    className="text-sm font-bold"
-                  >
-                    domov
-                  </StrokeText>
+
+                  <img
+                    src="/text-logo.svg"
+                    alt="Domov"
+                    className="h-5 ml-1 w-auto max-w-full"
+                  />
                 </Link>
               </div>
             </div>
@@ -112,18 +100,18 @@ export default function MobileNavbar() {
             {/* Right column */}
             <div className="flex-1 flex flex-col gap-1.25">
               <NavButton
-                href={navLinks[1].href}
-                text={navLinks[1].text}
+                href={primaryNavLinks[1].href}
+                text={primaryNavLinks[1].text}
                 className="rounded-tl-3xl relative z-10"
               />
               <NavButton
-                href={navLinks[3].href}
-                text={navLinks[3].text}
+                href={primaryNavLinks[3].href}
+                text={primaryNavLinks[3].text}
                 className="mid-one relative z-0 "
               />
               <NavButton
-                href={navLinks[5].href}
-                text={navLinks[5].text}
+                href={primaryNavLinks[5].href}
+                text={primaryNavLinks[5].text}
                 className="rounded-bl-3xl relative z-10"
               />
             </div>
