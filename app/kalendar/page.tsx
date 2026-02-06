@@ -128,20 +128,46 @@ function groupSlotsByDay(all: Slot[]) {
   return map;
 }
 
+const CACHE_KEY = "komex-calendar-slots";
+
+function readCache(): Slot[] {
+  try {
+    if (typeof window === "undefined") return [];
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeCache(slots: Slot[]) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(slots));
+  } catch {
+    /* quota exceeded – ignore */
+  }
+}
+
 export default function KalendarPage() {
   const [viewDate, setViewDate] = useState(() => startOfDay(new Date()));
   const [selectedIso, setSelectedIso] = useState(() => localIso(new Date()));
+  // Initialize deterministically for SSR/hydration.
+  // We'll read `localStorage` only on the client inside an effect.
   const [slots, setSlots] = useState<Slot[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchEvents = useCallback(async () => {
     try {
-      setLoading(true);
+      // Only show loading spinner if we have no cached data
+      setLoading((prev) => prev);
       const res = await fetch("/api/calendar");
       if (!res.ok) throw new Error("fetch failed");
       const data = await res.json();
       if (data.ok && Array.isArray(data.events)) {
         setSlots(data.events);
+        writeCache(data.events);
       }
     } catch (err) {
       console.error("Failed to load calendar events:", err);
@@ -151,6 +177,16 @@ export default function KalendarPage() {
   }, []);
 
   useEffect(() => {
+    // On mount (client only) try to hydrate from localStorage to reduce layout shift,
+    // then fetch fresh events in background.
+    if (typeof window !== "undefined") {
+      const cached = readCache();
+      if (cached.length > 0) {
+        setSlots(cached);
+        setLoading(false);
+      }
+    }
+
     fetchEvents();
     // Refresh every 2 minutes
     const interval = setInterval(fetchEvents, 2 * 60 * 1000);
