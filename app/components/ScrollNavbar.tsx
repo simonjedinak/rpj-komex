@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ButtonLink } from "./ButtonLink";
 import { primaryNavLinks } from "../data/navigation";
 
-const SCROLL_THRESHOLD = 100;
+const SCROLL_THRESHOLD = 280;
 
 export default function ScrollNavbar() {
   const [isVisible, setIsVisible] = useState(false);
