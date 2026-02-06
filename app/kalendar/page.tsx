@@ -1,7 +1,6 @@
-// app/kalendar/page.tsx
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import StrokeText from "../components/StrokeText";
 
 function startOfDay(d: Date) {
@@ -158,27 +157,31 @@ export default function KalendarPage() {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchEvents = useCallback(async () => {
-    try {
-      // Only show loading spinner if we have no cached data
-      setLoading((prev) => prev);
-      const res = await fetch("/api/calendar");
-      if (!res.ok) throw new Error("fetch failed");
-      const data = await res.json();
-      if (data.ok && Array.isArray(data.events)) {
-        setSlots(data.events);
-        writeCache(data.events);
+  const fetchEvents = useCallback(
+    async ({ silent = false }: { silent?: boolean } = {}) => {
+      try {
+        if (!silent) setLoading(true);
+        const res = await fetch("/api/calendar");
+        if (!res.ok) throw new Error("fetch failed");
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.events)) {
+          setSlots(data.events);
+          writeCache(data.events);
+        }
+      } catch (err) {
+        console.error("Failed to load calendar events:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load calendar events:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   useEffect(() => {
     // On mount (client only) try to hydrate from localStorage to reduce layout shift,
-    // then fetch fresh events in background.
+    // then fetch fresh events in background. If cache exists render it immediately
+    // without a loading spinner, then start a background fetch that shows loading
+    // and updates the UI when complete.
     if (typeof window !== "undefined") {
       const cached = readCache();
       if (cached.length > 0) {
@@ -237,9 +240,7 @@ export default function KalendarPage() {
         <div
           className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
           aria-hidden="true"
-        >
-          <div className="fixed left-0 right-0 top-2/5 h-30 blur-xl rotate-15 bg-linear-to-r from-white/50 via-white/70 to-white/50 shadow-[0_0_100px_10px_rgba(255,255,255,0.6)]" />
-        </div>
+        ></div>
 
         {/* HERO panel */}
         <div className="shadow-xl shadow-black/50 p-4 md:p-5 gap-6 md:gap-20 pl-4 md:pl-16 container flex flex-col from-[#2a2b2c] to-[#0c0d0f] bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
@@ -264,7 +265,7 @@ export default function KalendarPage() {
         </div>
 
         {/* KALENDAR panel */}
-        <div className="shadow-xl shadow-black/50 container overflow-hidden flex flex-col bg-linear-to-b from-[#2a2b2c] to-[#0c0d0f] rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
+        <div className="shadow-xl shadow-black/50 container overflow-hidden flex flex-col bg-linear-to-b from-[#212222] to-[#0c0d0f] via-[#141414] via-20% rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
           <div className="px-4 md:px-16 pt-6 md:pt-10 pb-6 md:pb-10">
             {/* Header + navigácia mesiacov */}
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

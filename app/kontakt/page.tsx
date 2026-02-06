@@ -178,7 +178,7 @@ export default function ContactForm() {
         </div>
 
         {/* panel v štýle About (jeden veľký blok) */}
-        <div className="shadow-xl shadow-black/50 p-4 md:p-5 gap-6 md:gap-10 pl-4 md:pl-16 container flex flex-col from-[#1b1b1c] to-[#0c0d0f] bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
+        <div className="shadow-xl shadow-black/50 p-4 md:p-5 gap-6 md:gap-10 pl-4 md:pl-16 container flex flex-col from-[#222223] via-[#141619] to-[#0c0d0f] via-20%  bg-linear-to-b rounded-2xl md:rounded-4xl border-black border-3 relative z-10">
           <div className="w-full flex flex-col text-base md:text-xl pt-3 md:pt-6">
             <StrokeText
               strokeWidth={8}

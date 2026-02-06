@@ -43,6 +43,17 @@ export default function FisheyeCarousel({
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+    // Measure immediately to reserve layout space (avoid layout shift)
+    const rect = container.getBoundingClientRect();
+    if (rect.width > 0) {
+      const height = rect.width / aspectRatio;
+      setContainerSize((prev) =>
+        prev.width === Math.round(rect.width) &&
+        prev.height === Math.round(height)
+          ? prev
+          : { width: Math.round(rect.width), height: Math.round(height) },
+      );
+    }
 
     let timeoutId: NodeJS.Timeout;
     const resizeObserver = new ResizeObserver((entries) => {
@@ -53,9 +64,10 @@ export default function FisheyeCarousel({
           if (width > 0) {
             const height = width / aspectRatio;
             setContainerSize((prev) =>
-              prev.width === width && prev.height === height
+              prev.width === Math.round(width) &&
+              prev.height === Math.round(height)
                 ? prev
-                : { width, height },
+                : { width: Math.round(width), height: Math.round(height) },
             );
           }
         }
@@ -413,7 +425,10 @@ export default function FisheyeCarousel({
     <div
       ref={containerRef}
       className={`w-full ${className}`}
-      style={{ height: containerSize.height || "auto" }}
+      style={{
+        height: containerSize.height || undefined,
+        aspectRatio: `${aspectRatio}`,
+      }}
     />
   );
 }
