@@ -146,7 +146,7 @@ function writeCache(slots: Slot[]) {
   try {
     localStorage.setItem(CACHE_KEY, JSON.stringify(slots));
   } catch {
-    /* quota exceeded – ignore */
+    /* quota exceeded - ignore */
   }
 }
 
@@ -259,7 +259,7 @@ export default function KalendarPage() {
               Červené bloky znamenajú obsadený termín v danom čase.
             </p>
 
-            <div className="mt-6 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
+            <div className="mt-6 h-0.5 w-full bg-linear-to-r from-transparent via-zinc-600 to-transparent" />
           </div>
         </div>
 
@@ -336,7 +336,7 @@ export default function KalendarPage() {
 
             {/* Hlavička dní (mobile scroll ostáva) */}
             <div className="mt-6 overflow-x-auto touch-pan-x">
-              <div className="min-w-[560px] grid grid-cols-7 gap-2 sm:gap-3 text-center text-xs md:text-sm text-zinc-300">
+              <div className="min-w-140 grid grid-cols-7 gap-2 sm:gap-3 text-center text-xs md:text-sm text-zinc-300">
                 {week.map((w) => (
                   <div key={w} className="py-2 font-extrabold tracking-wide">
                     {w}
@@ -347,7 +347,7 @@ export default function KalendarPage() {
 
             {/* Grid dní (mobile scroll ostáva) */}
             <div className="mt-3 overflow-x-auto touch-pan-x">
-              <div className="min-w-[560px] grid grid-cols-7 gap-2 sm:gap-3">
+              <div className="min-w-140 grid grid-cols-7 gap-2 sm:gap-3">
                 {cells.map((c) => {
                   const daySlots = slotsByDay.get(c.iso) ?? [];
                   const isSelected = c.iso === selectedIso;
@@ -364,7 +364,7 @@ export default function KalendarPage() {
                         "group relative overflow-hidden text-left",
                         "rounded-2xl border",
                         "p-2 sm:p-3 md:p-4",
-                        "h-[82px] sm:h-[108px] md:h-[130px]",
+                        "h-20.5 sm:h-27 md:h-32.5",
                         "transition",
                         "focus:outline-none focus:ring-2 focus:ring-white/15",
                         "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/15",
@@ -416,13 +416,13 @@ export default function KalendarPage() {
                               "w-full rounded-lg border px-2 py-1",
                               "text-[10px] md:text-xs font-extrabold",
                               "truncate",
-                              s.status === "Plné"
+                              s.status === "Obsadené"
                                 ? "border-red-400/30 bg-red-500/20 text-red-200"
                                 : "border-emerald-400/20 bg-emerald-500/15 text-emerald-200",
                             ].join(" ")}
-                            title={`${s.from}–${s.to} ${s.status}`}
+                            title={`${s.from} - ${s.to} ${s.status}`}
                           >
-                            {s.from}–{s.to} • {s.summary}
+                            {s.from} - {s.to}
                           </div>
                         ))}
 
@@ -472,11 +472,11 @@ export default function KalendarPage() {
                         "
                       >
                         <span className="text-sm md:text-base font-extrabold text-zinc-100">
-                          {s.from}–{s.to}
+                          {s.from} - {s.to}
                         </span>
-                        <span className="inline-flex items-center rounded-full border border-red-400/30 bg-red-500/20 text-red-200 px-2 py-1 text-xs font-extrabold">
+                        {/* <span className="inline-flex items-center rounded-full border border-red-400/30 bg-red-500/20 text-red-200 px-2 py-1 text-xs font-extrabold">
                           {s.summary}
-                        </span>
+                        </span> */}
                       </li>
                     ))}
                   </ul>
@@ -484,7 +484,7 @@ export default function KalendarPage() {
               </div>
             </div>
 
-            <div className="mt-8 h-[2px] w-full bg-gradient-to-r from-transparent via-zinc-600 to-transparent" />
+            <div className="mt-8 h-0.5 w-full bg-linear-to-r from-transparent via-zinc-600 to-transparent" />
           </div>
         </div>
       </section>

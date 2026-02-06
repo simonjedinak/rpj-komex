@@ -58,7 +58,7 @@ function parseICS(icsText: string): CalendarEvent[] {
       from,
       to,
       summary,
-      status: "Plné",
+      status: "Obsadené",
     });
   }
 
@@ -149,7 +149,6 @@ export async function GET() {
     }
 
     const icsText = await res.text();
-    console.log("ICS payload:\n", icsText);
     const events = parseICS(icsText);
 
     // Sort by date, then by start time
