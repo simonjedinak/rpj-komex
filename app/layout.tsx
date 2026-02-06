@@ -20,10 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sk">
-      <body className={`antialiased flex flex-col min-h-screen bg-[#1e1e1e]`}>
+      <body className={`antialiased flex flex-col min-h-screen bg-texture`}>
         {/* Sticky scroll navbar - desktop only */}
         <ScrollNavbar />
-        <div className="flex flex-col container mx-auto">
+        <div className="flex flex-col container mx-auto main-shadow">
           {/* Desktop navbar - hidden on mobile */}
           <Navbar />
           {children}
