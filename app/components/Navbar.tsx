@@ -45,8 +45,8 @@ export default function Navbar() {
 
             const Content = (
               <StrokeText
-                strokeWidth={2.6}
-                shadowSize={2.5}
+                strokeWidth={{ sm: 2, md: 2.6, default: 1.3 }}
+                shadowSize={{ sm: 2, md: 2.5, default: 1 }}
                 className="md:text-base sm:text-sm text-[10px] font-bold italic"
               >
                 {text}
@@ -74,20 +74,20 @@ export default function Navbar() {
 
       {/* MIDDLE BAR (logo + title) */}
       <div className="flex flex-row gap-1.5">
-        <div className="w-80 bg-chrome2 inset-chrome relative flex justify-center items-center rounded-xs">
-          <Link href="/" className="absolute w-45 mr-1">
-            <img src="/logo.svg" alt="KOMEX Logo" />
+        <div className="w-80 lg:overflow-visible overflow-hidden bg-chrome2 inset-chrome relative flex justify-center items-center rounded-xs">
+          <Link href="/" className="absolute w-32.5 md:w-43 lg:w-45 mr-1">
+            <img src="/logo.svg" alt="KOMEX Logo" className="drop-shadow-lg" />
           </Link>
         </div>
 
         <div className="flex justify-between items-center bg-chrome2 inset-chrome w-full px-10 py-6 rounded-xs">
           <StrokeText
-            strokeWidth={6}
-            shadowSize={5}
+            strokeWidth={{ default: 4, md: 6 }}
+            shadowSize={{ default: 2.5, md: 5 }}
             tag="h1"
-            className="text-5xl font-bold "
+            className="md:text-5xl text-2xl font-bold "
           >
-            Profesionálna starostlivosť
+            Profesionálna <br className="block md:hidden" /> starostlivosť
           </StrokeText>
         </div>
       </div>
