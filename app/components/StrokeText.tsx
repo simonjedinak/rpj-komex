@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useMemo } from "react";
 
 type Breakpoint = "default" | "sm" | "md" | "lg" | "xl" | "2xl";
 type ResponsiveValue = number | Partial<Record<Breakpoint, number>>;
@@ -88,8 +88,13 @@ export default function StrokeText({
   shadowSize = 2,
 }: StrokeTextProps) {
   const Tag = tag;
-  const reactId = useId();
-  const id = `st-${reactId.replace(/:/g, "")}`;
+
+  // Generate a stable ID based on children or a unique key
+  const id = useMemo(() => {
+    const baseId = typeof children === "string" ? children : "stroke-text";
+    return `st-${baseId.replace(/[^a-zA-Z0-9]/g, "")}`;
+  }, [children]);
+
   const cssString = generateResponsiveCSS(
     id,
     strokeWidth,
