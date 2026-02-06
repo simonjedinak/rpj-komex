@@ -6,6 +6,7 @@ type ButtonLinkProps = ComponentProps<typeof Link> & {
   variant?: "small" | "big";
   text?: string;
   arrow?: boolean;
+  textSize?: "text-xs" | "text-sm" | "text-md" | "text-lg" | "text-xl" | null;
 };
 
 export function ButtonLink({
@@ -13,6 +14,7 @@ export function ButtonLink({
   text,
   arrow = false,
   className,
+  textSize = "text-lg",
   ...props
 }: ButtonLinkProps) {
   const base = "inline-flex items-center justify-center h-7";
@@ -29,7 +31,7 @@ export function ButtonLink({
       <StrokeText
         strokeWidth={2}
         shadowSize={2}
-        className="text-lg font-bold flex items-center gap-1"
+        className={`${textSize} font-bold flex items-center gap-1`}
       >
         {arrow && (
           <span className="inline-block transform mr-2 -translate-y-0.2">

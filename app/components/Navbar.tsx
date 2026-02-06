@@ -27,21 +27,27 @@ export default function Navbar() {
     <nav className="shadow-navbar bg-black flex flex-col gap-1.5 py-1.5 relative z-50">
       {/* TOP BAR */}
       <div className="w-full h-10 flex gap-1.5 bg-chrome1 inset-chrome">
-        <div className="container w-80" />
+        <div className="container w-80 hidden lg:block" />
 
-        <div className="w-full h-full flex justify-between items-center py-2 -ml-0.5 pr-20">
+        <div className="w-full h-full flex justify-around lg:justify-between items-center py-2 lg:-ml-0.5 lg:pr-20">
           {navTopTexts.map((item: NavTextItem, index: number) => {
             const isDivider = item === "";
             const text = typeof item === "string" ? item : item.text;
             const href = typeof item === "object" ? item.href : null;
 
-            if (isDivider) return <ChromeDivider key={`divider-${index}`} />;
+            if (isDivider)
+              return (
+                <ChromeDivider
+                  className={index === 0 ? "hidden lg:flex" : ""}
+                  key={`divider-${index}`}
+                />
+              );
 
             const Content = (
               <StrokeText
                 strokeWidth={2.6}
                 shadowSize={2.5}
-                className="text font-bold italic"
+                className="md:text-base sm:text-sm text-[10px] font-bold italic"
               >
                 {text}
               </StrokeText>
@@ -88,15 +94,16 @@ export default function Navbar() {
 
       {/* BOTTOM BAR (buttons like footer) */}
       <div className="w-full md:flex flex-row h-10 gap-1.5 bg-chrome1 inset-chrome hidden ">
-        <div className="container w-80" />
+        <div className="container w-80 lg:block hidden" />
 
-        <ul className="w-full h-full flex items-center gap-10 py-2 -ml-0.5">
+        <ul className="w-full h-full flex items-center lg:justify-start justify-around lg:gap-10 py-2 -ml-0.5 text-sm tracking-wide lg:text-md xl:text-lg">
           {primaryNavLinks.map((link) => (
             <li key={link.href}>
               <ButtonLink
                 href={link.href}
                 variant="small"
                 text={link.text}
+                textSize={null}
                 arrow
               />
             </li>
