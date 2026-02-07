@@ -9,7 +9,8 @@ export default function Home() {
   return (
     <main className="flex-1 text-black bg-white">
       <section className="relative from-gray-900 to-gray-800 text-white overflow-hidden">
-        <div className="hidden md:block">
+        {/* Red bar top - smaller height on mobile */}
+        <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-top">
           <SvgBar className="rotate-180 top-0" />
         </div>
         <FisheyeCarousel
@@ -22,14 +23,14 @@ export default function Home() {
           autoplayInterval={4000}
           animationDuration={1200}
         />
-        <div className="hidden md:block">
+        {/* Red bar bottom - smaller height on mobile */}
+        <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-bottom">
           <SvgBar className="bottom-0" />
         </div>
       </section>
       <div className="h-3 sm:h-4 md:h-6 w-full relative bg-chrome2 shadow-navbar-inset-chrome"></div>
 
       <section className="flex flex-col items-center">
-        {/* Keep desktop text exactly as original, just scale down on mobile */}
         <div className="w-full flex justify-center">
           <StrokeText
             strokeWidth={7.8}
