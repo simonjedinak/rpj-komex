@@ -27,7 +27,7 @@ export default function AboutGallery() {
 
   return (
     <>
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start">
         {/* Row 1 */}
         <Panel title="Komplex" className="w-full" titleBar={false}>
           <p>
