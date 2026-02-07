@@ -27,17 +27,25 @@ export default function AboutGallery() {
 
   return (
     <>
-      <div className="container grid grid-cols-1 md:grid-cols-2 gap-y-20 items-center">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
         {/* Row 1 */}
-        <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+        <Panel title="O nás" className="w-full" titleBar={false}>
           <p>
             Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
             úžitkové vozidlá všetkých bežných značiek.
           </p>
+          <p>
+            Staviame na dlhoročných skúsenostiach, poctivej práci a
+            individuálnom prístupe ku každému zákazníkovi.
+          </p>
+          <p>
+            Pri práci používame overené náhradné diely a moderné vybavenie,
+            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+          </p>
         </Panel>
         <Panel
           title="O nás"
-          className="w-120 mx-auto cursor-pointer transition-transform hover:scale-[1.02]"
+          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(0)}>
@@ -45,6 +53,7 @@ export default function AboutGallery() {
               src={galleryImages[0]}
               alt="O nás 1"
               className="w-full h-auto"
+              loading="lazy"
             />
           </div>
         </Panel>
@@ -52,7 +61,7 @@ export default function AboutGallery() {
         {/* Row 2 */}
         <Panel
           title="O nás"
-          className="w-120 mx-auto cursor-pointer transition-transform hover:scale-[1.02]"
+          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(1)}>
@@ -60,20 +69,43 @@ export default function AboutGallery() {
               src={galleryImages[1]}
               alt="O nás 2"
               className="w-full h-auto"
+              loading="lazy"
             />
           </div>
         </Panel>
-        <Panel title="O nás" className="w-120 mx-auto" titleBar={false}>
+        <Panel title="O nás" className="w-full" titleBar={false}>
           <p>
             Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
             úžitkové vozidlá všetkých bežných značiek.
           </p>
+          <p>
+            Staviame na dlhoročných skúsenostiach, poctivej práci a
+            individuálnom prístupe ku každému zákazníkovi.
+          </p>
+          <p>
+            Pri práci používame overené náhradné diely a moderné vybavenie,
+            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+          </p>
         </Panel>
 
         {/* Row 3 */}
+        <Panel title="O nás" className="w-full" titleBar={false}>
+          <p>
+            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
+            úžitkové vozidlá všetkých bežných značiek.
+          </p>
+          <p>
+            Staviame na dlhoročných skúsenostiach, poctivej práci a
+            individuálnom prístupe ku každému zákazníkovi.
+          </p>
+          <p>
+            Pri práci používame overené náhradné diely a moderné vybavenie,
+            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+          </p>
+        </Panel>
         <Panel
           title="O nás"
-          className="w-120 mx-auto cursor-pointer transition-transform hover:scale-[1.02]"
+          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(2)}>
@@ -81,12 +113,15 @@ export default function AboutGallery() {
               src={galleryImages[2]}
               alt="O nás 3"
               className="w-full h-auto"
+              loading="lazy"
             />
           </div>
         </Panel>
+
+        {/* Row 4 */}
         <Panel
           title="O nás"
-          className="w-120 mx-auto cursor-pointer transition-transform hover:scale-[1.02]"
+          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(3)}>
@@ -94,8 +129,23 @@ export default function AboutGallery() {
               src={galleryImages[3]}
               alt="O nás 4"
               className="w-full h-auto"
+              loading="lazy"
             />
           </div>
+        </Panel>
+        <Panel title="O nás" className="w-full" titleBar={false}>
+          <p>
+            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
+            úžitkové vozidlá všetkých bežných značiek.
+          </p>
+          <p>
+            Staviame na dlhoročných skúsenostiach, poctivej práci a
+            individuálnom prístupe ku každému zákazníkovi.
+          </p>
+          <p>
+            Pri práci používame overené náhradné diely a moderné vybavenie,
+            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+          </p>
         </Panel>
       </div>
 

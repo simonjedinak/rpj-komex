@@ -18,8 +18,8 @@ export default function Panel({
     <div className={`relative max-w-full shadow-lg ${className}`}>
       {/* Panel (front) */}
       <div className="relative z-10 bg-[#E5E5E5] p-1.5 border-2 border-white">
-        {/* Handle (behind) */}
-        <div className="absolute -left-px -top-6 h-8 w-100">
+        {/* Handle (behind) - responsive width */}
+        <div className="absolute -left-px -top-4 sm:-top-5 md:-top-6 h-6 sm:h-7 md:h-8 w-full max-w-[20rem] sm:max-w-[25rem] md:max-w-[30rem] lg:w-100">
           {/* Fill (clipped) */}
           <div className="absolute inset-0 bg-linear-to-r from-[#e5e5e5] via-[#dadada] to-[#c9c7c8] [clip-path:polygon(5%_0%,90%_0%,100%_100%,0_100%,0%_50%)]" />
 
@@ -53,19 +53,19 @@ export default function Panel({
             {titleBar && (
               <>
                 {/* Title bar */}
-                <div className="relative px-7 py-5 text-white">
+                <div className="relative px-4 sm:px-6 md:px-7 py-3 sm:py-4 md:py-5 text-white">
                   <div className="absolute inset-0 bg-linear-to-b from-[#840000] to-[#E31E24] border-2 border-[#999997]" />
                   {/* subtle inner line like in the screenshot */}
                   <div className="absolute inset-x-0 top-0 h-0.5 bg-[#b00000]/70" />
                   <div className="absolute inset-x-0 bottom-0 h-0.5 bg-black/15" />
 
                   <div className="relative flex items-center justify-between">
-                    {/* Title */}
+                    {/* Title - responsive */}
                     <StrokeText
-                      strokeWidth={6}
-                      shadowSize={6}
+                      strokeWidth={{ default: 2, sm: 4, md: 6 }}
+                      shadowSize={{ default: 2, sm: 4, md: 6 }}
                       tag="h4"
-                      className="text-6xl font-bold "
+                      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold"
                     >
                       {title}
                     </StrokeText>
@@ -74,12 +74,12 @@ export default function Panel({
               </>
             )}
 
-            {/* Body */}
-            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-2xl">
+            {/* Body - responsive text and padding */}
+            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-base sm:text-lg md:text-xl lg:text-2xl">
               {Children.map(children, (child, index) => (
                 <div
                   key={index}
-                  className={`py-6 px-8 ${index % 2 === 1 ? "bg-neutral-200" : ""}`}
+                  className={`py-4 sm:py-5 md:py-6 px-4 sm:px-6 md:px-8 ${index % 2 === 1 ? "bg-neutral-200" : ""}`}
                 >
                   {child}
                 </div>
