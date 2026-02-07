@@ -29,29 +29,26 @@ export default function AboutGallery() {
     <>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
         {/* Row 1 */}
-        <Panel title="O nás" className="w-full" titleBar={false}>
+        <Panel title="Komplex" className="w-full" titleBar={false}>
           <p>
-            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
-            úžitkové vozidlá všetkých bežných značiek.
+            V Komexe opravíme motor, prevodovku, podvozok, brzdy, výfuk aj elektrickú inštaláciu. Každé vozidlo prechádza dôkladnou diagnostikou pred začiatkom prác.
           </p>
           <p>
-            Staviame na dlhoročných skúsenostiach, poctivej práci a
-            individuálnom prístupe ku každému zákazníkovi.
+            Vykonávame pravidelné servisné prehliadky podľa odporúčaní výrobcov. Používame kvalitné náhradné diely a originálne oleje pre dlhú životnosť vášho vozidla.
           </p>
           <p>
-            Pri práci používame overené náhradné diely a moderné vybavenie,
-            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+            Náš pneuservis zabezpečí prezutie, vyváženie a uskladnenie pneumatík. Špecialista na chladiče vám opraví alebo vymení chladič motora či klimatizácie.
           </p>
         </Panel>
         <Panel
-          title="O nás"
+          title="Dielňa"
           className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(0)}>
             <img
               src={galleryImages[0]}
-              alt="O nás 1"
+              alt="Autoservis Komex - dielňa"
               className="w-full h-auto"
               loading="lazy"
             />
@@ -60,58 +57,52 @@ export default function AboutGallery() {
 
         {/* Row 2 */}
         <Panel
-          title="O nás"
+          title="Vybavenie"
           className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(1)}>
             <img
               src={galleryImages[1]}
-              alt="O nás 2"
+              alt="Autoservis Komex - vybavenie"
               className="w-full h-auto"
               loading="lazy"
             />
           </div>
         </Panel>
-        <Panel title="O nás" className="w-full" titleBar={false}>
+        <Panel title="Prístup" className="w-full" titleBar={false}>
           <p>
-            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
-            úžitkové vozidlá všetkých bežných značiek.
+            V Komexe si ceníme každého zákazníka a venujeme mu plnú pozornosť. Vždy vám vysvetlíme, čo je potrebné opraviť a prečo, bez zbytočných prác.
           </p>
           <p>
-            Staviame na dlhoročných skúsenostiach, poctivej práci a
-            individuálnom prístupe ku každému zákazníkovi.
+            Naše ceny sú férové a transparentné. Pred opravou vám vytvoríme cenovú kalkuláciu, aby ste vedeli, s čím počítať. Žiadne skryté poplatky.
           </p>
           <p>
-            Pri práci používame overené náhradné diely a moderné vybavenie,
-            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+            Záleží nám na dlhodobej spokojnosti klientov. Preto robíme každú prácu kvalitne a s precíznosťou, akoby išlo o naše vlastné auto.
           </p>
         </Panel>
 
         {/* Row 3 */}
-        <Panel title="O nás" className="w-full" titleBar={false}>
+        <Panel title="Tím" className="w-full" titleBar={false}>
           <p>
-            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
-            úžitkové vozidlá všetkých bežných značiek.
+            Náš tím tvoria dvaja skúsení automechanici s rokmi praxe a odborným vzdelaním. Neustále sa vzdelávajú v nových technológiách a postupoch.
           </p>
           <p>
-            Staviame na dlhoročných skúsenostiach, poctivej práci a
-            individuálnom prístupe ku každému zákazníkovi.
+            Špecialista na chladiče dokáže opraviť chladiče motorov, klimatizácií aj vykurovacích systémov pre všetky typy vozidiel s dlhoročnými skúsenosťami.
           </p>
           <p>
-            Pri práci používame overené náhradné diely a moderné vybavenie,
-            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+            Kombinujeme tradičné remeselné zručnosti s modernou diagnostikou. Vďaka tomu rýchlo identifikujeme problém a efektívne ho odstránime.
           </p>
         </Panel>
         <Panel
-          title="O nás"
+          title="Servis"
           className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(2)}>
             <img
               src={galleryImages[2]}
-              alt="O nás 3"
+              alt="Autoservis Komex - servis"
               className="w-full h-auto"
               loading="lazy"
             />
@@ -120,31 +111,28 @@ export default function AboutGallery() {
 
         {/* Row 4 */}
         <Panel
-          title="O nás"
+          title="Diagnostika"
           className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
           titleBar={false}
         >
           <div onClick={() => handleImageClick(3)}>
             <img
               src={galleryImages[3]}
-              alt="O nás 4"
+              alt="Autoservis Komex - diagnostika"
               className="w-full h-auto"
               loading="lazy"
             />
           </div>
         </Panel>
-        <Panel title="O nás" className="w-full" titleBar={false}>
+        <Panel title="Lokalita" className="w-full" titleBar={false}>
           <p>
-            Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
-            úžitkové vozidlá všetkých bežných značiek.
+            Autoservis Komex nájdete na Strojníckej ulici v Prešove s dobrým dopravným napojením a dostupným parkovaním priamo pred dielňou.
           </p>
           <p>
-            Staviame na dlhoročných skúsenostiach, poctivej práci a
-            individuálnom prístupe ku každému zákazníkovi.
+            Naša dielňa je vybavená všetkým potrebným - od zdvihakov cez kompletné náradie až po stroje na prezúvanie, vyvažovanie kolies a plnenie klimatizácií.
           </p>
           <p>
-            Pri práci používame overené náhradné diely a moderné vybavenie,
-            vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+            Tešíme sa na vašu návštevu v Komexe, kde sa o vaše vozidlo postaráme s rešpektom, kvalitou a za férovú cenu.
           </p>
         </Panel>
       </div>

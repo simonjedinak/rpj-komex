@@ -74,7 +74,7 @@ export default function Panel({
               </>
             )}
 
-            {/* Body - responsive text and padding */}
+            {/* Body - with alternating stripes */}
             <div className="border-t-2 border-[#c9c9c9] flex flex-col text-base sm:text-lg md:text-xl lg:text-2xl">
               {Children.map(children, (child, index) => (
                 <div

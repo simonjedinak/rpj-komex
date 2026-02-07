@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <main className="flex-1 text-black bg-white">
       <section className="relative from-gray-900 to-gray-800 text-white overflow-hidden">
-        {/* Red bar top - smaller height on mobile */}
         <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-top">
           <SvgBar className="rotate-180 top-0" />
         </div>
@@ -23,7 +22,6 @@ export default function Home() {
           autoplayInterval={4000}
           animationDuration={1200}
         />
-        {/* Red bar bottom - smaller height on mobile */}
         <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-bottom">
           <SvgBar className="bottom-0" />
         </div>
@@ -56,16 +54,13 @@ export default function Home() {
         <div className="w-full max-w-[calc(2*40rem+3rem)] mx-auto px-0 sm:px-6 md:px-8 lg:px-28 flex flex-col items-center gap-6 sm:gap-8 md:gap-10">
           <Panel title="O nás" className="w-full sm:max-w-[50rem]">
             <p>
-              Nezávislý autoservis zameraný na kompletnú starostlivosť o osobné a
-              úžitkové vozidlá všetkých bežných značiek.
+              Autoservis Komex na Strojníckej ulici v Prešove ponúka komplexné služby pre osobné aj úžitkové vozidlá všetkých značiek.
             </p>
             <p>
-              Staviame na dlhoročných skúsenostiach, poctivej práci a
-              individuálnom prístupe ku každému zákazníkovi.
+              Náš tím skúsených mechnikov sa stará o vaše vozidlo s osobným prístupom, ktorý vytvára dlhodobé vzťahy s klientmi založené na dôvere a spokojnosti.
             </p>
             <p>
-              Pri práci používame overené náhradné diely a moderné vybavenie,
-              vďaka ktorému dokážeme rýchlo nájsť a odstrániť poruchu.
+              Disponujeme moderným vybavením vrátane zdvihakov, diagnostických prístrojov, pneuservisu a klimatizačných staníc pre precíznu a rýchlu opravu.
             </p>
           </Panel>
           <AboutGallery />
