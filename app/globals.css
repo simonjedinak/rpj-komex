@@ -237,43 +237,6 @@ body {
   mask-composite: exclude;
 }
 
-.navbar-clip-wrapper {
-  --border-width-x: 3px;
-  --border-width-y: -1.8px;
-  filter: drop-shadow(
-      var(--border-width-x) var(--border-width-y) 0 rgb(196, 196, 196, 1)
-    )
-    drop-shadow(
-      calc(var(--border-width-x) * -1) var(--border-width-y) 0
-        rgb(196, 196, 196, 1)
-    )
-    /* drop-shadow(inset 0px 25px 40px rgba(255, 255, 255, 0.45)) */
-    drop-shadow(0px -4px 20px rgba(0, 0, 0, 0.5));
-
-  -webkit-filter: drop-shadow(
-      var(--border-width-x) var(--border-width-y) 0 rgb(196, 196, 196, 1)
-    )
-    drop-shadow(
-      calc(var(--border-width-x) * -1) var(--border-width-y) 0
-        rgb(196, 196, 196, 1)
-    )
-    /* drop-shadow(inset 0px 25px 40px rgba(255, 255, 255, 0.45)) */
-    drop-shadow(0px -4px 20px rgba(0, 0, 0, 0.5));
-}
-
-.navbar-clip {
-  --height: 10rem;
-  --width: 40px;
-  clip-path: polygon(
-    -10px 0,
-    var(--width) var(--height),
-    calc(100% - var(--width)) var(--height),
-    calc(100% + 10px) 0,
-    calc(100% + 10px) 100%,
-    -10px 100%
-  );
-}
-
 .mobile-button-link {
   background: linear-gradient(
     180deg,

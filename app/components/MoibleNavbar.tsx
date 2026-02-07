@@ -1,14 +1,117 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { primaryNavLinks } from "../data/navigation";
 
 // Height of the bottom section (logo + 2 button rows) in pixels
 const BOTTOM_SECTION_HEIGHT = 104;
 
+// Trapezoid geometry
+const TRAPEZOID_INSET = 40; // px from each side
+const TRAPEZOID_HEIGHT = 160; // 10rem = 160px
+
+function NavbarShape({ width, height }: { width: number; height: number }) {
+  if (width <= 0 || height <= 0) return null;
+
+  const w = width;
+  const h = height;
+
+  // Main fill shape: trapezoid top + rectangle bottom
+  const shapePath = `M0,0 L${TRAPEZOID_INSET},${TRAPEZOID_HEIGHT} L${w - TRAPEZOID_INSET},${TRAPEZOID_HEIGHT} L${w},0 L${w},${h} L0,${h} Z`;
+  // Top edges only (for border stroke)
+  const borderPath = `M0,0 L${TRAPEZOID_INSET},${TRAPEZOID_HEIGHT} L${w - TRAPEZOID_INSET},${TRAPEZOID_HEIGHT} L${w},0`;
+
+  return (
+    <svg
+      className="absolute inset-0 pointer-events-none"
+      viewBox={`0 0 ${w} ${h}`}
+      style={{ overflow: "visible" }}
+      aria-hidden="true"
+    >
+      <defs>
+        <filter
+          id="mobile-navbar-shadow"
+          x="-10%"
+          y="-10%"
+          width="120%"
+          height="120%"
+        >
+          {/* Outer drop shadow */}
+          <feGaussianBlur
+            in="SourceAlpha"
+            stdDeviation="10"
+            result="outerBlur"
+          />
+          <feOffset in="outerBlur" dx="0" dy="-2" result="outerOffset" />
+          <feFlood
+            floodColor="#000000"
+            floodOpacity="0.8"
+            result="outerColor"
+          />
+          <feComposite
+            in="outerColor"
+            in2="outerOffset"
+            operator="in"
+            result="outerShadow"
+          />
+
+          {/* Inset shadow from top (white highlight for chrome effect) */}
+          <feComponentTransfer in="SourceAlpha" result="invertedAlpha">
+            <feFuncA type="table" tableValues="1 0" />
+          </feComponentTransfer>
+          <feOffset in="invertedAlpha" dx="0" dy="5" result="insetOffset" />
+          <feGaussianBlur
+            in="insetOffset"
+            stdDeviation="5"
+            result="insetBlur"
+          />
+          <feComposite
+            in="insetBlur"
+            in2="SourceAlpha"
+            operator="in"
+            result="insetMask"
+          />
+          <feFlood
+            floodColor="#ffffff"
+            floodOpacity="0.5"
+            result="insetColor"
+          />
+          <feComposite
+            in="insetColor"
+            in2="insetMask"
+            operator="in"
+            result="insetShadow"
+          />
+
+          {/* Merge: outer shadow → fill → inset highlight */}
+          <feMerge>
+            <feMergeNode in="outerShadow" />
+            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="insetShadow" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Main shape with fill and shadows */}
+      <path d={shapePath} fill="#ABABAB" filter="url(#mobile-navbar-shadow)" />
+
+      {/* Border stroke on top angled edges only */}
+      <path
+        d={borderPath}
+        fill="none"
+        stroke="rgb(196,196,196)"
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export default function MobileNavbar() {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   // Collapse navbar on scroll
   useEffect(() => {
@@ -20,6 +123,19 @@ export default function MobileNavbar() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, []);
+
+  // Track container dimensions for SVG shape
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => {
+      setDimensions({ width: el.offsetWidth, height: el.offsetHeight });
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   // Collapse navbar on link click
@@ -34,8 +150,17 @@ export default function MobileNavbar() {
         bottom: isExpanded ? "0px" : `-${BOTTOM_SECTION_HEIGHT}px`,
       }}
     >
-      <div className="navbar-clip-wrapper">
-        <div className="bg-[#ABABAB] navbar-clip pt-40 relative">
+      <div ref={containerRef} className="relative">
+        {/* SVG background shape with drop shadow + inset shadow */}
+        <NavbarShape width={dimensions.width} height={dimensions.height} />
+
+        {/* Content clipped to trapezoid shape */}
+        <div
+          className="relative pt-40"
+          style={{
+            clipPath: `polygon(0 0, ${TRAPEZOID_INSET}px ${TRAPEZOID_HEIGHT}px, calc(100% - ${TRAPEZOID_INSET}px) ${TRAPEZOID_HEIGHT}px, 100% 0, 100% 100%, 0 100%)`,
+          }}
+        >
           {/* bg stripe */}
           <div
             aria-hidden="true"
