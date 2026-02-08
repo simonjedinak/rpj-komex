@@ -8,7 +8,7 @@ import { primaryNavLinks } from "../data/navigation";
 const BOTTOM_SECTION_HEIGHT = 104;
 
 // Trapezoid geometry
-const TRAPEZOID_INSET = 40; // px from each side
+const TRAPEZOID_INSET = 25; // px from each side
 const TRAPEZOID_HEIGHT = 160; // 10rem = 160px
 
 function NavbarShape({ width, height }: { width: number; height: number }) {
@@ -145,7 +145,7 @@ export default function MobileNavbar() {
 
   return (
     <nav
-      className="fixed left-0 pb-4 right-0 z-50 md:hidden transition-[bottom] duration-300 ease-out"
+      className="fixed left-0 pb-4 right-0 z-50 md:hidden transition-[bottom] duration-300 ease-out text-white"
       style={{
         bottom: isExpanded ? "0px" : `-${BOTTOM_SECTION_HEIGHT}px`,
       }}
