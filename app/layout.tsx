@@ -33,7 +33,7 @@ export default function RootLayout({
         <MobileNavbar />
         <div className="md:hidden bg-chrome2 mobile-bar h-4 w-full fixed z-100 bottom-0 left-0" />
         {/* Add padding at bottom on mobile to account for fixed navbar */}
-        <div className="h-15 md:hidden" />
+        <div className="h-19.5 md:hidden" />
       </body>
     </html>
   );
