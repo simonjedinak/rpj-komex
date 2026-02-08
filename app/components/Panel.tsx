@@ -25,7 +25,7 @@ export default function Panel({
 
           {/* Border (not clipped) */}
           <svg
-            className="absolute inset-0 h-full w-full overflow-visible pointer-events-none"
+            className="absolute inset-0 h-full w-full overflow-visible pointer-events-none "
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
@@ -47,7 +47,7 @@ export default function Panel({
         </div>
 
         {/* mid frame */}
-        <div className="border-2 border-[#c9c9c9] bg-white">
+        <div className="border-2 border-[#c9c9c9] mt-0.5 border-t-0 bg-white">
           {/* inner bevel line */}
           <div>
             {titleBar && (
@@ -75,7 +75,7 @@ export default function Panel({
             )}
 
             {/* Body - with alternating stripes */}
-            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-base sm:text-lg md:text-xl lg:text-2xl">
+            <div className="border-t-2 border-[#c9c9c9] flex flex-col text-base sm:text-lg md:text-xl lg:text-2xl overflow-hidden">
               {Children.map(children, (child, index) => (
                 <div
                   key={index}

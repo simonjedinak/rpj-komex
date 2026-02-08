@@ -16,6 +16,8 @@ const galleryImages = [
   "/images/o-nas/IMG_20251221_232359_182 1.png",
 ];
 
+const hover = "transition-transform relative hover:scale-[1.19]  about-img";
+
 export default function AboutGallery() {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
@@ -31,108 +33,112 @@ export default function AboutGallery() {
         {/* Row 1 */}
         <Panel title="Komplex" className="w-full" titleBar={false}>
           <p>
-            V Komexe opravíme motor, prevodovku, podvozok, brzdy, výfuk aj elektrickú inštaláciu. Každé vozidlo prechádza dôkladnou diagnostikou pred začiatkom prác.
+            V Komexe opravíme motor, prevodovku, podvozok, brzdy, výfuk aj
+            elektrickú inštaláciu. Každé vozidlo prechádza dôkladnou
+            diagnostikou pred začiatkom prác.
           </p>
           <p>
-            Vykonávame pravidelné servisné prehliadky podľa odporúčaní výrobcov. Používame kvalitné náhradné diely a originálne oleje pre dlhú životnosť vášho vozidla.
+            Vykonávame pravidelné servisné prehliadky podľa odporúčaní výrobcov.
+            Používame kvalitné náhradné diely a originálne oleje pre dlhú
+            životnosť vášho vozidla.
           </p>
           <p>
-            Náš pneuservis zabezpečí prezutie, vyváženie a uskladnenie pneumatík. Špecialista na chladiče vám opraví alebo vymení chladič motora či klimatizácie.
+            Náš pneuservis zabezpečí prezutie, vyváženie a uskladnenie
+            pneumatík. Špecialista na chladiče vám opraví alebo vymení chladič
+            motora či klimatizácie.
           </p>
         </Panel>
-        <Panel
-          title="Dielňa"
-          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
-          titleBar={false}
-        >
-          <div onClick={() => handleImageClick(0)}>
+        <Panel title="Dielňa" className="w-full  " titleBar={false}>
+          <div className={hover} onClick={() => handleImageClick(0)}>
             <img
               src={galleryImages[0]}
               alt="Autoservis Komex - dielňa"
-              className="w-full h-auto"
+              className="w-full h-auto cursor-pointer"
               loading="lazy"
             />
           </div>
         </Panel>
 
         {/* Row 2 */}
-        <Panel
-          title="Vybavenie"
-          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
-          titleBar={false}
-        >
-          <div onClick={() => handleImageClick(1)}>
+        <Panel title="Vybavenie" className="w-full" titleBar={false}>
+          <div className={hover} onClick={() => handleImageClick(1)}>
             <img
               src={galleryImages[1]}
               alt="Autoservis Komex - vybavenie"
-              className="w-full h-auto"
+              className="w-full h-auto cursor-pointer"
               loading="lazy"
             />
           </div>
         </Panel>
         <Panel title="Prístup" className="w-full" titleBar={false}>
           <p>
-            V Komexe si ceníme každého zákazníka a venujeme mu plnú pozornosť. Vždy vám vysvetlíme, čo je potrebné opraviť a prečo, bez zbytočných prác.
+            V Komexe si ceníme každého zákazníka a venujeme mu plnú pozornosť.
+            Vždy vám vysvetlíme, čo je potrebné opraviť a prečo, bez zbytočných
+            prác.
           </p>
           <p>
-            Naše ceny sú férové a transparentné. Pred opravou vám vytvoríme cenovú kalkuláciu, aby ste vedeli, s čím počítať. Žiadne skryté poplatky.
+            Naše ceny sú férové a transparentné. Pred opravou vám vytvoríme
+            cenovú kalkuláciu, aby ste vedeli, s čím počítať. Žiadne skryté
+            poplatky.
           </p>
           <p>
-            Záleží nám na dlhodobej spokojnosti klientov. Preto robíme každú prácu kvalitne a s precíznosťou, akoby išlo o naše vlastné auto.
+            Záleží nám na dlhodobej spokojnosti klientov. Preto robíme každú
+            prácu kvalitne a s precíznosťou, akoby išlo o naše vlastné auto.
           </p>
         </Panel>
 
         {/* Row 3 */}
         <Panel title="Tím" className="w-full" titleBar={false}>
           <p>
-            Náš tím tvoria dvaja skúsení automechanici s rokmi praxe a odborným vzdelaním. Neustále sa vzdelávajú v nových technológiách a postupoch.
+            Náš tím tvoria dvaja skúsení automechanici s rokmi praxe a odborným
+            vzdelaním. Neustále sa vzdelávajú v nových technológiách a
+            postupoch.
           </p>
           <p>
-            Špecialista na chladiče dokáže opraviť chladiče motorov, klimatizácií aj vykurovacích systémov pre všetky typy vozidiel s dlhoročnými skúsenosťami.
+            Špecialista na chladiče dokáže opraviť chladiče motorov,
+            klimatizácií aj vykurovacích systémov pre všetky typy vozidiel s
+            dlhoročnými skúsenosťami.
           </p>
           <p>
-            Kombinujeme tradičné remeselné zručnosti s modernou diagnostikou. Vďaka tomu rýchlo identifikujeme problém a efektívne ho odstránime.
+            Kombinujeme tradičné remeselné zručnosti s modernou diagnostikou.
+            Vďaka tomu rýchlo identifikujeme problém a efektívne ho odstránime.
           </p>
         </Panel>
-        <Panel
-          title="Servis"
-          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
-          titleBar={false}
-        >
-          <div onClick={() => handleImageClick(2)}>
+        <Panel title="Servis" className="w-full " titleBar={false}>
+          <div className={hover} onClick={() => handleImageClick(2)}>
             <img
               src={galleryImages[2]}
               alt="Autoservis Komex - servis"
-              className="w-full h-auto"
+              className="w-full h-auto cursor-pointer"
               loading="lazy"
             />
           </div>
         </Panel>
 
         {/* Row 4 */}
-        <Panel
-          title="Diagnostika"
-          className="w-full cursor-pointer transition-transform hover:scale-[1.02]"
-          titleBar={false}
-        >
-          <div onClick={() => handleImageClick(3)}>
+        <Panel title="Diagnostika" className="w-full  " titleBar={false}>
+          <div className={hover} onClick={() => handleImageClick(3)}>
             <img
               src={galleryImages[3]}
               alt="Autoservis Komex - diagnostika"
-              className="w-full h-auto"
+              className="w-full h-auto cursor-pointer"
               loading="lazy"
             />
           </div>
         </Panel>
         <Panel title="Lokalita" className="w-full" titleBar={false}>
           <p>
-            Autoservis Komex nájdete na Strojníckej ulici v Prešove s dobrým dopravným napojením a dostupným parkovaním priamo pred dielňou.
+            Autoservis Komex nájdete na Strojníckej ulici v Prešove s dobrým
+            dopravným napojením a dostupným parkovaním priamo pred dielňou.
           </p>
           <p>
-            Naša dielňa je vybavená všetkým potrebným - od zdvihakov cez kompletné náradie až po stroje na prezúvanie, vyvažovanie kolies a plnenie klimatizácií.
+            Naša dielňa je vybavená všetkým potrebným - od zdvihakov cez
+            kompletné náradie až po stroje na prezúvanie, vyvažovanie kolies a
+            plnenie klimatizácií.
           </p>
           <p>
-            Tešíme sa na vašu návštevu v Komexe, kde sa o vaše vozidlo postaráme s rešpektom, kvalitou a za férovú cenu.
+            Tešíme sa na vašu návštevu v Komexe, kde sa o vaše vozidlo postaráme
+            s rešpektom, kvalitou a za férovú cenu.
           </p>
         </Panel>
       </div>

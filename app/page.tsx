@@ -54,13 +54,18 @@ export default function Home() {
         <div className="w-full max-w-[calc(2*40rem+3rem)] mx-auto px-0 sm:px-6 md:px-8 lg:px-28 flex flex-col items-center gap-6 sm:gap-8 md:gap-10">
           <Panel title="O nás" className="w-full sm:max-w-[50rem]">
             <p>
-              Autoservis Komex na Strojníckej ulici v Prešove ponúka komplexné služby pre osobné aj úžitkové vozidlá všetkých značiek.
+              Autoservis Komex na Strojníckej ulici v Prešove ponúka komplexné
+              služby pre osobné aj úžitkové vozidlá všetkých značiek.
             </p>
             <p>
-              Náš tím skúsených mechnikov sa stará o vaše vozidlo s osobným prístupom, ktorý vytvára dlhodobé vzťahy s klientmi založené na dôvere a spokojnosti.
+              Náš tím skúsených mechnikov sa stará o vaše vozidlo s osobným
+              prístupom, ktorý vytvára dlhodobé vzťahy s klientmi založené na
+              dôvere a spokojnosti.
             </p>
             <p>
-              Disponujeme moderným vybavením vrátane zdvihakov, diagnostických prístrojov, pneuservisu a klimatizačných staníc pre precíznu a rýchlu opravu.
+              Disponujeme moderným vybavením vrátane zdvihakov, diagnostických
+              prístrojov, pneuservisu a klimatizačných staníc pre precíznu a
+              rýchlu opravu.
             </p>
           </Panel>
           <AboutGallery />
