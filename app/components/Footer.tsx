@@ -15,8 +15,9 @@ export default function Footer() {
         <div className="absolute inset-0 bg-black/60" />
 
         <div className="relative">
-          <div className="flex flex-col md:flex-row gap-24 items-stretch px-24 py-12">
-            <nav className="flex flex-col gap-4 h-full justify-center items-start">
+          {/* Navigation Links - Stacked on mobile, side-by-side on desktop */}
+          <div className="flex flex-col md:flex-row gap-6 md:gap-24 items-stretch px-6 md:px-24 py-8 md:py-12">
+            <nav className="flex flex-col gap-3 md:gap-4 h-full justify-center items-start">
               {leftLinks.map((link) => (
                 <ButtonLink
                   key={link.href}
@@ -27,7 +28,7 @@ export default function Footer() {
               ))}
             </nav>
 
-            <nav className="flex flex-col gap-4 justify-center items-start ">
+            <nav className="flex flex-col gap-3 md:gap-4 justify-center items-start">
               {rightLinks.map((link) => (
                 <ButtonLink
                   key={link.href}
@@ -39,23 +40,23 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Bottom “silver” bar */}
-          <div className="flex bg-black gap-1.5">
-            <div className="relative z-10 w-full rounded-[3px] bg-chrome2 inset-chrome py-7 px-24">
+          {/* Bottom "silver" bar - Stacked on mobile */}
+          <div className="flex flex-col md:flex-row bg-black gap-1.5">
+            <div className="relative z-10 w-full rounded-[3px] bg-chrome2 inset-chrome py-4 md:py-7 px-6 md:px-24">
               <StrokeText
                 strokeWidth={2.6}
                 shadowSize={2.5}
-                className="text-lg font-bold italic text-white"
+                className="text-sm md:text-lg font-bold italic text-white text-center md:text-left"
               >
                 © 2026 KOMEX. Všetky práva vyhradené.
               </StrokeText>
             </div>
 
-            <div className="relative z-10 w-80 pl-1 pb-2 rounded-[3px] bg-chrome2 inset-chrome flex justify-center items-end">
+            <div className="relative z-10 w-full md:w-80 h-24 md:h-auto pl-1 pb-2 rounded-[3px] bg-chrome2 inset-chrome flex justify-center items-center md:items-end">
               <img
                 src="/logo.svg"
                 alt="KOMEX logo"
-                className="absolute z-30 w-45"
+                className="absolute z-30 w-32 md:w-45"
               />
             </div>
           </div>
