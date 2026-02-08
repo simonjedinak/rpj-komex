@@ -47,7 +47,7 @@ export default function Footer() {
               <StrokeText
                 strokeWidth={{ sm: 2.6, default: 2 }}
                 shadowSize={{ sm: 2.5, default: 1.4 }}
-                className="text-sm md:text-lg font-bold italic text-white text-center md:text-left"
+                className="text-sm md:text-lg font-bold italic text-white sm:mx-0 mx-auto"
               >
                 © 2026 KOMEX. Všetky práva vyhradené.
               </StrokeText>
