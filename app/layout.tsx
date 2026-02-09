@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import ScrollNavbar from "./components/ScrollNavbar";
 import Footer from "./components/Footer";
 import MobileNavbar from "./components/MoibleNavbar";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "KOMEX - Autoservis",
@@ -34,6 +35,7 @@ export default function RootLayout({
         <div className="md:hidden bg-chrome2 mobile-bar h-4 w-full fixed z-100 bottom-0 left-0" />
         {/* Add padding at bottom on mobile to account for fixed navbar */}
         <div className="h-19.5 md:hidden" />
+        <Analytics />
       </body>
     </html>
   );
