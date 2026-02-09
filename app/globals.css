@@ -203,7 +203,7 @@ body {
     inset 0px -11px 20px rgba(0, 0, 0, 0.4);
 }
 
-.knob {
+/* .knob {
   position: relative;
   background: conic-gradient(
     from 180deg at 50% 50%,
@@ -235,7 +235,7 @@ body {
     linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   mask-composite: exclude;
-}
+} */
 
 .mobile-button-link {
   background: linear-gradient(
@@ -271,8 +271,6 @@ body {
     inset 0 -4px 6px rgba(0, 0, 0, 0.3),
     0 1px 3px rgba(0, 0, 0, 0.9),
     0px 0px 1px 2px rgba(72, 0, 0, 0.5);
-
-  /* transform: rotate(180deg); */
 }
 
 .navbar-bg-stripe {
@@ -283,7 +281,6 @@ body {
     -2px 0px 0px rgb(0, 0, 0);
   transform: perspective(1200px) rotateX(50deg) translateY(-800px);
   perspective-origin: 100%;
-  /* translateY(100px); */
 }
 .navbar-bg-stripe div {
   border: 2px solid #252525;

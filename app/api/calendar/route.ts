@@ -46,8 +46,8 @@ function parseICS(icsText: string): CalendarEvent[] {
     if (!startDate || !endDate) continue;
 
     // Convert UTC to Europe/Prague
-    const pragueStart = toPrague(startDate);
-    const pragueEnd = toPrague(endDate);
+    const pragueStart = toCET(startDate);
+    const pragueEnd = toCET(endDate);
 
     const isoDate = formatISODate(pragueStart);
     const from = formatTime(pragueStart);
@@ -88,7 +88,7 @@ function parseICSDate(raw: string): Date | null {
   return null;
 }
 
-function toPrague(utcDate: Date): Date {
+function toCET(utcDate: Date): Date {
   // Use Intl to get the offset for Europe/Prague at this specific date
   const fmt = new Intl.DateTimeFormat("en-GB", {
     timeZone: "Europe/Prague",

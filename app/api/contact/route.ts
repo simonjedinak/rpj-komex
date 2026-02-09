@@ -54,21 +54,21 @@ export async function POST(req: Request) {
       );
     }
 
-    // Gmail SMTP (explicit)
+    // Gmail SMTP
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
       secure: true,
       auth: {
         user: SMTP_USER,
-        pass: SMTP_PASS, // should be Gmail App Password if using basic auth [page:2]
+        pass: SMTP_PASS,
       },
     });
 
     await transporter.verify();
 
     await transporter.sendMail({
-      from: SMTP_USER, // Gmail rewrites From to authenticated user anyway [page:2]
+      from: SMTP_USER,
       to: MAIL_TO,
       replyTo: data.email,
       subject: `Kontakt: ${data.subject} | ${data.brand} ${data.model}`,
