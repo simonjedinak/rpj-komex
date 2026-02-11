@@ -12,16 +12,7 @@ export default function Home() {
         <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-top">
           <SvgBar className="rotate-180 top-0" />
         </div>
-        <FisheyeCarousel
-          imageUrls={[
-            "/images/car2.avif",
-            "/images/car2.avif",
-            "/images/car2.avif",
-            "/images/car2.avif",
-          ]}
-          autoplayInterval={4000}
-          animationDuration={1200}
-        />
+        <FisheyeCarousel autoplayInterval={4000} animationDuration={1200} />
         <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-bottom">
           <SvgBar className="bottom-0" />
         </div>
