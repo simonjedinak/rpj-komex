@@ -13,6 +13,81 @@ interface FisheyeCarouselProps {
 
 const easeInOutSine = (t: number): number => -(Math.cos(Math.PI * t) - 1) / 2;
 
+// Image caching helpers
+const CACHE_DB_NAME = "fisheye-carousel-cache";
+const CACHE_STORE_NAME = "images";
+const CACHE_VERSION = 1;
+
+const initCacheDB = async (): Promise<IDBDatabase> => {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(CACHE_DB_NAME, CACHE_VERSION);
+    req.onerror = () => reject(req.error);
+    req.onsuccess = () => resolve(req.result);
+    req.onupgradeneeded = (e) => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains(CACHE_STORE_NAME)) {
+        db.createObjectStore(CACHE_STORE_NAME);
+      }
+    };
+  });
+};
+
+const getCachedImage = async (url: string): Promise<Blob | null> => {
+  try {
+    const db = await initCacheDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction(CACHE_STORE_NAME, "readonly");
+      const req = tx.objectStore(CACHE_STORE_NAME).get(url);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  } catch {
+    return null;
+  }
+};
+
+const cacheImage = async (url: string, blob: Blob): Promise<void> => {
+  try {
+    const db = await initCacheDB();
+    const tx = db.transaction(CACHE_STORE_NAME, "readwrite");
+    tx.objectStore(CACHE_STORE_NAME).put(blob, url);
+  } catch (error) {
+    console.warn("Failed to cache image:", error);
+  }
+};
+
+const loadImageWithCache = async (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+
+    const createImageFromBlob = (blob: Blob) => {
+      const blobUrl = URL.createObjectURL(blob);
+      img.src = blobUrl;
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error(`Failed to load: ${url}`));
+    };
+
+    const fetchAndCache = () => {
+      fetch(url)
+        .then((res) => res.blob())
+        .then((blob) => {
+          cacheImage(url, blob);
+          createImageFromBlob(blob);
+        })
+        .catch(() => reject(new Error(`Failed to fetch: ${url}`)));
+    };
+
+    getCachedImage(url).then((blob) => {
+      if (blob) {
+        createImageFromBlob(blob);
+      } else {
+        fetchAndCache();
+      }
+    });
+  });
+};
+
 export default function FisheyeCarousel({
   imageUrls,
   autoplayInterval = 4000,
@@ -63,15 +138,21 @@ export default function FisheyeCarousel({
           const { width } = entry.contentRect;
           if (width > 0) {
             const height = width / aspectRatio;
-            setContainerSize((prev) =>
-              prev.width === Math.round(width) &&
-              prev.height === Math.round(height)
-                ? prev
-                : { width: Math.round(width), height: Math.round(height) },
-            );
+            setContainerSize((prev) => {
+              const newWidth = Math.round(width);
+              const newHeight = Math.round(height);
+              // Only update if changed significantly (avoid 1-2px fluctuations)
+              if (
+                Math.abs(prev.width - newWidth) > 5 ||
+                Math.abs(prev.height - newHeight) > 5
+              ) {
+                return { width: newWidth, height: newHeight };
+              }
+              return prev;
+            });
           }
         }
-      }, 50);
+      }, 100); // Increased debounce from 50ms to 100ms
     });
 
     resizeObserver.observe(container);
@@ -103,16 +184,7 @@ export default function FisheyeCarousel({
 
       try {
         const loadedImages = await Promise.all(
-          urls.map(
-            (url) =>
-              new Promise<HTMLImageElement>((resolve, reject) => {
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                img.onload = () => resolve(img);
-                img.onerror = () => reject(new Error(`Failed to load: ${url}`));
-                img.src = url;
-              }),
-          ),
+          urls.map((url) => loadImageWithCache(url)),
         );
 
         if (!cancelled) {
@@ -184,7 +256,8 @@ export default function FisheyeCarousel({
     images.forEach((img) => {
       const texture = new THREE.Texture(img);
       texture.needsUpdate = true;
-      texture.minFilter = THREE.LinearFilter;
+      // Use mipmaps for better quality at distance with less artifacts
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
       texture.magFilter = THREE.LinearFilter;
       textures.push(texture);
 
@@ -424,11 +497,39 @@ export default function FisheyeCarousel({
   return (
     <div
       ref={containerRef}
-      className={`w-full ${className}`}
+      className={`w-full relative ${className}`}
       style={{
         height: containerSize.height || undefined,
         aspectRatio: `${aspectRatio}`,
       }}
-    />
+    >
+      {!isReady && (
+        <>
+          <div className="absolute inset-0 bg-gray-100" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(249, 1, 1, 0.15) 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%)",
+              backgroundSize: "100% 200%",
+              animation: "gradientSweep 0.3s ease-in-out infinite",
+            }}
+          />
+          <style>{`
+            @keyframes gradientSweep {
+              0% {
+                background-position: 0% 200%;
+              }
+              50% {
+                background-position: 0% 0%;
+              }
+              100% {
+                background-position: 0% 200%;
+              }
+            }
+          `}</style>
+        </>
+      )}
+    </div>
   );
 }

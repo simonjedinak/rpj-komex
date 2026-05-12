@@ -25,7 +25,7 @@ const services: Service[] = [
       "Pracujeme podľa odporúčaní výrobcu pre každý typ motora a upozorníme aj na zistenia, ktoré sa pri výmene často ukážu (úniky, nadmerná spotreba oleja, stav tesnení).",
     ],
   },
-  {
+  { 
     title: "Brzdy",
     description: [
       "Zabezpečujeme detailnú kontrolu a opravu brzdového systému – platničky, kotúče, strmene, hadice aj diagnostiku príčiny vibrácií či pískania.",

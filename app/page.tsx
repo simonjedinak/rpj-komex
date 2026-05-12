@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className="flex-1 text-black bg-white">
       <section className="relative from-gray-900 to-gray-800 text-white overflow-hidden">
-        <div className="scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-top">
+        <div className="relative z-10 scale-y-[0.3] sm:scale-y-50 md:scale-y-75 lg:scale-y-100 origin-top">
           <SvgBar className="rotate-180 top-0" />
         </div>
         <FisheyeCarousel autoplayInterval={4000} animationDuration={1200} />
